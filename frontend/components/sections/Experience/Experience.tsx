@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useLocale } from 'next-intl';
 import {
@@ -433,7 +434,7 @@ const communityData: DetailItem[] = [
   }
 ];
 
-// Modernized Modal Component (Monochrome, Zero Green)
+// Modernized Modal Component (Monochrome, Zero Green, Portaled to document.body)
 function DetailModal({
   item,
   onClose,
@@ -445,110 +446,132 @@ function DetailModal({
   t: (key: string) => string;
   locale: string;
 }) {
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!item) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
-    if (item) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('keydown', handleKeyDown);
-    }
+    window.addEventListener('keydown', handleKeyDown);
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = prevOverflow;
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [item, onClose]);
 
-  if (!item) return null;
+  if (!mounted) return null;
 
-  const prefix = item.isCourse ? 'courses' : 'items';
-  const Icon = item.icon || BookOpen;
-  const details = locale === 'tr' ? item.detailsTr : item.detailsEn;
-
-  return (
+  return createPortal(
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
-        {/* Backdrop */}
-        <motion.div
-          className="absolute inset-0 bg-black/85 backdrop-blur-md"
-          onClick={onClose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
+      {item && (() => {
+        const prefix = item.isCourse ? 'courses' : 'items';
+        const Icon = item.icon || BookOpen;
+        const details = locale === 'tr' ? item.detailsTr : item.detailsEn;
 
-        {/* Modal Window */}
-        <motion.div
-          className="relative w-full max-w-lg bg-[#141414] border border-white/15 rounded-[22px] p-6 sm:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95)] max-h-[85vh] overflow-y-auto"
-          initial={{ opacity: 0, scale: 0.94, y: 15 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.94, y: 15 }}
-          transition={{ type: "spring", damping: 28, stiffness: 350 }}
-        >
-          {/* Close button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
-            aria-label="Kapat"
+        return (
+          <div
+            key={item.key}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6"
+            role="dialog"
+            aria-modal="true"
           >
-            <X className="w-4 h-4" />
-          </button>
+            {/* Backdrop: hafif yarı-saydam katman (arkadaki kartlar ve başlıklar kaybolmaz) */}
+            <motion.div
+              className="absolute inset-0 bg-black/55 backdrop-blur-[3px]"
+              onClick={onClose}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            />
 
-          {/* Header */}
-          <div className="mb-5 pr-8">
-            <div className="flex items-center gap-3 mb-2.5">
-              <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#819fa7] shrink-0">
-                <Icon className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] leading-snug">
-                  {t(`${prefix}.${item.key}.title`)}
-                </h3>
-                {!item.isCourse && (
-                  <div className="flex items-center gap-2 mt-1 flex-wrap">
-                    <span className="text-xs text-[#819fa7] font-medium flex items-center gap-1">
-                      <Building2 className="w-3.5 h-3.5" />
-                      {t(`${prefix}.${item.key}.organization`)}
-                    </span>
-                    <span className="text-white/20">•</span>
-                    <span className="text-[11px] font-mono text-white/50 flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {t(`${prefix}.${item.key}.period`)}
-                    </span>
+            {/* Modal Window */}
+            <motion.div
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 w-full max-w-lg bg-[#141414] border border-white/15 rounded-[22px] p-5 sm:p-7 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] max-h-[82dvh] overflow-y-auto overscroll-contain"
+              initial={{ opacity: 0, scale: 0.95, y: 14 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 10 }}
+              transition={{ type: "spring", damping: 28, stiffness: 360 }}
+            >
+              {/* Close button */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+                aria-label="Kapat"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Header */}
+              <div className="mb-5 pr-8">
+                <div className="flex items-center gap-3 mb-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#819fa7] shrink-0">
+                    <Icon className="w-5 h-5" />
                   </div>
-                )}
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] leading-snug">
+                      {t(`${prefix}.${item.key}.title`)}
+                    </h3>
+                    {!item.isCourse && (
+                      <div className="flex items-center gap-2 mt-1 flex-wrap">
+                        <span className="text-xs text-[#819fa7] font-medium flex items-center gap-1">
+                          <Building2 className="w-3.5 h-3.5" />
+                          {t(`${prefix}.${item.key}.organization`)}
+                        </span>
+                        <span className="text-white/20">•</span>
+                        <span className="text-[11px] font-mono text-white/50 flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {t(`${prefix}.${item.key}.period`)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+
+              {/* Description */}
+              <p className="text-sm text-white/70 mb-6 leading-relaxed font-sans bg-white/[0.02] p-3.5 rounded-xl border border-white/5">
+                {t(`${prefix}.${item.key}.description`)}
+              </p>
+
+              {/* Learnings list */}
+              {details && details.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-mono font-semibold text-[#819fa7] uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5 text-white/60" />
+                    {t('modal.learned')}
+                  </h4>
+                  <ul className="space-y-2.5">
+                    {details.map((detail, index) => (
+                      <li
+                        key={index}
+                        className="flex items-start gap-3 text-xs sm:text-[13px] text-white/80 leading-relaxed"
+                      >
+                        <CheckCircle2 className="w-4 h-4 text-[#819fa7] mt-0.5 shrink-0" />
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </motion.div>
           </div>
-
-          {/* Description */}
-          <p className="text-sm text-white/70 mb-6 leading-relaxed font-sans bg-white/[0.02] p-3.5 rounded-xl border border-white/5">
-            {t(`${prefix}.${item.key}.description`)}
-          </p>
-
-          {/* Learnings list */}
-          {details && details.length > 0 && (
-            <div>
-              <h4 className="text-xs font-mono font-semibold text-[#819fa7] uppercase tracking-wider mb-3 flex items-center gap-2">
-                <Sparkles className="w-3.5 h-3.5 text-white/60" />
-                {t('modal.learned')}
-              </h4>
-              <ul className="space-y-2.5">
-                {details.map((detail, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 text-xs sm:text-[13px] text-white/80 leading-relaxed"
-                  >
-                    <CheckCircle2 className="w-4 h-4 text-[#819fa7] mt-0.5 shrink-0" />
-                    <span>{detail}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </motion.div>
-      </div>
-    </AnimatePresence>
+        );
+      })()}
+    </AnimatePresence>,
+    document.body
   );
 }
 
@@ -557,6 +580,7 @@ export default function Experience() {
   const locale = useLocale();
   const [selectedItem, setSelectedItem] = useState<DetailItem | null>(null);
   const [activeTab, setActiveTab] = useState<'education' | 'community' | 'certifications'>('education');
+  const handleCloseModal = useCallback(() => setSelectedItem(null), []);
 
   const tabs = [
     {
@@ -857,15 +881,13 @@ export default function Experience() {
 
       </div>
 
-      {/* Modal Dialog (Tıklanan ders / sertifikanın detayları) */}
-      {selectedItem && (
-        <DetailModal
-          item={selectedItem}
-          onClose={() => setSelectedItem(null)}
-          t={t}
-          locale={locale}
-        />
-      )}
+      {/* Modal Dialog (Tıklanan ders / sertifikanın detayları — body portal ile render edilir) */}
+      <DetailModal
+        item={selectedItem}
+        onClose={handleCloseModal}
+        t={t}
+        locale={locale}
+      />
     </section>
   );
 }

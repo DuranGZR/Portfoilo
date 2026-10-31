@@ -403,10 +403,17 @@ body {
   will-change: opacity;
 }
 
-/* content-visibility for sections - improves initial render */
+/* content-visibility for sections - improves initial render on desktop without mobile paint/containment glitches */
 .content-visibility-auto {
   content-visibility: auto;
-  contain-intrinsic-size: 0 500px;
+  contain-intrinsic-size: auto 600px;
+}
+
+@media (max-width: 768px) {
+  .content-visibility-auto {
+    content-visibility: visible;
+    contain-intrinsic-size: none;
+  }
 }
 
 /* GPU acceleration for heavy animations */
@@ -448,9 +455,18 @@ body {
 }
 
 /* ===== PERFORMANCE: CSS Containment for sections ===== */
-/* Tells the browser each section is independent for layout/paint */
+/* Avoid layout/paint containment here so fixed modals and mobile GPU layers are never trapped or blanked */
 section[id] {
-  contain: layout style paint;
+  contain: style;
+}
+
+/* Hide scrollbar for frameless mascot dialogue stream */
+.mascot-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.mascot-no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 /* ===== REDUCED MOTION ===== */
