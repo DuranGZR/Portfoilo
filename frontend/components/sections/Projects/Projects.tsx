@@ -1,9 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { useTranslations, useMessages, useLocale } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import {
+  ExternalLink,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import SectionReveal from '@/components/animations/SectionReveal';
 
 interface ProjectItem {
@@ -14,39 +21,201 @@ interface ProjectItem {
 
 const PROJECT_LIST: ProjectItem[] = [
   { key: 'aliagaAI', slug: 'aliaga-ai', defaultImage: '/projects/aliagaai.png' },
-  { key: 'aiDreamInterpreter', slug: 'ai-dream-interpreter', defaultImage: '/projects/dream-interpreter.png' },
+  {
+    key: 'aiDreamInterpreter',
+    slug: 'ai-dream-interpreter',
+    defaultImage: '/projects/dream-interpreter.png',
+  },
   { key: 'kayipQR', slug: 'kayip-qr', defaultImage: '/projects/kayipqr.png' },
   { key: 'weDo', slug: 'wedo', defaultImage: '/projects/wedo-card.png' },
-  { key: 'visualAI', slug: 'real-time-visual-understanding', defaultImage: '/projects/visual-ai.png' },
+  {
+    key: 'visualAI',
+    slug: 'real-time-visual-understanding',
+    defaultImage: '/projects/visual-ai.png',
+  },
 ];
+
+const TOTAL = PROJECT_LIST.length;
+
+/**
+ * Signed shortest circular distance in [-2, -1, 0, 1, 2] for 5 items.
+ */
+function getCircularOffset(index: number, activeIndex: number): number {
+  let diff = index - activeIndex;
+  const half = Math.floor(TOTAL / 2);
+  if (diff > half) diff -= TOTAL;
+  if (diff < -half) diff += TOTAL;
+  return diff;
+}
 
 export default function Projects() {
   const t = useTranslations('projects');
   const messages = useMessages() as any;
   const locale = useLocale();
+  const router = useRouter();
+  const prefersReducedMotion = useReducedMotion();
 
-  const [currentIndex, setCurrentIndex] = useState(2); // Start at center (kayipQR)
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0); // Start on AliağaAI
+  const [viewportW, setViewportW] = useState(1200);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const nextProject = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % PROJECT_LIST.length);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const wheelLockRef = useRef(false);
+  const pointerStateRef = useRef<{
+    active: boolean;
+    pointerId: number;
+    startX: number;
+    startY: number;
+    startTime: number;
+    axisLocked: 'x' | 'y' | null;
+    didSwipe: boolean;
+  }>({
+    active: false,
+    pointerId: -1,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    axisLocked: null,
+    didSwipe: false,
+  });
+
+  // Track viewport width for responsive 3D coverflow spacing
+  useEffect(() => {
+    const updateWidth = () => {
+      setViewportW(document.documentElement.clientWidth || window.innerWidth);
+    };
+    updateWidth();
+    window.addEventListener('resize', updateWidth, { passive: true });
+    return () => window.removeEventListener('resize', updateWidth);
   }, []);
 
-  // Auto rotate every 5 seconds
+  const goNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % TOTAL);
+  }, []);
+
+  const goPrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + TOTAL) % TOTAL);
+  }, []);
+
+  const goToIndex = useCallback((idx: number) => {
+    setCurrentIndex(((idx % TOTAL) + TOTAL) % TOTAL);
+  }, []);
+
+  // Auto-rotate every 5.5s when not hovered / touched
   useEffect(() => {
-    timerRef.current = setInterval(nextProject, 5000);
+    if (isPaused) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+
+    timerRef.current = setInterval(goNext, 5500);
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [nextProject]);
+  }, [isPaused, goNext, currentIndex]);
 
-  const handleCardClick = (index: number) => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = setInterval(nextProject, 5000);
-    }
-    setCurrentIndex(index);
+  // Bidirectional Pointer / Touch Swipe Handler (Smooth mobile left & right swipe)
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    setIsPaused(true);
+    pointerStateRef.current = {
+      active: true,
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      startTime: performance.now(),
+      axisLocked: null,
+      didSwipe: false,
+    };
   };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const st = pointerStateRef.current;
+    if (!st.active || e.pointerId !== st.pointerId) return;
+
+    const dx = e.clientX - st.startX;
+    const dy = e.clientY - st.startY;
+
+    if (st.axisLocked === null) {
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+      st.axisLocked = Math.abs(dx) >= Math.abs(dy) ? 'x' : 'y';
+      if (st.axisLocked === 'x') {
+        st.didSwipe = true;
+        try {
+          e.currentTarget.setPointerCapture(e.pointerId);
+        } catch {
+          // Ignore pointer capture errors
+        }
+      }
+    }
+
+    if (st.axisLocked === 'x') {
+      // Smooth elastic resistance while dragging
+      const clamped = Math.max(-130, Math.min(130, dx * 0.55));
+      setDragOffset(clamped);
+    }
+  };
+
+  const finishPointerGesture = (e: React.PointerEvent<HTMLDivElement>) => {
+    const st = pointerStateRef.current;
+    if (!st.active || e.pointerId !== st.pointerId) return;
+
+    const dx = e.clientX - st.startX;
+    const elapsed = Math.max(1, performance.now() - st.startTime);
+    const velocity = dx / elapsed; // px per ms
+
+    if (st.axisLocked === 'x') {
+      if (dx > 38 || velocity > 0.35) {
+        // Swiped right -> go back to PREVIOUS (left) card
+        goPrev();
+      } else if (dx < -38 || velocity < -0.35) {
+        // Swiped left -> advance to NEXT (right) card
+        goNext();
+      }
+    }
+
+    setDragOffset(0);
+    st.active = false;
+    st.axisLocked = null;
+
+    if (e.pointerType !== 'mouse') {
+      setIsPaused(false);
+    }
+  };
+
+  // Horizontal trackpad two-finger swipe support
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) || Math.abs(e.deltaX) < 26) {
+      return;
+    }
+    if (wheelLockRef.current) return;
+    wheelLockRef.current = true;
+    if (e.deltaX > 0) {
+      goNext();
+    } else {
+      goPrev();
+    }
+    setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 480);
+  };
+
+  // Keyboard arrow navigation when focused inside gallery
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goPrev();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goNext();
+    }
+  };
+
+  const isMobile = viewportW < 640;
+  const isTablet = viewportW >= 640 && viewportW < 1024;
+  const step1X = isMobile ? 140 : isTablet ? 215 : 265;
+  const step2X = isMobile ? 225 : isTablet ? 345 : 430;
 
   const activeProjectMeta = PROJECT_LIST[currentIndex];
   const items = messages?.projects?.items || {};
@@ -61,9 +230,9 @@ export default function Projects() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1140px] w-full mx-auto md:my-auto flex flex-col justify-center">
-        {/* Header Layout (Matching Richard Miculob's work-header) */}
+        {/* Header Layout */}
         <SectionReveal delay={0}>
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 md:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 md:mb-10">
             <div>
               <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] uppercase mb-2">
                 {t('badge')}
@@ -88,103 +257,204 @@ export default function Projects() {
           </div>
         </SectionReveal>
 
-        {/* 3D Album Coverflow Carousel & Active Project Details */}
-        <SectionReveal delay={0.15}>
-          <div className="relative w-full my-4 sm:my-8 flex flex-col items-center select-none">
+        {/* 3D Album Coverflow Carousel */}
+        <SectionReveal delay={0.12}>
           <div
-            className="relative w-full max-w-[980px] h-[240px] sm:h-[300px] md:h-[350px] flex items-center justify-center"
-            style={{ perspective: '1100px' }}
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            style={{ outline: 'none' }}
+            className="relative w-full my-2 sm:my-6 flex flex-col items-center select-none"
           >
-            {PROJECT_LIST.map((proj, idx) => {
-              const projData = items[proj.key] || {};
-              const imgSrc = projData.image || proj.defaultImage;
-              const pos = (idx - currentIndex + PROJECT_LIST.length) % PROJECT_LIST.length;
-
-              // Compute transforms for 5 slots matching Richard's coverflow
-              let transform = '';
-              let opacity = 0;
-              let zIndex = 1;
-              let isCenter = false;
-
-              if (pos === 0) {
-                // Center active card
-                transform = 'translate(-50%, -50%) scale(1)';
-                opacity = 1;
-                zIndex = 30;
-                isCenter = true;
-              } else if (pos === 1) {
-                // Immediate right
-                transform = 'translate(calc(-50% + 240px), -50%) scale(0.74)';
-                opacity = 0.85;
-                zIndex = 20;
-              } else if (pos === PROJECT_LIST.length - 1) {
-                // Immediate left
-                transform = 'translate(calc(-50% - 240px), -50%) scale(0.74)';
-                opacity = 0.85;
-                zIndex = 20;
-              } else if (pos === 2) {
-                // Far right
-                transform = 'translate(calc(-50% + 400px), -50%) scale(0.55)';
-                opacity = 0.3;
-                zIndex = 10;
-              } else {
-                // Far left
-                transform = 'translate(calc(-50% - 400px), -50%) scale(0.55)';
-                opacity = 0.3;
-                zIndex = 10;
-              }
-
-              return (
-                <div
-                  key={proj.key}
-                  onClick={() => handleCardClick(idx)}
-                  className={`absolute top-1/2 left-1/2 w-[300px] sm:w-[420px] md:w-[480px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-                    isCenter
-                      ? 'border border-white/20 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9),0_0_35px_rgba(129,159,167,0.18)] cursor-default'
-                      : 'border border-white/10 hover:opacity-100 hover:scale-[0.78] shadow-[0_15px_30px_-10px_rgba(0,0,0,0.6)]'
-                  }`}
-                  style={{
-                    transform,
-                    opacity,
-                    zIndex,
-                    willChange: 'transform, opacity',
-                  }}
-                >
-                  <img
-                    src={imgSrc}
-                    alt={projData.title || proj.key}
-                    className="w-full h-full object-cover select-none pointer-events-none bg-[#141414]"
-                    draggable={false}
-                  />
-                  {!isCenter && (
-                    <div className="absolute inset-0 bg-black/35 hover:bg-transparent transition-colors" />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Active Project Details Box (Matching Richard Miculob's work-info) */}
-        <div className="max-w-[780px] mx-auto text-center px-4 mt-8 md:mt-12 space-y-3">
-          <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-bold text-[#f3f5f9] tracking-tight">
-            {activeData.title || 'Project'}
-          </h3>
-
-          <p className="text-sm sm:text-[15px] leading-relaxed text-white/60 max-w-[650px] mx-auto">
-            {activeData.tagline || ''}
-          </p>
-
-          <div className="pt-2">
-            <Link
-              href={`/${locale}/projects/${activeProjectMeta.slug}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#819fa7] border-b border-white hover:border-[#819fa7] pb-1 transition-all duration-200 group"
+            {/* Interactive Swipe & Coverflow Stage */}
+            <div
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={finishPointerGesture}
+              onPointerCancel={finishPointerGesture}
+              onWheel={handleWheel}
+              style={{ perspective: 1200, touchAction: 'pan-y' }}
+              className="relative w-full max-w-[1040px] h-[215px] sm:h-[295px] md:h-[355px] flex items-center justify-center cursor-grab active:cursor-grabbing"
             >
-              <span>{t('viewProject')}</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
+              {PROJECT_LIST.map((proj, idx) => {
+                const projData = items[proj.key] || {};
+                const imgSrc = projData.image || proj.defaultImage;
+                const rel = getCircularOffset(idx, currentIndex);
+                const isCenter = rel === 0;
+                const absRel = Math.abs(rel);
+
+                const baseX =
+                  rel === 0
+                    ? 0
+                    : rel === 1
+                      ? step1X
+                      : rel === -1
+                        ? -step1X
+                        : rel === 2
+                          ? step2X
+                          : -step2X;
+
+                const targetScale =
+                  rel === 0 ? 1 : absRel === 1 ? 0.76 : 0.56;
+                const targetOpacity =
+                  rel === 0 ? 1 : absRel === 1 ? 0.82 : isMobile ? 0 : 0.28;
+                const targetRotateY = prefersReducedMotion
+                  ? 0
+                  : rel === 0
+                    ? 0
+                    : rel > 0
+                      ? -14
+                      : 14;
+                const zIndex = rel === 0 ? 30 : absRel === 1 ? 20 : 10;
+
+                // Apply live finger/mouse drag follow smoothly
+                const dragFactor = isCenter ? 1 : absRel === 1 ? 0.55 : 0.25;
+
+                return (
+                  <motion.div
+                    key={proj.key}
+                    initial={false}
+                    animate={{
+                      x: baseX + dragOffset * dragFactor,
+                      scale: targetScale,
+                      opacity: targetOpacity,
+                      rotateY: targetRotateY,
+                    }}
+                    transition={
+                      dragOffset !== 0
+                        ? { type: 'tween', duration: 0.05, ease: 'linear' }
+                        : {
+                            type: 'spring',
+                            stiffness: 225,
+                            damping: 28,
+                            mass: 0.88,
+                          }
+                    }
+                    onClick={() => {
+                      if (pointerStateRef.current.didSwipe) {
+                        pointerStateRef.current.didSwipe = false;
+                        return;
+                      }
+                      if (isCenter) {
+                        router.push(`/${locale}/projects/${proj.slug}`);
+                      } else {
+                        goToIndex(idx);
+                      }
+                    }}
+                    style={{
+                      zIndex,
+                      transformStyle: 'preserve-3d',
+                      willChange: 'transform, opacity',
+                      pointerEvents: isMobile && absRel > 1 ? 'none' : 'auto',
+                    }}
+                    className={`group/card absolute w-[276px] sm:w-[410px] md:w-[490px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer ${
+                      isCenter
+                        ? 'border border-white/25 shadow-[0_28px_65px_-15px_rgba(0,0,0,0.92),0_0_40px_rgba(129,159,167,0.2)]'
+                        : 'border border-white/10 shadow-[0_16px_32px_-10px_rgba(0,0,0,0.65)]'
+                    }`}
+                  >
+                    <img
+                      src={imgSrc}
+                      alt={projData.title || proj.key}
+                      className="w-full h-full object-cover select-none pointer-events-none bg-[#121417] transition-transform duration-500 group-hover/card:scale-[1.02]"
+                      draggable={false}
+                    />
+                    {!isCenter && (
+                      <div className="absolute inset-0 bg-black/38 group-hover/card:bg-black/15 transition-colors duration-300" />
+                    )}
+                  </motion.div>
+                );
+              })}
+
+              {/* Left / Previous Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goPrev();
+                }}
+                aria-label={locale === 'tr' ? 'Önceki proje' : 'Previous project'}
+                style={{ outline: 'none' }}
+                className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 hover:bg-[#202831] backdrop-blur-xl border border-white/15 hover:border-[#819fa7]/60 text-white/80 hover:text-white flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] active:scale-90 transition-all cursor-pointer"
+              >
+                <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+
+              {/* Right / Next Button */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goNext();
+                }}
+                aria-label={locale === 'tr' ? 'Sonraki proje' : 'Next project'}
+                style={{ outline: 'none' }}
+                className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 hover:bg-[#202831] backdrop-blur-xl border border-white/15 hover:border-[#819fa7]/60 text-white/80 hover:text-white flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] active:scale-90 transition-all cursor-pointer"
+              >
+                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              </button>
+            </div>
+
+            {/* Interactive Pagination Dots */}
+            <div className="flex items-center justify-center gap-2 mt-5">
+              {PROJECT_LIST.map((proj, idx) => {
+                const isActive = idx === currentIndex;
+                return (
+                  <button
+                    key={proj.key}
+                    type="button"
+                    onClick={() => goToIndex(idx)}
+                    aria-label={`Project ${idx + 1}`}
+                    style={{ outline: 'none' }}
+                    className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                      isActive
+                        ? 'w-7 bg-[#819fa7]'
+                        : 'w-1.5 bg-white/20 hover:bg-white/45'
+                    }`}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+
+          {/* Smoothly Animated Active Project Details Box */}
+          <div className="max-w-[780px] mx-auto text-center px-4 mt-6 md:mt-8 min-h-[150px] flex flex-col items-center justify-start">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeProjectMeta.key}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                className="space-y-3"
+              >
+                {activeData.category && (
+                  <div className="inline-block font-mono text-[11px] font-semibold tracking-[0.16em] uppercase text-[#819fa7]/90">
+                    {activeData.category}
+                  </div>
+                )}
+
+                <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-bold text-[#f3f5f9] tracking-tight">
+                  {activeData.title || 'Project'}
+                </h3>
+
+                <p className="text-sm sm:text-[15px] leading-relaxed text-white/60 max-w-[660px] mx-auto">
+                  {activeData.tagline || ''}
+                </p>
+
+                <div className="pt-2">
+                  <Link
+                    href={`/${locale}/projects/${activeProjectMeta.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#819fa7] border-b border-white hover:border-[#819fa7] pb-1 transition-all duration-200 group"
+                  >
+                    <span>{t('viewProject')}</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
         </SectionReveal>
       </div>
     </section>

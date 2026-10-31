@@ -2,16 +2,27 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, getMessages } from 'next-intl/server';
 import Link from 'next/link';
-import { ArrowLeft, ExternalLink, Github, CheckCircle2, Layers, Cpu, Calendar } from 'lucide-react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  ExternalLink,
+  Github,
+  CheckCircle2,
+  Layers,
+  Cpu,
+  Calendar,
+  Workflow,
+  Sparkles,
+} from 'lucide-react';
 
 const SLUG_TO_KEY: Record<string, string> = {
   'aliaga-ai': 'aliagaAI',
   'ai-dream-interpreter': 'aiDreamInterpreter',
   'kayip-qr': 'kayipQR',
-  'wedo': 'weDo',
+  wedo: 'weDo',
   'real-time-visual-understanding': 'visualAI',
-  'aliagaai': 'aliagaAI',
-  'kayipqr': 'kayipQR',
+  aliagaai: 'aliagaAI',
+  kayipqr: 'kayipQR',
   'visual-ai': 'visualAI',
 };
 
@@ -59,7 +70,8 @@ export default async function ProjectDetailPage({
 
   const messages = (await getMessages({ locale })) as any;
   const t = await getTranslations({ locale, namespace: 'projects' });
-  const project = messages?.projects?.items?.[projectKey];
+  const items = messages?.projects?.items || {};
+  const project = items[projectKey];
 
   if (!project) {
     notFound();
@@ -67,11 +79,18 @@ export default async function ProjectDetailPage({
 
   const features: string[] = project.features || [];
   const tags: string[] = project.tags || [];
+  const architectureSteps: string[] = project.architectureSteps || [];
+  const highlights: Array<{ label: string; value: string }> = project.highlights || [];
 
   // Previous and next projects
-  const currentIndex = ALL_SLUGS.indexOf(slug);
-  const prevSlug = currentIndex > 0 ? ALL_SLUGS[currentIndex - 1] : ALL_SLUGS[ALL_SLUGS.length - 1];
-  const nextSlug = currentIndex < ALL_SLUGS.length - 1 ? ALL_SLUGS[currentIndex + 1] : ALL_SLUGS[0];
+  const normalizedIdx = ALL_SLUGS.indexOf(
+    ALL_SLUGS.find((s) => SLUG_TO_KEY[s] === projectKey) || slug
+  );
+  const safeIndex = normalizedIdx >= 0 ? normalizedIdx : 0;
+  const prevSlug = ALL_SLUGS[(safeIndex - 1 + ALL_SLUGS.length) % ALL_SLUGS.length];
+  const nextSlug = ALL_SLUGS[(safeIndex + 1) % ALL_SLUGS.length];
+  const prevProject = items[SLUG_TO_KEY[prevSlug]];
+  const nextProject = items[SLUG_TO_KEY[nextSlug]];
 
   return (
     <main className="min-h-screen bg-[#0d0d0d] text-[#f3f5f9] pt-28 pb-24 px-4 sm:px-6 relative">
@@ -91,18 +110,18 @@ export default async function ProjectDetailPage({
         </div>
 
         {/* Header Hero */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-10">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="font-mono text-xs font-semibold px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#819fa7]">
+            <span className="font-mono text-xs font-semibold px-3 py-1 rounded-full bg-[#819fa7]/10 border border-[#819fa7]/25 text-[#9cc0ca]">
               {project.category || 'Engineering'}
             </span>
-            <span className="font-mono text-xs text-white/40 flex items-center gap-1.5">
+            <span className="font-mono text-xs text-white/45 flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5" />
-              {project.period || '2024'}
+              {project.period || '2025'}
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-[#f3f5f9]">
+          <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-[#f3f5f9] leading-[1.12]">
             {project.title}
           </h1>
 
@@ -138,36 +157,78 @@ export default async function ProjectDetailPage({
           </div>
         </div>
 
-        {/* Featured Showcase Banner */}
-        <div className="mb-14 rounded-2xl overflow-hidden border border-white/10 bg-[#141414] shadow-2xl relative group">
-          <div className="relative w-full aspect-[16/9] sm:aspect-[16/8] max-h-[520px] flex items-center justify-center bg-[#111]">
+        {/* Featured Showcase Banner (Full uncropped 16:10 display) */}
+        <div className="mb-8 rounded-2xl overflow-hidden border border-white/12 bg-[#101215] shadow-[0_28px_70px_-15px_rgba(0,0,0,0.85)] relative">
+          <div className="relative w-full aspect-[16/10] flex items-center justify-center bg-[#0f1114]">
             <img
               src={project.image || '/projects/aliagaai.png'}
               alt={project.title}
-              className="w-full h-full object-cover select-none"
+              className="w-full h-full object-contain select-none"
             />
           </div>
         </div>
 
-        {/* Grid Sections: Overview & Features */}
+        {/* Engineering Highlights Strip */}
+        {highlights.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
+            {highlights.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 flex flex-col justify-between gap-1.5"
+              >
+                <span className="font-mono text-[11px] font-semibold tracking-[0.14em] uppercase text-[#819fa7]">
+                  {item.label}
+                </span>
+                <span className="text-sm sm:text-base font-display font-bold text-[#f3f5f9] leading-snug">
+                  {item.value}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {/* Main Left: Overview & Key Features */}
+          {/* Left 2 Columns: Overview, Architecture Flow & Key Features */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Overview */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/10 space-y-3">
-              <h2 className="text-lg font-bold text-white font-display flex items-center gap-2.5">
+            {/* 1. Overview */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
+              <h2 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2.5">
                 <Layers className="w-5 h-5 text-[#819fa7]" />
                 {t('overview')}
               </h2>
-              <p className="text-sm sm:text-base text-white/70 leading-relaxed whitespace-pre-line">
+              <p className="text-sm sm:text-[15.5px] text-white/75 leading-[1.8] whitespace-pre-line">
                 {project.overview || project.tagline}
               </p>
             </div>
 
-            {/* Key Features */}
+            {/* 2. System Architecture & How It Works */}
+            {architectureSteps.length > 0 && (
+              <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/10 space-y-5">
+                <h2 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2.5">
+                  <Workflow className="w-5 h-5 text-[#819fa7]" />
+                  {t('architecture')}
+                </h2>
+                <div className="space-y-3">
+                  {architectureSteps.map((step, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-4 p-4 rounded-xl bg-[#111519]/80 border border-white/[0.07]"
+                    >
+                      <span className="font-mono text-xs font-bold px-2.5 py-1 rounded-lg bg-[#819fa7]/15 border border-[#819fa7]/30 text-[#a8cbd6] shrink-0 mt-0.5">
+                        0{idx + 1}
+                      </span>
+                      <p className="text-sm text-white/80 leading-relaxed">{step}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 3. Key Features */}
             {features.length > 0 && (
               <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
-                <h2 className="text-lg font-bold text-white font-display flex items-center gap-2.5">
+                <h2 className="text-lg sm:text-xl font-bold text-white font-display flex items-center gap-2.5">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                   {t('keyFeatures')}
                 </h2>
@@ -175,9 +236,9 @@ export default async function ProjectDetailPage({
                   {features.map((feat, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-3 p-3.5 rounded-xl bg-white/[0.02] border border-white/5"
+                      className="flex items-start gap-3 p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06]"
                     >
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 mt-2 shrink-0" />
+                      <Sparkles className="w-4 h-4 text-[#819fa7] mt-0.5 shrink-0" />
                       <span className="text-sm text-white/80 leading-relaxed">{feat}</span>
                     </div>
                   ))}
@@ -186,11 +247,11 @@ export default async function ProjectDetailPage({
             )}
           </div>
 
-          {/* Sidebar Right: Tech Stack & Details */}
-          <div className="space-y-6">
+          {/* Right Sidebar: Tech Stack & Repository Card */}
+          <div className="space-y-6 lg:sticky lg:top-28 lg:self-start">
             {/* Tech Stack */}
             <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
-              <h3 className="text-xs font-mono font-semibold text-white/40 tracking-wider uppercase flex items-center gap-2">
+              <h3 className="text-xs font-mono font-semibold text-white/45 tracking-wider uppercase flex items-center gap-2">
                 <Cpu className="w-4 h-4 text-[#819fa7]" />
                 {t('techStack')}
               </h3>
@@ -198,7 +259,7 @@ export default async function ProjectDetailPage({
                 {tags.map((tag, idx) => (
                   <span
                     key={idx}
-                    className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-medium text-white/80"
+                    className="px-3 py-1.5 rounded-lg bg-white/[0.05] border border-white/10 text-xs font-medium text-white/85"
                   >
                     {tag}
                   </span>
@@ -208,43 +269,60 @@ export default async function ProjectDetailPage({
 
             {/* GitHub Info Card */}
             {project.github && (
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1a2327]/40 to-transparent border border-[#819fa7]/20 space-y-3">
-                <div className="font-mono text-xs text-[#819fa7] uppercase font-semibold">
-                  {locale === 'tr' ? 'Açık Kaynak Kod' : 'Open Source'}
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-[#1a2327]/55 to-[#111518]/60 border border-[#819fa7]/25 space-y-3.5">
+                <div className="font-mono text-xs text-[#9ac0cb] uppercase font-semibold tracking-wider">
+                  {locale === 'tr' ? 'Kaynak Kod & Dokümantasyon' : 'Source Code & Docs'}
                 </div>
-                <p className="text-xs text-white/60 leading-relaxed">
+                <p className="text-xs text-white/65 leading-relaxed">
                   {locale === 'tr'
-                    ? 'Bu projenin kaynak kodlarını, mimari diyagramlarını ve dokümantasyonunu GitHub üzerinde inceleyebilirsiniz.'
-                    : 'Explore the source code, architecture diagrams, and complete documentation on GitHub.'}
+                    ? 'Projenin tüm kaynak kodlarını, Docker kurulumunu, sistem mimarisi şemalarını ve API dokümantasyonunu GitHub deposunda inceleyebilirsiniz.'
+                    : 'Explore the complete source code, Docker setup, system architecture diagrams, and API documentation in the GitHub repository.'}
                 </p>
                 <a
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-semibold text-white hover:text-[#819fa7] transition-colors"
+                  className="inline-flex items-center gap-2 text-xs font-semibold text-white hover:text-[#9cc0ca] transition-colors pt-1"
                 >
-                  GitHub <ExternalLink className="w-3 h-3" />
+                  <Github className="w-4 h-4" />
+                  <span>{locale === 'tr' ? "GitHub'da Aç" : 'Open on GitHub'}</span>
+                  <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
             )}
           </div>
         </div>
 
-        {/* Footer Navigation: Next / Prev Projects */}
-        <div className="pt-8 border-t border-white/10 flex items-center justify-between">
+        {/* Footer Navigation: Next / Prev Projects with Titles */}
+        <div className="pt-8 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link
             href={`/${locale}/projects/${prevSlug}`}
-            className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-white transition-colors"
+            className="group p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 transition-all flex items-center gap-3"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            {locale === 'tr' ? 'Önceki Proje' : 'Previous Project'}
+            <ArrowLeft className="w-4 h-4 text-[#819fa7] group-hover:-translate-x-1 transition-transform shrink-0" />
+            <div className="min-w-0">
+              <div className="font-mono text-[10px] uppercase tracking-wider text-white/40">
+                {locale === 'tr' ? 'Önceki Proje' : 'Previous Project'}
+              </div>
+              <div className="text-sm font-semibold text-white/85 group-hover:text-white truncate">
+                {prevProject?.title || prevSlug}
+              </div>
+            </div>
           </Link>
+
           <Link
             href={`/${locale}/projects/${nextSlug}`}
-            className="flex items-center gap-2 text-xs font-mono text-white/50 hover:text-white transition-colors"
+            className="group p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/10 transition-all flex items-center justify-end gap-3 text-right"
           >
-            {locale === 'tr' ? 'Sonraki Proje' : 'Next Project'}
-            <ArrowLeft className="w-3.5 h-3.5 rotate-180" />
+            <div className="min-w-0">
+              <div className="font-mono text-[10px] uppercase tracking-wider text-white/40">
+                {locale === 'tr' ? 'Sonraki Proje' : 'Next Project'}
+              </div>
+              <div className="text-sm font-semibold text-white/85 group-hover:text-white truncate">
+                {nextProject?.title || nextSlug}
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-[#819fa7] group-hover:translate-x-1 transition-transform shrink-0" />
           </Link>
         </div>
       </div>
