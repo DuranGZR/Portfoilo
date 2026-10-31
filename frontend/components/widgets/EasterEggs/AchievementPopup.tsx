@@ -31,8 +31,8 @@ const AchievementPopup = ({ achievement, onClose }: AchievementPopupProps) => {
         gravity={0.3}
       />
       <div
-        className={`fixed top-8 right-8 z-[10000] transition-all duration-300 ${
-          show ? 'translate-x-0 opacity-100' : 'translate-x-[120%] opacity-0'
+        className={`fixed top-8 left-1/2 -translate-x-1/2 z-[10000] transition-all duration-300 ${
+          show ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}
       >
         <div className="glass-card p-6 min-w-[320px] border-2 border-primary/50 shadow-2xl">

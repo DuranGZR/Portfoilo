@@ -82,10 +82,10 @@ const KonamiListener = () => {
 
   return (
     <>
-      {/* Subtle hint */}
+      {/* Subtle hint — centered so it never overlaps the corner mascot */}
       {showHint && !terminalOpen && (
-        <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-2 fade-in duration-500">
-          <div className="glass-card px-4 py-3 max-w-[200px]">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-none animate-in slide-in-from-bottom-2 fade-in duration-500">
+          <div className="glass-card px-4 py-3 max-w-[220px]">
             <p className="text-xs text-white/50 text-center font-mono">
               🎮 Try the Konami code
               <br />
