@@ -5,6 +5,7 @@ import { Send, Loader2, ArrowRight, RotateCcw, Sparkles } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import SectionReveal from '@/components/animations/SectionReveal';
+import ChatMessageContent from '@/components/ui/ChatMessageContent';
 
 interface Message {
   id: string;
@@ -167,7 +168,10 @@ export default function AIAssistant() {
                             : 'bg-white/[0.03] border border-white/10 text-white/90 rounded-tl-sm'
                         }`}
                       >
-                        <p className="whitespace-pre-wrap">{message.content}</p>
+                        <ChatMessageContent
+                          content={message.content}
+                          isUser={message.role === 'user'}
+                        />
                       </div>
                     </div>
                   ))}

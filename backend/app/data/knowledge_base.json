@@ -1,131 +1,173 @@
 {
     "about": {
         "name": "Duran Gezer",
-        "title": "AI/ML Engineer",
+        "title": "Computer Engineer & AI Systems Developer",
         "location": "İzmir, Türkiye",
         "university": "İnönü Üniversitesi - Bilgisayar Mühendisliği",
-        "year": "4. sınıf (2022-2026)",
+        "year": "4. sınıf (2022-2026, Mezuniyet: 2026)",
         "gpa": "2.84/4.0",
-        "bio": "İnönü Üniversitesi Bilgisayar Mühendisliği 4. sınıf öğrencisiyim. 2022'den bu yana yapay zeka ve makine öğrenmesi üzerine yoğunlaşarak, Python, TensorFlow, Scikit-learn gibi teknolojilerle çeşitli projeler geliştirdim. Görüntü işlemeden doğal dil işlemeye, pekiştirmeli öğrenmeden derin öğrenmeye kadar geniş bir yelpazede deneyim kazandım. Her projemde teoriyi pratiğe dökmeyi, karmaşık problemleri analitik düşünceyle çözmeyi ve sürekli öğrenmeyi ilke edindim.",
-        "goal": "Mezuniyetimin ardından AI/ML alanında uzmanlaşarak, veri bilimi ve yapay zeka teknolojilerini gerçek dünya problemlerine uygulayan bir mühendis olmak.",
-        "status": "İş fırsatlarına açık"
+        "bio": "İnönü Üniversitesi Bilgisayar Mühendisliği 4. sınıf öğrencisiyim. AI sistemleri, hibrit RAG mimarileri (pgvector, Türkçe FTS, RRF), mobil ve backend mimarileri (FastAPI, React Native, Next.js) ile DevOps (Docker, CI/CD) alanlarına odaklanıyorum. 2022'den bu yana 20'den fazla proje geliştirdim. Teoriyi pratiğe dökerek gerçek dünya problemlerini çözen, production-ready sistemler inşa ediyorum.",
+        "goal": "AI sistemleri, hibrit RAG mimarileri ve production-ready backend/mobil yazılım alanlarında uzmanlaşarak gerçek dünya problemlerine ölçeklenebilir ve yüksek performanslı çözümler üretmek.",
+        "status": "İş fırsatlarına açık (Junior AI / Backend / DevOps rolleri)"
     },
     "highlights": [
-        "15+ Tamamlanan Proje",
-        "Analitik Düşünce - Karmaşık problemleri parçalara ayırıp çözümleme",
-        "Sürekli Öğrenen - AI/ML'deki en son gelişmeleri takip",
-        "Uygulama Odaklı - Teoriden pratiğe, çalışan çözümler üretme"
+        "20+ Tamamlanan Proje (AI, Backend, Mobil, DevOps)",
+        "Hibrit RAG Mimarisi (pgvector HNSW + PostgreSQL Türkçe FTS + RRF ile sıfır halüsinasyon)",
+        "Yerel Multimodal AI & Edge Çıkarımı (LLaVA 7B, Ollama, WebSocket)",
+        "Çoklu Model LLM Orkestrasyonu & Failover (Google Gemini 1.5 + Groq Llama 3)",
+        "Topluluk Liderliği (HSD İnönü DevOps Developer & Siber Güvenlik Topluluğu Organizasyon Başkanı)"
     ],
     "skills": {
-        "ai_ml": [
-            "TensorFlow",
+        "ai_systems_and_ml": [
+            "Hibrit RAG (Retrieval-Augmented Generation)",
+            "pgvector (HNSW) & Vektörel Arama",
+            "Groq Llama 3 / 3.3 & Google Gemini 1.5",
+            "Yerel LLM & Multimodal AI (Ollama, LLaVA 7B)",
+            "Chain-of-Thought (CoT) Prompting",
+            "Computer Vision & Görüntü İşleme (OpenCV)",
+            "TensorFlow & Keras (CNN)",
+            "Scikit-learn & Machine Learning",
+            "Pekiştirmeli Öğrenme (Q-Learning)",
             "PyTorch",
-            "Scikit-learn",
-            "Keras",
-            "OpenCV",
-            "NumPy",
-            "Q-Learning",
-            "CNN",
-            "Reinforcement Learning"
+            "NumPy & Pandas"
         ],
         "programming": [
-            "Python",
-            "JavaScript",
+            "Python (3.11 - 3.13)",
             "TypeScript",
-            "C#",
-            "C++",
+            "JavaScript",
+            "SQL (PostgreSQL, SQLite)",
             "Java",
             "Kotlin",
-            "SQL"
+            "C#",
+            "C++"
         ],
-        "frameworks": [
-            "React",
-            "Next.js",
+        "backend_and_frameworks": [
             "FastAPI",
-            "Docker",
-            "Git",
-            "Pandas"
+            "Async SQLAlchemy 2 & Alembic",
+            "Next.js 15 (React 19)",
+            "React Native (Expo SDK 54)",
+            "Node.js & Express",
+            "Docker & Docker Compose",
+            "Zustand & TanStack Query",
+            "Tailwind CSS",
+            "Git & GitHub Actions"
         ],
-        "data": [
-            "Veri Analizi",
-            "Feature Engineering",
-            "Model Evaluation",
-            "PostgreSQL",
-            "MongoDB"
+        "database_and_devops": [
+            "PostgreSQL 17 & pgvector",
+            "Firebase (Firestore, Auth)",
+            "SQLite",
+            "SQL Outbox Pattern",
+            "CI/CD Pipeline (GitHub Actions)",
+            "Linux Sunucu Yönetimi & Nginx",
+            "APScheduler (İzole Arka Plan Botları)",
+            "Argon2id & JWT Güvenliği",
+            "SlowAPI (Rate Limiting)"
         ]
     },
     "projects": [
         {
-            "name": "Gerçek Zamanlı Görsel Anlama AI",
-            "description": "Ollama LLaVA modeli kullanarak kameradan anlık görüntü analizi yapan yapay zeka sistemi. Görüntüleri gerçek zamanlı olarak anlayıp Türkçe açıklama üretir.",
+            "name": "AliağaAI — Akıllı Şehir Rehberi & RAG Asistanı",
+            "featured": true,
+            "category": "AI Systems • Hybrid RAG • Mobile",
+            "year": "2025",
+            "description": "Aliağa ilçesine özel doğrulanmış verilerle çalışan; React Native mobil arayüzü ve çok aşamalı hibrit RAG (FastAPI + pgvector HNSW + PostgreSQL Türkçe Full-Text Search + Reciprocal Rank Fusion / RRF) mimarisini birleştiren halüsinasyonsuz akıllı şehir rehberi ve asistanı. 9 izole asenkron veri botu (APScheduler) ile canlı belediye duyuruları, İZBAN seferleri, nöbetçi eczaneler ve planlı kesintiler taranır. Groq Llama 3.3 modeli yalnızca doğrulanmış bağlam üzerinden yanıt üretir; yanıtlarda [S1], [S2] tıklanabilir kaynak atıfları sunar. SlowAPI rate limiting ve X-API-Key güvenliğine sahiptir.",
             "tech": [
-                "Python",
+                "Python 3.11+",
+                "FastAPI",
+                "React Native",
+                "Expo",
+                "PostgreSQL",
+                "pgvector (HNSW)",
+                "Groq Llama 3.3",
+                "APScheduler",
+                "Docker Compose",
+                "SlowAPI"
+            ],
+            "github": "https://github.com/DuranGZR/AliagaAI"
+        },
+        {
+            "name": "Rüya Yorumlayıcı (AI Dream Interpreter)",
+            "featured": true,
+            "category": "Applied AI • Mobile • CoT & RAG",
+            "year": "2025",
+            "description": "Carl Gustav Jung arketipleri ve Sigmund Freud sembolik analiz yaklaşımı temelli, çoklu LLM yedekleme (Google Gemini 1.5 Flash + Groq Llama 3 Failover) ve yerel sembol RAG sözlüğüyle çalışan psikolojik rüya analiz ve takip platformu. 3 aşamalı Chain-of-Thought (Dedektif -> Analist -> Sentez), 0–100 zihinsel enerji skoru, haftalık aktivite grafiği, takvim ısıl haritası (Heatmap) ve Firebase Firestore/Auth altyapısı içerir.",
+            "tech": [
+                "React Native",
+                "Expo SDK 54",
+                "TypeScript",
+                "Node.js",
+                "Express",
+                "Google Gemini 1.5",
+                "Groq Llama 3",
+                "Firebase Firestore",
+                "Firebase Auth",
+                "Docker Compose"
+            ],
+            "github": "https://github.com/DuranGZR/Ai-Dream-Interpreter"
+        },
+        {
+            "name": "KayıpQR — Gizlilik Odaklı Akıllı QR Etiket Platformu",
+            "featured": true,
+            "category": "Full-Stack Web • Privacy & Security",
+            "year": "2025",
+            "description": "'Eşyan sana dönsün, numaran sende kalsın' vizyonuyla geliştirilmiş; kişisel telefon veya e-posta paylaşmadan dinamik QR etiketleri üzerinden üyeliksiz anonim mesajlaşma sağlayan uçtan uca platform. 8 tasarım şablonu, SVG/PNG/A4 baskı çıktısı sunar. Redis bağımlılığı olmadan doğrudan PostgreSQL üzerinde SQL Outbox e-posta kuyruğu, Argon2id parola hashleme, WebP görsel optimizasyonu ve Pytest CI doğrulama hattı barındırır.",
+            "tech": [
+                "Next.js 15",
+                "TypeScript",
+                "FastAPI",
+                "Async SQLAlchemy",
+                "PostgreSQL",
+                "Alembic",
+                "Argon2id",
+                "Tailwind CSS",
+                "Resend Outbox",
+                "Docker"
+            ],
+            "github": "https://github.com/DuranGZR/KayipQR"
+        },
+        {
+            "name": "WeDo — Ortak Fikir, Liste & Karar Uygulaması",
+            "featured": true,
+            "category": "Mobile • Backend Architecture • DevOps",
+            "year": "2025",
+            "description": "Çiftlerin ve arkadaş gruplarının sosyal medyada (TikTok, Instagram, YouTube) veya web'de gördükleri mekan, etkinlik ve alışveriş fikirlerini telefonun yerleşik 'Paylaş' menüsünden (Native Share Intent) tek dokunuşla ortak alana kaydedip birlikte planlamasını sağlayan mobil öncelikli uygulama. SSRF korumalı metadata çıkarma zinciri (oEmbed, OpenGraph, JSON-LD), Argon2 ve refresh-token rotation güvenliği, Docker Compose ve Nginx orkestrasyonu barındırır.",
+            "tech": [
+                "React Native 0.81",
+                "Expo SDK 54",
+                "TypeScript",
+                "FastAPI",
+                "Python 3.13",
+                "PostgreSQL 17",
+                "SQLAlchemy 2",
+                "Zustand & TanStack Query",
+                "Docker Compose",
+                "Nginx"
+            ],
+            "github": "https://github.com/DuranGZR/WeDo"
+        },
+        {
+            "name": "Anlık Anlatım — Gerçek Zamanlı Görsel Anlama AI",
+            "featured": true,
+            "category": "Computer Vision • Local Multimodal AI",
+            "year": "2024",
+            "description": "Webcam görüntülerini %100 yerel çalışan multimodal LLaVA 7B (Mistral q4_0) derin öğrenme modeliyle analiz edip düşük gecikmeyle anlık Türkçe doğal dil açıklamaları üreten sistem. Çift yönlü düşük gecikmeli WebSocket akışı ve OpenCV kamera entegrasyonuyla harici bulut/API maliyeti olmadan sıfır veri sızıntısıyla çalışır.",
+            "tech": [
+                "Python 3.11+",
+                "FastAPI",
                 "Ollama",
-                "LLaVA",
-                "OpenCV"
-            ],
-            "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding",
-            "year": "2024"
-        },
-        {
-            "name": "El Yazısı Rakam Tanıma",
-            "description": "CNN ve OpenCV ile MNIST veri seti üzerinde eğitilmiş derin öğrenme modeli. Gerçek zamanlı çizim arayüzü ile el yazısı rakamları tanır.",
-            "tech": [
-                "TensorFlow",
-                "Keras",
+                "LLaVA 7B (Mistral q4_0)",
+                "WebSockets",
                 "OpenCV",
-                "CNN"
+                "React"
             ],
-            "github": "https://github.com/DuranGZR/El_Yazisi_Tahmin",
-            "year": "2024"
-        },
-        {
-            "name": "Diyabet Tahmin Sistemi",
-            "description": "Makine öğrenmesi ile diyabet hastalığını erken teşhis eden tahmin modeli. Veri analizi, ön işleme ve çoklu sınıflandırma algoritmaları kullanıldı.",
-            "tech": [
-                "Python",
-                "Scikit-learn",
-                "Pandas",
-                "NumPy"
-            ],
-            "github": "https://github.com/DuranGZR/Diabetes_Prediction",
-            "year": "2024"
-        },
-        {
-            "name": "XOX Bot - Q-Learning AI",
-            "description": "Q-Öğrenme algoritması ile eğitilmiş yapay zeka destekli Tic-Tac-Toe botu. Takviye öğrenme ile stratejilerini geliştirerek optimal hamleler yapar.",
-            "tech": [
-                "Python",
-                "Q-Learning",
-                "Reinforcement Learning"
-            ],
-            "github": "https://github.com/DuranGZR/XOX_Bot",
-            "year": "2024"
-        },
-        {
-            "name": "Maaş Tahmin Modeli",
-            "description": "Beyzbol oyuncularının maaş tahminleri için makine öğrenmesi modeli. Keşifçi veri analizi, özellik mühendisliği ve regresyon algoritmaları uygulandı.",
-            "tech": [
-                "Python",
-                "Scikit-learn",
-                "Feature Engineering"
-            ],
-            "github": "https://github.com/DuranGZR/Salary_Prediction_with_Mahcine_Learning",
-            "year": "2024"
-        },
-        {
-            "name": "Basit Yapay Sinir Ağı",
-            "description": "Yapay sinir ağlarının temel çalışma prensiplerini gösteren eğitim amaçlı proje. Nöron yapısı ve aktivasyon fonksiyonları implementasyonu.",
-            "tech": [
-                "Python",
-                "NumPy"
-            ],
-            "github": "https://github.com/DuranGZR/Simple-Artificial-Neuron",
-            "year": "2024"
+            "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding"
         },
         {
             "name": "Telegram Doğum Günü Botu",
-            "description": "Doğum günlerini takip eden ve otomatik hatırlatma gönderen Telegram botu. Her gün 09:00'da kontrol eder ve doğum gününden 1 gün önce gruba mesaj atar. CSV ile toplu ekleme, admin yetkilendirme ve istatistik özellikleri mevcut.",
+            "featured": false,
+            "category": "Automation & Bots",
+            "year": "2025",
+            "description": "python-telegram-bot async mimarisi, SQLite ve APScheduler ile doğum günlerini takip eden ve her gün 09:00'da otomatik hatırlatma gönderen Telegram botu. Doğum gününden 1 gün önce gruba mesaj atar; CSV ile toplu ekleme, admin yetkilendirme ve Railway üzerinde 7/24 cloud deployment özelliklerine sahiptir.",
             "tech": [
                 "Python",
                 "Telegram Bot API",
@@ -133,19 +175,93 @@
                 "APScheduler",
                 "Railway"
             ],
-            "github": "https://github.com/DuranGZR/Telegram_dogum_gunu_bot",
-            "year": "2025"
+            "github": "https://github.com/DuranGZR/Telegram_dogum_gunu_bot"
+        },
+        {
+            "name": "El Yazısı Rakam Tanıma",
+            "featured": false,
+            "category": "Deep Learning • CNN",
+            "year": "2024",
+            "description": "CNN (Evrişimli Sinir Ağları) ve OpenCV ile MNIST veri seti üzerinde eğitilmiş derin öğrenme modeli. Gerçek zamanlı çizim GUI arayüzü ile el yazısı rakamları %98+ doğrulukla tanır.",
+            "tech": [
+                "Python",
+                "TensorFlow",
+                "Keras",
+                "OpenCV",
+                "CNN",
+                "NumPy"
+            ],
+            "github": "https://github.com/DuranGZR/El_Yazisi_Tahmin"
+        },
+        {
+            "name": "XOX Bot — Q-Learning AI",
+            "featured": false,
+            "category": "Reinforcement Learning",
+            "year": "2024",
+            "description": "Pekiştirmeli öğrenme (Q-Learning) algoritmasıyla kendi kendine oynayarak optimal hamleler öğrenen Tic-Tac-Toe yapay zekası. Epsilon-greedy keşif stratejisiyle %95+ kazanma oranı elde eder.",
+            "tech": [
+                "Python",
+                "NumPy",
+                "Q-Learning",
+                "Reinforcement Learning"
+            ],
+            "github": "https://github.com/DuranGZR/XOX_Bot"
+        },
+        {
+            "name": "Diyabet Tahmin Sistemi",
+            "featured": false,
+            "category": "Machine Learning • Classification",
+            "year": "2024",
+            "description": "Makine öğrenmesi ve kapsamlı özellik mühendisliği (feature engineering) ile diyabet riskini erken tespit eden sınıflandırma modeli. Random Forest ve XGBoost algoritmalarıyla ROC-AUC 0.85 performansı sağlar.",
+            "tech": [
+                "Python",
+                "Scikit-learn",
+                "Pandas",
+                "NumPy",
+                "Matplotlib"
+            ],
+            "github": "https://github.com/DuranGZR/Diabetes_Prediction"
+        },
+        {
+            "name": "Maaş Tahmin Modeli",
+            "featured": false,
+            "category": "Machine Learning • Regression",
+            "year": "2024",
+            "description": "Beyzbol oyuncularının maaş tahminleri için geliştirilen regresyon modeli. Keşifçi veri analizi (EDA), aykırı değer yönetimi, özellik mühendisliği ve Gradient Boosting algoritmaları uygulandı.",
+            "tech": [
+                "Python",
+                "Scikit-learn",
+                "Pandas",
+                "Feature Engineering"
+            ],
+            "github": "https://github.com/DuranGZR/Salary_Prediction_with_Mahcine_Learning"
+        },
+        {
+            "name": "Basit Yapay Sinir Ağı",
+            "featured": false,
+            "category": "Deep Learning Fundamentals",
+            "year": "2024",
+            "description": "Hiçbir hazır derin öğrenme kütüphanesi (TensorFlow/PyTorch) kullanmadan, sadece NumPy ile matematiksel temellerden sıfırdan yazılmış yapay nöron ve çok katmanlı sinir ağı (MLP) implementasyonu. Forward/backward propagation ve gradient descent elle kodlandı.",
+            "tech": [
+                "Python",
+                "NumPy",
+                "Matematiksel Modelleme"
+            ],
+            "github": "https://github.com/DuranGZR/Simple-Artificial-Neuron"
         },
         {
             "name": "Otobüs Bilet Rezervasyon Sistemi",
-            "description": "Nesne yönelimli programlama ve veri yapıları kullanılarak geliştirilen bilet rezervasyon sistemi. Yolcu yönetimi ve koltuk seçimi özellikleri.",
+            "featured": false,
+            "category": "Desktop App • OOP",
+            "year": "2024",
+            "description": "Java Swing GUI ve Nesne Yönelimli Programlama (OOP) prensipleriyle geliştirilmiş sefer yönetimi, yolcu yönetimi ve koltuk rezervasyon masaüstü uygulaması.",
             "tech": [
                 "Java",
+                "Swing",
                 "OOP",
                 "Veri Yapıları"
             ],
-            "github": "https://github.com/DuranGZR/A_Bus_Ticket_Reservation_System",
-            "year": "2024"
+            "github": "https://github.com/DuranGZR/A_Bus_Ticket_Reservation_System"
         }
     ],
     "education": {
@@ -233,10 +349,10 @@
         "quote": "İyi bir mühendis problemi anlamadan çözüme başlamaz."
     },
     "roadmap": {
-        "now": "Son Sınıf - Yapay zeka ve makine öğrenmesi projelerini güçlendirme, portföyü zenginleştirme",
-        "graduation": "2026 - Bilgisayar Mühendisliği diploması, AI/ML alanında junior pozisyon",
-        "1year": "Gerçek dünya ML projelerinde deneyim, derin öğrenme ve NLP'de uzmanlaşma",
-        "2years": "Mid-level AI/ML Engineer, kendi AI projelerini hayata geçirme"
+        "now": "Son Sınıf - Yapay zeka ve makine öğrenmesi projelerini güçlendirme, hibrit RAG ve production-ready AI sistemleri geliştirme",
+        "graduation": "2026 - Bilgisayar Mühendisliği diploması, AI Systems / Backend / DevOps alanında rol",
+        "1year": "Gerçek dünya LLM ve RAG sistemlerinde derinleşme, ölçeklenebilir mikroservisler ve yüksek erişilebilirlik",
+        "2years": "Mid-level AI/ML Engineer, kendi AI ürünlerini ve mimarilerini hayata geçirme"
     },
     "contact": {
         "github": "https://github.com/DuranGZR",

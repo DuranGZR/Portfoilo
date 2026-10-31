@@ -36,6 +36,149 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'aliaga-ai',
+    title: 'AliağaAI — Akıllı Şehir Rehberi & RAG Asistanı',
+    status: 'completed',
+    oneLiner: 'Aliağa ilçesine özel doğrulanmış verilerle çalışan, çok aşamalı hibrit RAG ve React Native mobil arayüzünü birleştiren akıllı şehir asistanı.',
+    problem: 'Genel arama motorlarının ilçe bazlı yerel veriye (nöbetçi eczane, İZBAN saatleri, kesintiler, belediye duyuruları) ulaşmadaki dağınıklığını ve reklam odaklı yapısını çözmek.',
+    constraints: [
+      'Sıfır halüsinasyon ve doğrulanmış kaynak zorunluluğu',
+      'Hızlı hibrit vektör arama (<500ms)',
+      '9 izole asenkron veri botu ile güncel veri',
+      'Mobil öncelikli arayüz (React Native)'
+    ],
+    approach: 'pgvector HNSW + PostgreSQL Türkçe Full-Text Search ve Reciprocal Rank Fusion (RRF) ile hibrit arama motoru. Groq Llama 3.3 ile doğrulanmış bağlam üzerinden kaynak atıflı ([S1], [S2]) yanıt üretimi.',
+    modelChoice: {
+      name: 'Groq Llama 3.3 + pgvector HNSW',
+      rationale: 'Hızlı çıkarım süresi, Türkçe anlama yeteneği ve hibrit vektör erişimi sayesinde uydurma bilgi üretmeden net kaynak referanslı cevaplar.'
+    },
+    evaluation: {
+      metrics: [
+        { name: 'Halüsinasyon Oranı', value: '%0' },
+        { name: 'Veri Botları', value: '9 İzole Bot' },
+        { name: 'Sorgu Yanıtı', value: '<600ms' }
+      ],
+      approach: 'Doğrulanmış yerel veri kümeleri ve canlı belediye/ulaşım sorguları ile kapsamlı testler.'
+    },
+    outcome: 'Aliağa ilçesi sakinleri ve ziyaretçileri için 7/24 güncel, güvenilir ve tek ekranda şehir sinyallerini sunan akıllı asistan.',
+    learnings: [
+      'Hibrit RAG (vektör + FTS), salt vektör aramasına göre yerel aramalarda belirgin şekilde daha isabetli',
+      'Reciprocal Rank Fusion (RRF), farklı arama skorlarını normalize etmede en dengeli yöntem',
+      'Arka plan botlarında hata izolasyonu veri hattı sürekliliği için şart'
+    ],
+    techStack: ['Python 3.11+', 'FastAPI', 'React Native', 'Expo', 'PostgreSQL', 'pgvector (HNSW)', 'Groq Llama 3.3', 'APScheduler', 'Docker Compose', 'SlowAPI'],
+    github: 'https://github.com/DuranGZR/AliagaAI',
+    demo: undefined,
+    tags: ['AI Systems', 'Hybrid RAG', 'Mobile', 'FastAPI', 'PostgreSQL']
+  },
+
+  {
+    id: 'ai-dream-interpreter',
+    title: 'Rüya Yorumlayıcı (AI Dream Interpreter)',
+    status: 'completed',
+    oneLiner: 'Jungiyen arketipler ve Freudyen sembolizm temelli, çoklu LLM yedekleme ve sembol RAG sözlüğüyle çalışan psikolojik rüya analiz platformu.',
+    problem: 'Geleneksel kalıp rüya tabirlerinin bilimsel ve psikolojik temelden yoksun olması; yüzeysel ve genellemeci açıklamalar sunması.',
+    constraints: [
+      'Yüksek model erişilebilirliği (kota/hata durumunda kesinti olmamalı)',
+      'Psikolojik derinlik ve Chain-of-Thought analizi',
+      'Kullanıcı gizliliği ve veri güvenliği',
+      'Zaman serisi ve içgörü takibi'
+    ],
+    approach: 'Google Gemini 1.5 Flash ile Groq Llama 3 arasında otomatik failover mimarisi. 3 aşamalı Chain-of-Thought (Dedektif -> Analist -> Sentez) ve yerel sembol RAG sözlüğü ile kişiselleştirilmiş içgörü.',
+    modelChoice: {
+      name: 'Google Gemini 1.5 + Groq Llama 3 (Failover)',
+      rationale: 'Kesintisiz çalışma garantisi ve yüksek bağlam kapasitesi ile derin sembol analizi.'
+    },
+    evaluation: {
+      metrics: [
+        { name: 'Failover Süresi', value: '<300ms' },
+        { name: 'Enerji Skoru', value: '0-100 Skala' },
+        { name: 'Uptime', value: '%99.9' }
+      ],
+      approach: 'Farklı rüya metinleri ve duygu durumları üzerinde karşılaştırmalı analiz testleri.'
+    },
+    outcome: 'Kullanıcıların bilinçaltı örüntülerini, sembol frekanslarını ve zihinsel enerji seviyelerini takip edebildiği tam teşekküllü mobil farkındalık uygulaması.',
+    learnings: [
+      'Chain-of-Thought adımları, tek aşamalı prompt çıktısına göre analiz kalitesini katbekat artırıyor',
+      'Çoklu LLM failover mimarisi prodüksiyon kararlılığı için kritik önemde'
+    ],
+    techStack: ['React Native', 'Expo SDK 54', 'TypeScript', 'Node.js', 'Express', 'Google Gemini 1.5', 'Groq Llama 3', 'Firebase Firestore', 'Firebase Auth', 'Docker Compose'],
+    github: 'https://github.com/DuranGZR/Ai-Dream-Interpreter',
+    demo: undefined,
+    tags: ['Applied AI', 'Mobile', 'CoT & RAG', 'React Native', 'Firebase']
+  },
+
+  {
+    id: 'kayip-qr',
+    title: 'KayıpQR — Gizlilik Odaklı Akıllı QR Etiket Platformu',
+    status: 'completed',
+    oneLiner: 'Kişisel telefon numarası veya e-posta paylaşmadan dinamik QR etiketleri üzerinden üyeliksiz anonim mesajlaşma sağlayan platform.',
+    problem: 'Değerli eşyalara telefon numarası yazmanın oluşturduğu gizlilik ve güvenlik riskleri.',
+    constraints: [
+      'Telefon/e-posta bilgilerinin asla dışarı sızmaması',
+      'Bulan kişinin uygulama indirmeden ve üye olmadan mesaj atabilmesi',
+      'Düşük sunucu kaynak tüketimi (Redis bağımlılığı olmadan)'
+    ],
+    approach: 'Next.js 15 ve FastAPI mimarisi. Redis yerine PostgreSQL tabanlı SQL Outbox deseniyle asenkron e-posta bildirimi; Argon2id parola güvenliği ve WebP görsel sıkıştırma.',
+    modelChoice: {
+      name: 'FastAPI + Next.js 15 + PostgreSQL',
+      rationale: 'Yüksek performans, tip güvenliği ve minimal harici bağımlılıkla üretime hazır yalın mimari.'
+    },
+    evaluation: {
+      metrics: [
+        { name: 'Gizlilik İfşası', value: '%0' },
+        { name: 'Baskı Şablonları', value: '8 Tema' },
+        { name: 'Outbox Gecikmesi', value: '<2s' }
+      ],
+      approach: 'Güvenlik denetimleri, sayfalama ve rate limiting senaryoları ile kapsamlı testler.'
+    },
+    outcome: 'Eşya sahipleri ve bulanlar arasında güvenli, anonim köprü kuran uçtan uca QR etiket ve baskı platformu.',
+    learnings: [
+      'SQL Outbox deseni, küçük ve orta ölçekli projelerde ek Redis altyapı maliyetini tamamen ortadan kaldırıyor',
+      'İmzasız tek kullanımlık oturum tokenları üyeliksiz akışlarda mükemmel UX sağlıyor'
+    ],
+    techStack: ['Next.js 15', 'TypeScript', 'FastAPI', 'Async SQLAlchemy', 'PostgreSQL', 'Alembic', 'Argon2id', 'Tailwind CSS', 'Resend Outbox', 'Docker'],
+    github: 'https://github.com/DuranGZR/KayipQR',
+    demo: undefined,
+    tags: ['Full-Stack Web', 'Privacy & Security', 'FastAPI', 'Next.js', 'PostgreSQL']
+  },
+
+  {
+    id: 'wedo',
+    title: 'WeDo — Ortak Fikir, Liste & Karar Uygulaması',
+    status: 'completed',
+    oneLiner: 'Sosyal medya ve web içeriklerini sistem paylaşım menüsünden tek dokunuşla ortak alana kaydedip birlikte planlamayı sağlayan mobil uygulama.',
+    problem: 'Sosyal medyada ve tarayıcı sekmelerinde kaybolan mekan, film, etkinlik ve alışveriş fikirlerinin ortak bir karara dönüşememesi.',
+    constraints: [
+      'iOS ve Android native Share Sheet yakalama zorunluluğu',
+      'SSRF korumalı metadata ayrıştırma',
+      'Gerçek zamanlı ortak alan senkronizasyonu'
+    ],
+    approach: 'Expo Share Intent ile sistem paylaşım menüsü entegrasyonu. oEmbed, OpenGraph ve JSON-LD ayrıştırıcıları ile otomatik önizleme kartı üretimi. FastAPI modüler monolit backend.',
+    modelChoice: {
+      name: 'FastAPI + React Native + PostgreSQL 17',
+      rationale: 'Python ekosisteminin zengin web scraping ve metadata ayrıştırma araçları ile React Native mobil akışının uyumu.'
+    },
+    evaluation: {
+      metrics: [
+        { name: 'Metadata Yakalama', value: '<1s' },
+        { name: 'Desteklenen Platformlar', value: 'Tüm Web' },
+        { name: 'Paylaşım Hızı', value: 'Tek Dokunuş' }
+      ],
+      approach: 'YouTube, TikTok, Instagram ve çeşitli e-ticaret sitelerinden gelen bağlantılarla stres testleri.'
+    },
+    outcome: 'Çiftlerin ve arkadaş gruplarının fikirlerini kolayca ortak listelere dönüştürüp karar alabildikleri pratik mobil uygulama.',
+    learnings: [
+      'Native share sheet entegrasyonu mobil kullanıcı deneyimini radikal biçimde hızlandırıyor',
+      'Metadata çekici servislerde SSRF ve boyut sınırları güvenlik için vazgeçilmez'
+    ],
+    techStack: ['React Native 0.81', 'Expo SDK 54', 'TypeScript', 'FastAPI', 'Python 3.13', 'PostgreSQL 17', 'SQLAlchemy 2', 'Zustand & TanStack Query', 'Docker Compose', 'Nginx'],
+    github: 'https://github.com/DuranGZR/WeDo',
+    demo: undefined,
+    tags: ['Mobile', 'Backend Architecture', 'DevOps', 'FastAPI', 'React Native']
+  },
+
+  {
     id: 'visual-ai',
     title: 'Gerçek Zamanlı Görsel Anlama AI',
     status: 'completed',

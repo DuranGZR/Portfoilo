@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { sendChatMessage } from '@/lib/api';
+import ChatMessageContent from '@/components/ui/ChatMessageContent';
 import VisorPodMascot, { type MascotMood } from '@/components/widgets/Mascot/VisorPodMascot';
 import {
   playSyllableBlip,
@@ -1213,12 +1214,11 @@ export default function FloatingAIChat() {
                         />
                       )}
 
-                      <p className="whitespace-pre-wrap">
-                        {message.content}
-                        {message.isStreaming && (
-                          <span className="inline-block w-1.5 h-3.5 ml-1 align-middle bg-[#d6f3fc] animate-pulse rounded-xs" />
-                        )}
-                      </p>
+                      <ChatMessageContent
+                        content={message.content}
+                        isStreaming={message.isStreaming}
+                        isUser={isUser}
+                      />
                     </div>
                   </motion.div>
                 );
