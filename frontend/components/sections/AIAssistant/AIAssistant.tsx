@@ -212,7 +212,7 @@ export default function AIAssistant() {
                   }
                   disabled={isLoading}
                   style={{ outline: 'none', boxShadow: 'none' }}
-                  className="flex-1 bg-transparent px-2 py-2 text-sm sm:text-[15px] text-[#f3f5f9] placeholder:text-white/30 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 ring-0 border-none shadow-none disabled:opacity-50"
+                  className="flex-1 bg-transparent px-2 py-2 text-base sm:text-[15px] text-[#f3f5f9] placeholder:text-white/30 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 ring-0 border-none shadow-none disabled:opacity-50"
                 />
                 <button
                   type="submit"

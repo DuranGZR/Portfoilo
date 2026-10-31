@@ -6,6 +6,7 @@ import { ArrowUp } from 'lucide-react';
 
 export default function BackToTop() {
     const [isVisible, setIsVisible] = useState(false);
+    const [placeOnRight, setPlaceOnRight] = useState(false);
 
     useEffect(() => {
         let ticking = false;
@@ -19,8 +20,17 @@ export default function BackToTop() {
             });
         };
 
+        const handleMascotCorner = (e: Event) => {
+            const custom = e as CustomEvent<{ corner?: string }>;
+            setPlaceOnRight(custom.detail?.corner === 'bottom-left');
+        };
+
         window.addEventListener('scroll', toggleVisibility, { passive: true });
-        return () => window.removeEventListener('scroll', toggleVisibility);
+        window.addEventListener('mascot-corner-change', handleMascotCorner);
+        return () => {
+            window.removeEventListener('scroll', toggleVisibility);
+            window.removeEventListener('mascot-corner-change', handleMascotCorner);
+        };
     }, []);
 
     const scrollToTop = () => {
@@ -34,13 +44,20 @@ export default function BackToTop() {
         <AnimatePresence>
             {isVisible && (
                 <motion.button
+                    layout
                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 20 }}
+                    transition={{
+                        layout: { type: 'spring', stiffness: 220, damping: 24 },
+                        duration: 0.25,
+                    }}
                     whileHover={{ scale: 1.1, y: -2 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={scrollToTop}
-                    className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-[#819fa7]/20 border border-[#819fa7]/30 backdrop-blur-sm flex items-center justify-center text-[#819fa7] hover:bg-[#819fa7]/30 hover:border-[#819fa7]/50 transition-colors shadow-lg"
+                    className={`fixed bottom-6 ${
+                        placeOnRight ? 'right-6' : 'left-6'
+                    } z-40 w-11 h-11 rounded-full bg-[#14181d]/85 border border-[#819fa7]/25 backdrop-blur-md flex items-center justify-center text-[#819fa7] hover:bg-[#819fa7]/20 hover:border-[#819fa7]/45 transition-colors shadow-lg`}
                     aria-label="Back to top"
                 >
                     <ArrowUp className="w-5 h-5" />
