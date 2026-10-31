@@ -1,776 +1,927 @@
 {
-    "metadata": {
-        "title": "Duran Gezer",
-        "description": "Understanding data, teaching machines, shaping the future."
+  "metadata": {
+    "title": "Duran Gezer",
+    "description": "Understanding data, teaching machines, shaping the future."
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "skills": "Skills",
+    "experience": "Experience",
+    "thinking": "Engineering Thinking",
+    "roadmap": "Roadmap",
+    "playground": "Playground",
+    "learningJourney": "Learning Journey",
+    "blog": "Blog",
+    "contact": "Contact",
+    "search": "Search",
+    "3dresume": "3D CV"
+  },
+  "hero": {
+    "greeting": "Hi, I'm",
+    "name": "Duran Gezer",
+    "title": "Computer Engineer",
+    "subtitle": "AI Systems • Backend • DevOps",
+    "location": "İzmir, Turkey",
+    "cta": {
+      "primary": "Explore My Projects",
+      "secondary": "Talk to My AI Assistant",
+      "3dresume": "Explore My 3D CV"
     },
-    "navigation": {
-        "home": "Home",
-        "about": "About",
-        "projects": "Projects",
-        "skills": "Skills",
-        "experience": "Experience",
-        "thinking": "Engineering Thinking",
-        "roadmap": "Roadmap",
-        "playground": "Playground",
-        "learningJourney": "Learning Journey",
-        "blog": "Blog",
-        "contact": "Contact",
-        "search": "Search",
-        "3dresume": "3D CV"
-    },
-    "hero": {
-        "greeting": "Hi, I'm",
-        "name": "Duran Gezer",
-        "title": "AI/ML Engineer",
-        "subtitle": "Understanding data, teaching machines, shaping the future.",
-        "location": "İzmir, Turkey",
-        "cta": {
-            "primary": "Explore My Projects",
-            "secondary": "Talk to My AI Assistant",
-            "3dresume": "Explore My 3D CV"
+    "scrollHint": "Discover more",
+    "status": "Available for opportunities"
+  },
+  "about": {
+    "title": "About Me",
+    "subtitle": "AI Passion, Engineering Vision",
+    "bio": "I'm a 4th-year Computer Engineering student at İnönü University, specializing in Artificial Intelligence and Machine Learning since 2022. I build end-to-end intelligent systems using Python, TensorFlow, and Scikit-learn, with experience spanning computer vision, NLP, and reinforcement learning. I focus on turning complex theoretical concepts into practical, reliable, production-ready solutions.",
+    "highlights": {
+      "title": "Highlights",
+      "items": {
+        "projects": {
+          "title": "20+ Completed Projects",
+          "description": "Applications solving real-world problems"
         },
-        "scrollHint": "Discover more",
-        "status": "Available for opportunities"
-    },
-    "about": {
-        "title": "About Me",
-        "subtitle": "AI Passion, Engineering Vision",
-        "bio": "I'm a 4th-year Computer Engineering student at İnönü University, specializing in Artificial Intelligence and Machine Learning since 2022. I build end-to-end intelligent systems using Python, TensorFlow, and Scikit-learn, with experience spanning computer vision, NLP, and reinforcement learning. I focus on turning complex theoretical concepts into practical, reliable, production-ready solutions.",
-        "highlights": {
-            "title": "Highlights",
-            "items": {
-                "projects": {
-                    "title": "15+ Completed Projects",
-                    "description": "Applications solving real-world problems"
-                },
-                "thinking": {
-                    "title": "Analytical Thinking",
-                    "description": "Breaking down complex problems into solutions"
-                },
-                "learning": {
-                    "title": "Continuous Learner",
-                    "description": "Keeping up with the latest in AI/ML"
-                },
-                "practical": {
-                    "title": "Application-Focused",
-                    "description": "From theory to practice, building working solutions"
-                }
-            }
+        "thinking": {
+          "title": "Analytical Thinking",
+          "description": "Breaking down complex problems into solutions"
         },
-        "quote": "Learning is a journey, every project is a new discovery.",
-        "status": {
-            "available": "Open to Opportunities",
-            "graduating": "Graduating: 2026"
+        "learning": {
+          "title": "Continuous Learner",
+          "description": "Continuously growing across AI systems, Backend, and DevOps"
         },
-        "badge": "ABOUT ME",
-        "headline": "Problem Solver. Digital Generalist.",
-        "name": "DURAN GEZER",
-        "stats": {
-            "projectsLabel": "PROJECTS",
-            "projectsValue": "20+",
-            "certsLabel": "CERTIFICATES",
-            "certsValue": "9",
-            "gradLabel": "BSIT GRADUATED",
-            "gradValue": "2026"
-        },
-        "resumeCta": "Want to know more about my experience?",
-        "resumeLink": "Download my resume",
-        "currently": {
-            "title": "CURRENTLY",
-            "buildingLabel": "Building",
-            "buildingDesc": "Web & digital projects",
-            "exploringLabel": "Exploring",
-            "exploringDesc": "Computer Vision & LLMs",
-            "learningLabel": "Learning",
-            "learningDesc": "Deep Learning & Agents"
-        },
-        "traits": {
-            "label": "TRAIT",
-            "items": [
-                "Problem Solver",
-                "Detail-Oriented",
-                "Reliable",
-                "Continuous Learner",
-                "User-Focused",
-                "Analytical Thinker",
-                "Open to Feedback"
-            ]
+        "practical": {
+          "title": "Application-Focused",
+          "description": "From theory to practice, building working solutions"
         }
+      }
     },
-    "projects": {
-        "badge": "SELECTED WORK",
-        "title": "Work Gallery",
-        "subtitle": "A collection of systems, digital projects, and technical work I have built.",
-        "viewMore": "View More Projects",
-        "viewProject": "View Project",
-        "backToProjects": "Back to Projects",
-        "viewCode": "View on GitHub",
-        "liveDemo": "Live Demo",
-        "techStack": "Technologies Used",
-        "overview": "Project Overview",
-        "keyFeatures": "Key Features",
-        "architecture": "Architecture & Logic",
-        "items": {
-            "aliagaAI": {
-                "title": "AliağaAI - Smart City Assistant",
-                "tagline": "An AI-powered smart city assistant and urban guide built with React Native and a multi-stage RAG FastAPI backend with pgvector, delivering verified responses.",
-                "period": "2024",
-                "category": "AI / RAG / Full-Stack",
-                "image": "/projects/aliagaai.png",
-                "github": "https://github.com/DuranGZR/AliagaAI",
-                "demo": "",
-                "tags": [
-                    "FastAPI",
-                    "React Native",
-                    "pgvector",
-                    "Groq LLM",
-                    "PostgreSQL",
-                    "Docker"
-                ],
-                "overview": "Built to overcome the limitations and advertising bias of standard search engines by leveraging verified municipal and local knowledge with RAG (Retrieval-Augmented Generation).",
-                "features": [
-                    "Intelligent agentic query router",
-                    "Hybrid semantic vector search with pgvector",
-                    "Verified municipal and public knowledge base",
-                    "Modern mobile user experience in React Native"
-                ]
-            },
-            "aiDreamInterpreter": {
-                "title": "AI Dream Interpreter",
-                "tagline": "Map your subconscious. An AI-powered dream tracking and psychological analysis platform grounded in Jungian and Freudian frameworks.",
-                "period": "2024",
-                "category": "AI / Mobile / Psychology",
-                "image": "/projects/dream-interpreter.png",
-                "github": "https://github.com/DuranGZR/Ai-Dream-Interpreter",
-                "demo": "",
-                "tags": [
-                    "React Native",
-                    "Expo",
-                    "Google Gemini",
-                    "TypeScript",
-                    "Node.js",
-                    "Firebase"
-                ],
-                "overview": "A secure mobile platform allowing users to log dreams and analyze symbolic meanings and emotional patterns using Google Gemini models.",
-                "features": [
-                    "Jungian and Freudian symbolic dream interpretation",
-                    "Emotional tone and recurring motif tracker",
-                    "Secure and encrypted user data handling",
-                    "Minimalist dark mode mobile interface"
-                ]
-            },
-            "kayipQR": {
-                "title": "KayıpQR - Smart QR Tag Platform",
-                "tagline": "Get your lost items back without sharing your phone number. Customizable QR labels with anonymous messaging.",
-                "period": "2024",
-                "category": "Web Platform / QR Studio",
-                "image": "/projects/kayipqr.png",
-                "github": "https://github.com/DuranGZR/KayipQR",
-                "demo": "",
-                "tags": [
-                    "Next.js",
-                    "TypeScript",
-                    "FastAPI",
-                    "PostgreSQL",
-                    "Docker",
-                    "TailwindCSS"
-                ],
-                "overview": "An end-to-end platform enabling finders to contact item owners anonymously through disposable chat sessions without exposing phone numbers or emails.",
-                "features": [
-                    "Interactive QR design studio with custom themes",
-                    "Anonymous communication without phone exchange",
-                    "Item lifecycle states (Safe, Lost, Returned)",
-                    "A4 sheet layout and PDF/SVG export ready for printing"
-                ]
-            },
-            "weDo": {
-                "title": "WeDo - Shared Idea & Decision App",
-                "tagline": "Save what inspires you. Decide together. Make it happen. A collaborative mobile planning app for couples and friend groups.",
-                "period": "2024",
-                "category": "Mobile / Social Planning",
-                "image": "/projects/wedo-card.png",
-                "github": "https://github.com/DuranGZR/WeDo",
-                "demo": "",
-                "tags": [
-                    "React Native",
-                    "Expo SDK 54",
-                    "FastAPI",
-                    "Python 3.13",
-                    "PostgreSQL 17"
-                ],
-                "overview": "Enables friends and partners to collect ideas, spots, and links from across the web into shared lists and make collective decisions.",
-                "features": [
-                    "Shared boards with real-time sync across devices",
-                    "Quick link and visual capture integration",
-                    "Collaborative polling and decision mechanisms",
-                    "Clean Expo SDK 54 and FastAPI Python 3.13 stack"
-                ]
-            },
-            "visualAI": {
-                "title": "Real-Time Visual Understanding",
-                "tagline": "Real-time webcam image analysis producing natural language descriptions using 100% local multimodal Ollama LLaVA AI.",
-                "period": "2024",
-                "category": "Computer Vision / Local AI",
-                "image": "/projects/visual-ai.png",
-                "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding",
-                "demo": "",
-                "tags": [
-                    "Python",
-                    "FastAPI",
-                    "Ollama",
-                    "LLaVA",
-                    "OpenCV",
-                    "WebSockets"
-                ],
-                "overview": "A privacy-first vision AI system running entirely on local GPU without sending any data to external cloud services.",
-                "features": [
-                    "100% Local AI: No internet required and zero data leakage",
-                    "Low-latency camera streaming over WebSockets",
-                    "Ollama and LLaVA-7B multimodal deep learning model",
-                    "Unlimited, unthrottled real-time analysis"
-                ]
-            }
-        }
+    "quote": "Learning is a journey, every project is a new discovery.",
+    "status": {
+      "available": "Open to Opportunities",
+      "graduating": "Graduating: 2026"
     },
-    "skills": {
-        "badge": "MY CAPABILITIES",
-        "title": "What I Can Do",
-        "subtitle": "I combine artificial intelligence, deep learning, and modern software engineering to build reliable, intelligent, and scalable digital systems.",
-        "bento": {
-            "card1": {
-                "number": "01",
-                "category": "AI, VISION &\nDEEP LEARNING",
-                "title": "AI, Computer Vision & Deep Learning",
-                "description": "Developing real-time webcam visual understanding, deep learning models (CNN/MLP), multimodal LLMs (LLaVA), and pgvector-backed RAG architectures.",
-                "tags": [
-                    "Python",
-                    "TensorFlow / Keras",
-                    "PyTorch",
-                    "Scikit-learn",
-                    "NumPy / Pandas",
-                    "OpenCV",
-                    "Computer Vision",
-                    "NLP",
-                    "Deep Learning",
-                    "Ollama / LLaVA",
-                    "pgvector"
-                ],
-                "image": "/images/gif/coding.gif"
-            },
-            "card2": {
-                "number": "02",
-                "category": "BACKEND, SYSTEMS &\nPROGRAMMING",
-                "title": "Backend, Systems & Programming Languages",
-                "description": "Architecting high-performance FastAPI microservices, object-oriented systems (Java, C#, C++), SQL databases, and Docker pipelines that productionize intelligent solutions.",
-                "tags": [
-                    "FastAPI",
-                    "Java",
-                    "C#",
-                    "C / C++",
-                    "SQL",
-                    "PostgreSQL",
-                    "Docker",
-                    "Git & GitHub",
-                    "Feature Engineering",
-                    "Data Analysis",
-                    "Kotlin"
-                ],
-                "image": "/images/gif/assistant.gif"
-            }
-        },
-        "techColumns": [
-            [
-                {
-                    "name": "Python",
-                    "icon": "/images/skills/python.svg"
-                },
-                {
-                    "name": "NumPy",
-                    "icon": "/images/skills/numpy.svg"
-                },
-                {
-                    "name": "Pandas",
-                    "icon": "/images/skills/pandas.svg"
-                },
-                {
-                    "name": "Scikit-learn",
-                    "icon": "/images/skills/scikitlearn.svg"
-                },
-                {
-                    "name": "TensorFlow",
-                    "icon": "/images/skills/tensorflow.svg"
-                }
-            ],
-            [
-                {
-                    "name": "PyTorch",
-                    "icon": "/images/skills/pytorch.svg"
-                },
-                {
-                    "name": "OpenCV",
-                    "icon": "/images/skills/opencv.svg"
-                },
-                {
-                    "name": "Ollama / LLaVA",
-                    "icon": "/images/skills/ollama.svg"
-                },
-                {
-                    "name": "PostgreSQL",
-                    "icon": "/images/skills/postgresql.svg"
-                }
-            ],
-            [
-                {
-                    "name": "Java",
-                    "icon": "/images/skills/java.svg"
-                },
-                {
-                    "name": "C#",
-                    "icon": "/images/skills/csharp.svg"
-                },
-                {
-                    "name": "C / C++",
-                    "icon": "/images/skills/cplusplus.svg"
-                },
-                {
-                    "name": "SQL",
-                    "icon": "/images/skills/sql.svg"
-                },
-                {
-                    "name": "Kotlin",
-                    "icon": "/images/skills/kotlin.svg"
-                }
-            ],
-            [
-                {
-                    "name": "FastAPI",
-                    "icon": "/images/skills/fastapi.svg"
-                },
-                {
-                    "name": "Docker",
-                    "icon": "/images/skills/docker.svg"
-                },
-                {
-                    "name": "Git / GitHub",
-                    "icon": "/images/skills/git.svg"
-                }
-            ]
+    "badge": "ABOUT ME",
+    "headline": "Learning, Experimenting, Building.",
+    "name": "DURAN GEZER",
+    "stats": {
+      "projectsLabel": "PROJECTS",
+      "projectsValue": "20+",
+      "certsLabel": "CERTIFICATES",
+      "certsValue": "9",
+      "gradLabel": "BSIT GRADUATED",
+      "gradValue": "2026"
+    },
+    "resumeCta": "Want to know more about my experience?",
+    "resumeLink": "Download my resume",
+    "currently": {
+      "title": "CURRENTLY",
+      "buildingLabel": "Building",
+      "buildingDesc": "Web & digital projects",
+      "exploringLabel": "Exploring",
+      "exploringDesc": "Computer Vision & LLMs",
+      "learningLabel": "Learning",
+      "learningDesc": "Deep Learning & Agents"
+    },
+    "traits": {
+      "label": "TRAIT",
+      "items": [
+        "Problem Solver",
+        "Detail-Oriented",
+        "Reliable",
+        "Continuous Learner",
+        "User-Focused",
+        "Analytical Thinker",
+        "Open to Feedback"
+      ]
+    }
+  },
+  "projects": {
+    "badge": "SELECTED WORK",
+    "title": "Work Gallery",
+    "subtitle": "A collection of systems, digital projects, and technical work I have built.",
+    "viewMore": "View More Projects",
+    "viewProject": "View Project",
+    "backToProjects": "Back to Projects",
+    "viewCode": "View on GitHub",
+    "liveDemo": "Live Demo",
+    "techStack": "Technologies Used",
+    "overview": "Project Overview",
+    "keyFeatures": "Key Features",
+    "architecture": "Architecture & How It Works",
+    "items": {
+      "aliagaAI": {
+        "title": "AliağaAI — Smart City Guide & Grounded RAG Assistant",
+        "tagline": "A zero-hallucination smart city assistant tailored for Aliağa, combining a React Native mobile client with a multi-stage hybrid RAG backend (FastAPI + pgvector + FTS).",
+        "period": "2025",
+        "category": "AI Systems • Hybrid RAG • Mobile",
+        "image": "/projects/aliagaai.png",
+        "github": "https://github.com/DuranGZR/AliagaAI",
+        "demo": "",
+        "tags": [
+          "Python 3.11+",
+          "FastAPI",
+          "React Native",
+          "Expo",
+          "PostgreSQL",
+          "pgvector (HNSW)",
+          "Groq Llama 3.3",
+          "APScheduler",
+          "Docker Compose",
+          "SlowAPI"
+        ],
+        "highlights": [
+          {
+            "label": "RETRIEVAL ENGINE",
+            "value": "Hybrid RAG (pgvector HNSW + FTS + RRF)"
+          },
+          {
+            "label": "DATA AUTOMATION",
+            "value": "9 Isolated Async Scrapers (APScheduler)"
+          },
+          {
+            "label": "RELIABILITY",
+            "value": "Zero Hallucination & [S1]/[S2] Citations"
+          }
+        ],
+        "overview": "Built to overcome the fragmented, ad-heavy nature of generic search engines when citizens look for hyper-local municipal data such as on-duty pharmacies, İZBAN commuter schedules, utility outages, municipal announcements, and local directories.\n\nAliağaAI pairs an agentic query router with a multi-stage grounded RAG pipeline so every response is backed by verified local sources with clickable [S1]/[S2] citations. On mobile, its black-and-gold Stitch Design System unifies live city status signals, interactive maps, and AI chat.",
+        "architectureSteps": [
+          "Preprocessing & Agentic Query Router: Incoming user queries are normalized, analyzed for intent, and routed across structured SQL tables, live API caches (weather, earthquakes, pharmacies), or the semantic RAG pipeline.",
+          "Query Expansion & Hybrid Search: The pipeline generates 4 semantic query variants and executes pgvector HNSW cosine similarity search alongside PostgreSQL Turkish Full-Text Search (FTS) in parallel.",
+          "Reciprocal Rank Fusion (RRF) & Reranking: Vector and lexical candidates are fused via RRF, filtered through dynamic similarity thresholds, and reranked for context precision.",
+          "Grounded LLM Synthesis & Isolated Scrapers: Groq Llama 3.3 synthesizes answers strictly from verified context with source citations, while 9 fault-isolated APScheduler bots continuously refresh city data in the background."
+        ],
+        "features": [
+          "Agentic Query Router dynamically selecting between SQL, live city caches, and vector search",
+          "Hybrid retrieval combining pgvector HNSW embeddings, PostgreSQL FTS, and Reciprocal Rank Fusion",
+          "Clickable [S1], [S2] inline source citation chips inside mobile chat bubbles",
+          "Live city signal widgets for İZBAN trains, on-duty pharmacies, planned outages, local markets, and weather",
+          "9 fault-isolated asynchronous APScheduler data scrapers keeping local records up to date",
+          "Protected endpoints via X-API-Key authentication and SlowAPI IP rate limiting"
         ]
+      },
+      "aiDreamInterpreter": {
+        "title": "AI Dream Interpreter — Psychological Dream Analytics",
+        "tagline": "A psychological dream journaling and analysis platform grounded in Jungian archetypes and Freudian symbolism, powered by Gemini + Groq failover orchestration and symbol RAG.",
+        "period": "2025",
+        "category": "Applied AI • Mobile • CoT & RAG",
+        "image": "/projects/dream-interpreter.png",
+        "github": "https://github.com/DuranGZR/Ai-Dream-Interpreter",
+        "demo": "",
+        "tags": [
+          "React Native",
+          "Expo SDK 54",
+          "TypeScript",
+          "Node.js",
+          "Express",
+          "Google Gemini 1.5",
+          "Groq Llama 3",
+          "Firebase Firestore",
+          "Firebase Auth",
+          "Docker Compose"
+        ],
+        "highlights": [
+          {
+            "label": "AI ORCHESTRATION",
+            "value": "Gemini 1.5 Flash + Groq Llama 3 Auto-Failover"
+          },
+          {
+            "label": "REASONING ENGINE",
+            "value": "3-Stage Chain-of-Thought + Symbol Dictionary RAG"
+          },
+          {
+            "label": "ANALYTICS",
+            "value": "0–100 Energy Score, Symbol Trends & Heatmap"
+          }
+        ],
+        "overview": "Unlike generic dream dictionaries, AI Dream Interpreter blends Carl Gustav Jung's collective unconscious/archetype theory and Sigmund Freud's symbolic analysis principles with modern multi-model LLM orchestration.\n\nInstead of labeling dreams as merely good or bad, the platform extracts recurring symbols, emotional tone, and mental energy levels across your dream history to deliver personalized psychological insights and actionable daily reflections.",
+        "architectureSteps": [
+          "Symbol Dictionary RAG Grounding: Concrete motifs and keywords in the user's dream journal entry are matched against a curated cultural and psychological symbol lexicon before prompting the model.",
+          "3-Stage Chain-of-Thought (CoT) Pipeline: The model reasons through three structured stages—Detective (entity & action extraction), Analyst (Shadow, Anima, Persona archetype mapping), and Synthesis.",
+          "Multi-Provider LLM Failover: The Express/TypeScript backend calls Google Gemini 1.5 Flash as primary provider and seamlessly fails over to Groq Llama 3 upon rate limits or transient network errors.",
+          "Longitudinal Subconscious Analytics: Firestore-backed dream logs power a 0–100 mental energy gauge, 30-day sentiment & weekly activity charts, a monthly calendar heatmap, and top-recurring symbol rankings."
+        ],
+        "features": [
+          "Selectable interpretation personas including rational clinical Analyst and warm practical Guide",
+          "High-availability multi-LLM orchestration with automatic Gemini 1.5 Flash to Groq Llama 3 failover",
+          "0–100 mental energy scoring, detected symbol cards, and single-sentence actionable daily insights",
+          "Weekly activity charts, monthly dream frequency heatmap, and recurring symbol analytics",
+          "Searchable dream archive with favorites and positive/neutral/negative sentiment filters",
+          "Firebase Auth security and GDPR/KVKK-compliant one-tap full account & data deletion"
+        ]
+      },
+      "kayipQR": {
+        "title": "KayıpQR — Privacy-First Smart QR Tag Platform",
+        "tagline": "Recover your belongings while keeping your phone number private. Customizable QR tags and accountless anonymous messaging between finders and owners.",
+        "period": "2025",
+        "category": "Full-Stack Web • Privacy & Security",
+        "image": "/projects/kayipqr.png",
+        "github": "https://github.com/DuranGZR/KayipQR",
+        "demo": "",
+        "tags": [
+          "Next.js 15",
+          "TypeScript",
+          "FastAPI",
+          "Async SQLAlchemy",
+          "PostgreSQL",
+          "Alembic",
+          "Argon2id",
+          "Tailwind CSS",
+          "Resend Outbox",
+          "Docker"
+        ],
+        "highlights": [
+          {
+            "label": "PRIVACY MODEL",
+            "value": "Zero Phone/Email Exposure & Accountless Finder Flow"
+          },
+          {
+            "label": "QR DESIGN STUDIO",
+            "value": "8 Custom Themes, SVG/PNG & A4 Print Export"
+          },
+          {
+            "label": "LEAN BACKEND",
+            "value": "Redis-Free PostgreSQL Outbox, WebP & Rate Limits"
+          }
+        ],
+        "overview": "Writing personal phone numbers on keychains, backpacks, laptops, or pet collars exposes owners to privacy risks. KayıpQR lets owners design and print custom QR stickers linked to a secure web relay: anyone who finds the item simply scans the QR code and sends a message—no app install and no sign-up required.\n\nEngineered with a lean, serverless-ready PostgreSQL architecture that handles compressed WebP photo storage, shared rate-limit counters, and transactional email outbox queues directly in Postgres without requiring external Redis or S3 buckets.",
+        "architectureSteps": [
+          "Dynamic Tag & Lifecycle Control: Owners toggle items between 'Safe', 'Lost', and 'Recovered' or pause public scanning anytime from their dashboard without invalidating the printed QR link.",
+          "Zero-Friction Finder Session: Scanning a tag opens a bilingual finder page supporting instant messaging, photo attachment, and optional location sharing via a private session link—never exposing the owner's email or phone.",
+          "Visibility-Aware Incremental Sync & WebSocket Option: Active chat tabs fetch incremental deltas and refresh signed media URLs efficiently on serverless deployments, with full WebSocket support for persistent hosts.",
+          "SQL Outbox & Anti-Spam Guardrails: First-contact Resend email notifications run through a reliable SQL outbox with daily retry jobs, protected by strict per-recipient rate limits (max 1 per 15m, 10 per 24h)."
+        ],
+        "features": [
+          "Interactive QR Design Studio with 8 templates, custom colors/labels, PNG/SVG export, and A4 print layouts",
+          "Accountless finder experience with photo uploads, optional location sharing, and private return-chat links",
+          "Strict privacy boundary ensuring phone numbers and account emails never appear in public API payloads",
+          "Argon2id password hashing, JWT authentication, and Alembic database migrations",
+          "Scan history logs, read receipts, and automated 30-day media retention cleanup",
+          "Automated test suite across Pytest (SQLite/PostgreSQL), pagination/polling tests, and GitHub Actions CI"
+        ]
+      },
+      "weDo": {
+        "title": "WeDo — Shared Ideas, Lists & Decision App",
+        "tagline": "Save what inspires you. Decide together. Make it happen. A mobile-first collaborative app for couples and friends to capture links from any app and turn them into real plans.",
+        "period": "2025",
+        "category": "Mobile • Backend Architecture • DevOps",
+        "image": "/projects/wedo-card.png",
+        "github": "https://github.com/DuranGZR/WeDo",
+        "demo": "",
+        "tags": [
+          "React Native 0.81",
+          "Expo SDK 54",
+          "TypeScript",
+          "FastAPI",
+          "Python 3.13",
+          "PostgreSQL 17",
+          "SQLAlchemy 2",
+          "Zustand & TanStack Query",
+          "Docker Compose",
+          "Nginx"
+        ],
+        "highlights": [
+          {
+            "label": "MOBILE CAPTURE",
+            "value": "Native iOS & Android Share Sheet Integration"
+          },
+          {
+            "label": "METADATA PIPELINE",
+            "value": "oEmbed + OpenGraph + JSON-LD (SSRF Hardened)"
+          },
+          {
+            "label": "SECURITY & STACK",
+            "value": "Argon2, Refresh-Token Rotation & PostgreSQL 17"
+          }
+        ],
+        "overview": "Great ideas—TikTok spots, Instagram Reels, products, movies, or restaurants—usually get buried across chat threads, browser tabs, and screenshots. WeDo turns 'should we do this?' into a structured collaborative workflow.\n\nUsers share any link, text, or image directly from their phone's native Share menu to WeDo. The backend automatically extracts rich titles and cover previews, drops the item into a shared space, and lets partners or friend groups react, organize into lists, schedule plans, and mark them complete.",
+        "architectureSteps": [
+          "Native Share-to-Save Flow: Expo Share Intent captures URLs, text snippets, and images straight from Android and iOS system share sheets into the user's shared space.",
+          "Standards-Based Metadata Extraction: Prioritizes oEmbed for YouTube and TikTok, falling back to Open Graph, Twitter Card, and JSON-LD parsers guarded by strict SSRF protection and payload size caps.",
+          "Modular Monolith FastAPI & PostgreSQL 17: Cleanly separated domain modules (auth, spaces, items, lists, metadata, uploads, background worker) built on Python 3.13, SQLAlchemy 2, and Alembic.",
+          "Hardened Auth & Containerized Stack: Implements Argon2 hashing, short-lived JWTs with refresh-token rotation, and auth rate limiting, orchestrated via Docker Compose and Nginx."
+        ],
+        "features": [
+          "One-tap link, image, and text capture from Android and iOS native share menus",
+          "Automatic rich preview extraction across social video, shopping, travel, and content sites",
+          "Invite-based shared spaces and organized lists (Places to Go, Shopping, Watchlist, To-Do, custom)",
+          "Collaborative decision signals ('Both of you want this'), reactions, comments, and activity logs",
+          "Actionable plans, reminders, and background worker notification infrastructure",
+          "SSRF-protected metadata fetcher, Argon2 + rotating refresh tokens, and full Docker Compose setup"
+        ]
+      },
+      "visualAI": {
+        "title": "Real-Time Visual Understanding — 100% Local Vision AI",
+        "tagline": "A privacy-first multimodal computer vision system that streams live webcam frames over WebSockets to a locally hosted Ollama LLaVA model for real-time natural language narration.",
+        "period": "2024",
+        "category": "Computer Vision • Local Multimodal AI",
+        "image": "/projects/visual-ai.png",
+        "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding",
+        "demo": "",
+        "tags": [
+          "Python 3.11+",
+          "FastAPI",
+          "Ollama",
+          "LLaVA 7B (Mistral q4_0)",
+          "WebSockets",
+          "OpenCV",
+          "React"
+        ],
+        "highlights": [
+          {
+            "label": "EXECUTION MODE",
+            "value": "100% Local GPU — Zero Cloud & Zero API Cost"
+          },
+          {
+            "label": "STREAMING LAYER",
+            "value": "Bi-Directional Low-Latency WebSocket Pipeline"
+          },
+          {
+            "label": "VISION MODEL",
+            "value": "LLaVA 7B v1.6 Mistral (4-bit Quantized)"
+          }
+        ],
+        "overview": "Cloud-based vision APIs introduce privacy concerns, per-request costs, and strict rate limits when analyzing continuous camera feeds. Real-Time Visual Understanding runs 100% locally on consumer GPUs so camera frames never leave the user's machine.\n\nLive webcam frames captured in the browser are streamed over a persistent WebSocket connection to a FastAPI backend, processed by a 4-bit quantized LLaVA-7B vision-language model served via Ollama, and returned as live natural-language scene descriptions.",
+        "architectureSteps": [
+          "Browser Frame Capture (React): Captures live webcam frames at controlled intervals and encodes lightweight Base64 payloads on the client.",
+          "Persistent WebSocket Transport: Streams frames over a full-duplex WebSocket channel between React and FastAPI, avoiding repetitive HTTP connection overhead.",
+          "FastAPI Frame Processor & Ollama Bridge: Validates incoming frames, manages backpressure, and dispatches multimodal prompts to the local Ollama runtime (localhost:11434).",
+          "Quantized Local GPU Inference: Runs llava:7b-v1.6-mistral-q4_0 efficiently on GPUs with 4GB+ VRAM, streaming scene narrations straight back to the UI."
+        ],
+        "features": [
+          "100% offline-capable local inference—camera footage never leaves your device",
+          "Unlimited continuous scene analysis with zero API fees and zero rate limits",
+          "Low-latency full-duplex WebSocket frame streaming and live response updates",
+          "Optimized 4-bit quantized LLaVA-7B Mistral model running smoothly on consumer GPUs",
+          "Clean, responsive web interface supporting both desktop and mobile browsers"
+        ]
+      }
+    }
+  },
+  "skills": {
+    "badge": "MY CAPABILITIES",
+    "title": "What I Can Do",
+    "subtitle": "I combine artificial intelligence, deep learning, and modern software engineering to build reliable, intelligent, and scalable digital systems.",
+    "bento": {
+      "card1": {
+        "number": "01",
+        "category": "AI, VISION &\nDEEP LEARNING",
+        "title": "AI, Computer Vision & Deep Learning",
+        "description": "Developing real-time webcam visual understanding, deep learning models (CNN/MLP), multimodal LLMs (LLaVA), and pgvector-backed RAG architectures.",
+        "tags": [
+          "Python",
+          "TensorFlow / Keras",
+          "PyTorch",
+          "Scikit-learn",
+          "NumPy / Pandas",
+          "OpenCV",
+          "Computer Vision",
+          "NLP",
+          "Deep Learning",
+          "Ollama / LLaVA",
+          "pgvector"
+        ],
+        "image": "/images/gif/coding.gif"
+      },
+      "card2": {
+        "number": "02",
+        "category": "BACKEND, SYSTEMS &\nPROGRAMMING",
+        "title": "Backend, Systems & Programming Languages",
+        "description": "Architecting high-performance FastAPI microservices, object-oriented systems (Java, C#, C++), SQL databases, and Docker pipelines that productionize intelligent solutions.",
+        "tags": [
+          "FastAPI",
+          "Java",
+          "C#",
+          "C / C++",
+          "SQL",
+          "PostgreSQL",
+          "Docker",
+          "Git & GitHub",
+          "Feature Engineering",
+          "Data Analysis",
+          "Kotlin"
+        ],
+        "image": "/images/gif/assistant.gif"
+      }
+    },
+    "techColumns": [
+      [
+        {
+          "name": "Python",
+          "icon": "/images/skills/python.svg"
+        },
+        {
+          "name": "NumPy",
+          "icon": "/images/skills/numpy.svg"
+        },
+        {
+          "name": "Pandas",
+          "icon": "/images/skills/pandas.svg"
+        },
+        {
+          "name": "Scikit-learn",
+          "icon": "/images/skills/scikitlearn.svg"
+        },
+        {
+          "name": "TensorFlow",
+          "icon": "/images/skills/tensorflow.svg"
+        }
+      ],
+      [
+        {
+          "name": "PyTorch",
+          "icon": "/images/skills/pytorch.svg"
+        },
+        {
+          "name": "OpenCV",
+          "icon": "/images/skills/opencv.svg"
+        },
+        {
+          "name": "Ollama / LLaVA",
+          "icon": "/images/skills/ollama.svg"
+        },
+        {
+          "name": "PostgreSQL",
+          "icon": "/images/skills/postgresql.svg"
+        }
+      ],
+      [
+        {
+          "name": "Java",
+          "icon": "/images/skills/java.svg"
+        },
+        {
+          "name": "C#",
+          "icon": "/images/skills/csharp.svg"
+        },
+        {
+          "name": "C / C++",
+          "icon": "/images/skills/cplusplus.svg"
+        },
+        {
+          "name": "SQL",
+          "icon": "/images/skills/sql.svg"
+        },
+        {
+          "name": "Kotlin",
+          "icon": "/images/skills/kotlin.svg"
+        }
+      ],
+      [
+        {
+          "name": "FastAPI",
+          "icon": "/images/skills/fastapi.svg"
+        },
+        {
+          "name": "Docker",
+          "icon": "/images/skills/docker.svg"
+        },
+        {
+          "name": "Git / GitHub",
+          "icon": "/images/skills/git.svg"
+        }
+      ]
+    ],
+    "categories": {
+      "ml": "AI & Computer Vision",
+      "backend": "Backend & System Architecture",
+      "programming": "Programming Languages",
+      "devops": "DevOps & Data Tooling",
+      "frameworks": "Backend & Frameworks",
+      "data": "Data & DevOps"
+    },
+    "stats": {
+      "technologies": "Technologies & Tools",
+      "projects": "Projects Built",
+      "certs": "Certifications",
+      "graduation": "Computer Eng.",
+      "codeLines": "Lines of Code",
+      "learningHrs": "Hours of Practice"
+    }
+  },
+  "experience": {
+    "badge": "Background",
+    "title": "Education, Certifications & Activities",
+    "subtitle": "The journey that shaped my engineering vision.",
+    "categories": {
+      "education": "Education",
+      "certifications": "Certifications",
+      "community": "Community Activities"
+    },
+    "items": {
+      "degree": {
+        "title": "B.S. Computer Engineering",
+        "organization": "İnönü University",
+        "period": "2022 - 2026",
+        "description": "Undergraduate curriculum and academic research focused on Artificial Intelligence and Machine Learning."
+      },
+      "mlCamp": {
+        "title": "Machine Learning Camp",
+        "organization": "Miuul",
+        "period": "2024",
+        "description": "Comprehensive machine learning bootcamp program"
+      },
+      "featureEng": {
+        "title": "Feature Engineering",
+        "organization": "Miuul",
+        "period": "2024",
+        "description": "Feature engineering and data preprocessing techniques"
+      },
+      "machineLearning": {
+        "title": "Machine Learning",
+        "organization": "Miuul",
+        "period": "2024",
+        "description": "Machine learning algorithms and applications"
+      },
+      "pythonDS": {
+        "title": "Python Programming for Data Science",
+        "organization": "Miuul",
+        "period": "2024",
+        "description": "Python programming for data science"
+      },
+      "csharp": {
+        "title": "C# Programming",
+        "organization": "Udemy",
+        "period": "2024",
+        "description": "Comprehensive C# programming course for all levels"
+      },
+      "cloudNight": {
+        "title": "Cloud Night",
+        "organization": "HSD İnönü - Huawei",
+        "period": "2025",
+        "description": "Cloud technologies and Huawei Cloud training"
+      },
+      "hsdDevOps": {
+        "title": "DevOps Developer",
+        "organization": "HSD İNÖNÜ",
+        "period": "Oct 2025 - Present",
+        "description": "Building CI/CD pipelines for community projects, Docker container management, automation with GitHub Actions, and server administration. Implementing DevOps culture and best practices."
+      },
+      "cyberSecurityOrg": {
+        "title": "Organization President",
+        "organization": "İnönü University Cyber Security Community",
+        "period": "Nov 2024 - Sep 2025",
+        "description": "During 11-month tenure: planning community events, organizing training programs, team management, and raising cybersecurity awareness. Developing leadership and organizational skills."
+      }
+    },
+    "modal": {
+      "learned": "What I Learned"
+    },
+    "coursesTitle": "Courses Taken",
+    "courses": {
+      "dataStructures": {
+        "title": "Data Structures",
+        "description": "Implementation of fundamental data structures and algorithms."
+      },
+      "oop": {
+        "title": "Object-Oriented Programming",
+        "description": "OOP principles and design patterns."
+      },
+      "database": {
+        "title": "Database Management Systems",
+        "description": "Relational databases and SQL."
+      },
+      "algorithms": {
+        "title": "Algorithm Analysis",
+        "description": "Algorithm design and complexity analysis."
+      },
+      "ai": {
+        "title": "Artificial Intelligence",
+        "description": "AI fundamentals and search algorithms."
+      },
+      "imageProcessing": {
+        "title": "Image Processing",
+        "description": "Digital image processing techniques."
+      },
+      "computerNetworks": {
+        "title": "Computer Networks",
+        "description": "Network protocols and communication."
+      },
+      "webProgramming": {
+        "title": "Web Programming",
+        "description": "Web development and backend systems."
+      },
+      "programmingLanguages": {
+        "title": "Programming Languages",
+        "description": "Programming paradigms and language design."
+      },
+      "softwareEng": {
+        "title": "Software Engineering",
+        "description": "Software development methodologies."
+      }
+    }
+  },
+  "thinking": {
+    "badge": "Engineering Mindset",
+    "title": "My Problem-Solving Philosophy",
+    "subtitle": "Principles I follow when transforming complex problems into simple solutions.",
+    "quote": "A good engineer never starts coding without understanding the problem first.",
+    "principles": {
+      "firstPrinciples": {
+        "title": "Understand First, Solve Later",
+        "description": "I never start coding without fully understanding the problem. I analyze requirements, consider edge cases, then move to implementation."
+      },
+      "outcome": {
+        "title": "Simplicity First",
+        "description": "The best code is the least complex code. I avoid premature optimization and focus on readable, maintainable solutions."
+      },
+      "iterations": {
+        "title": "Bugs = Learning",
+        "description": "Every bug is an opportunity to understand how the system works. Instead of quick fixes, I investigate the root cause."
+      },
+      "systems": {
+        "title": "Data-Driven Thinking",
+        "description": "I base decisions on data, not intuition. I measure model performance with metrics and validate with A/B testing."
+      },
+      "debugging": {
+        "title": "Documentation Culture",
+        "description": "Half of software is code, the other half is documentation. I leave explanatory notes even for my future self."
+      },
+      "curiosity": {
+        "title": "Continuous Learning",
+        "description": "Technology constantly evolves. I try to learn something new every day and experiment to stay current."
+      }
+    }
+  },
+  "roadmap": {
+    "badge": "Career Journey",
+    "title": "Looking Ahead",
+    "subtitle": "My post-graduation goals and career plan.",
+    "bottomNote": "A flexible plan. I adapt to opportunities and what I learn.",
+    "active": "Active",
+    "completed": "completed",
+    "milestones": {
+      "now": {
+        "period": "Now",
+        "title": "Senior Year - Self Development",
+        "goals": [
+          "Strengthening my AI and machine learning projects",
+          "Enriching my portfolio with real projects",
+          "Researching and applying for internship opportunities"
+        ]
+      },
+      "6months": {
+        "period": "2026 - Graduation",
+        "title": "Career Start",
+        "goals": [
+          "Earning my Computer Engineering degree",
+          "Finding a junior position in AI/ML field",
+          "Gaining professional work experience"
+        ],
+        "focus": "Learning > Salary"
+      },
+      "1year": {
+        "period": "1 Year Later",
+        "title": "Technical Deepening",
+        "goals": [
+          "Gaining experience in real-world ML projects",
+          "Specializing in deep learning and NLP",
+          "Contributing to open-source projects"
+        ],
+        "focus": "Developing expertise"
+      },
+      "2years": {
+        "period": "2 Years Later",
+        "title": "Becoming an AI Engineer",
+        "goals": [
+          "Reaching mid-level AI/ML Engineer position",
+          "Bringing my own AI projects to life",
+          "Actively contributing to the software community"
+        ],
+        "focus": "Creating value"
+      }
+    }
+  },
+  "aiAssistant": {
+    "badge": "Live Assistant",
+    "title": "Ask My AI Assistant",
+    "subtitle": "An intelligent assistant trained on my background, projects, and engineering approach. Feel free to ask anything directly.",
+    "chatHeader": {
+      "title": "AI Assistant",
+      "poweredBy": "Powered by my knowledge base"
+    },
+    "status": "Building...",
+    "sampleQuestionsTitle": "Sample questions you'll be able to ask:",
+    "sampleQuestions": {
+      "q1": "What projects are you most proud of?",
+      "q2": "How do you approach learning new technologies?",
+      "q3": "What's your take on the future of AI?",
+      "q4": "Walk me through your engineering process"
+    },
+    "inDevelopment": "In Development",
+    "inDevelopmentDesc": "Training on my projects, writing samples, and engineering philosophy",
+    "inputPlaceholder": "Ask me anything... (Coming Soon)",
+    "sendButton": "Send",
+    "features": {
+      "realtime": {
+        "title": "Real-time Responses",
+        "desc": "Instant answers about my projects and experience"
+      },
+      "context": {
+        "title": "Context-Aware",
+        "desc": "Understands follow-up questions and maintains conversation flow"
+      },
+      "learning": {
+        "title": "Always Learning",
+        "desc": "Updates as I complete new projects and gain experience"
+      }
+    },
+    "notifyQuestion": "Want to be notified when the AI assistant launches?",
+    "notifyButton": "Notify Me"
+  },
+  "footer": {
+    "tagline": "AI Engineer in Training. Building systems that solve real problems, not just adding lines to a résumé.",
+    "quickLinks": "Quick Links",
+    "getInTouch": "Get In Touch",
+    "getInTouchDesc": "Open to junior AI engineer roles and interesting problems to solve.",
+    "sendMessage": "Send a Message",
+    "builtWith": "Built with",
+    "copyright": "This portfolio is a living system—always evolving."
+  },
+  "contact": {
+    "title": "Get In Touch",
+    "name": "Your Name",
+    "email": "Email",
+    "subject": "Subject (Optional)",
+    "message": "Your Message",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Your message has been sent successfully! I'll get back to you soon.",
+    "error": "An error occurred. Please try again."
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "viewAll": "View All",
+    "close": "Close",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "tryAgain": "Try Again",
+    "comingSoon": "Coming Soon",
+    "new": "New"
+  },
+  "resume3d": {
+    "title": "3D CV Experience",
+    "loading": "Loading world...",
+    "backToSite": "Back to Site",
+    "mobileWarning": "Best Experience on Desktop",
+    "mobileDescription": "The 3D CV experience works best on desktop browsers. Please visit from your computer.",
+    "instructions": "Click on islands to explore • Drag to rotate view",
+    "about": {
+      "title": "About Me",
+      "subtitle": "Discover who I am",
+      "items": {
+        "0": {
+          "title": "Duran Gezer",
+          "description": "A passionate engineer candidate in artificial intelligence and machine learning."
+        },
+        "1": {
+          "title": "Vision",
+          "description": "Developing intelligent systems that solve real-world problems."
+        },
+        "2": {
+          "title": "Approach",
+          "description": "Continuous learning, clean code, and user-centered design."
+        }
+      }
+    },
+    "education": {
+      "title": "Education",
+      "subtitle": "My academic journey",
+      "items": {
+        "0": {
+          "title": "Computer Engineering",
+          "description": "Bachelor's degree focused on AI and software development."
+        },
+        "1": {
+          "title": "Online Certifications",
+          "description": "AI/ML certifications from Coursera, Udacity, and other platforms."
+        }
+      }
     },
     "experience": {
-        "badge": "Background",
-        "title": "Education, Certifications & Activities",
-        "subtitle": "The journey that shaped my engineering vision.",
-        "categories": {
-            "education": "Education",
-            "certifications": "Certifications",
-            "community": "Community Activities"
+      "title": "Experience & Activities",
+      "subtitle": "My professional and community experiences",
+      "items": {
+        "0": {
+          "title": "DevOps Developer - HSD İNÖNÜ",
+          "description": "Oct 2025 - Present • CI/CD, Docker, GitHub Actions, server management"
         },
-        "items": {
-            "degree": {
-                "title": "B.S. Computer Engineering",
-                "organization": "İnönü University",
-                "period": "2022 - 2026",
-                "description": "Undergraduate curriculum and academic research focused on Artificial Intelligence and Machine Learning."
-            },
-            "mlCamp": {
-                "title": "Machine Learning Camp",
-                "organization": "Miuul",
-                "period": "2024",
-                "description": "Comprehensive machine learning bootcamp program"
-            },
-            "featureEng": {
-                "title": "Feature Engineering",
-                "organization": "Miuul",
-                "period": "2024",
-                "description": "Feature engineering and data preprocessing techniques"
-            },
-            "machineLearning": {
-                "title": "Machine Learning",
-                "organization": "Miuul",
-                "period": "2024",
-                "description": "Machine learning algorithms and applications"
-            },
-            "pythonDS": {
-                "title": "Python Programming for Data Science",
-                "organization": "Miuul",
-                "period": "2024",
-                "description": "Python programming for data science"
-            },
-            "csharp": {
-                "title": "C# Programming",
-                "organization": "Udemy",
-                "period": "2024",
-                "description": "Comprehensive C# programming course for all levels"
-            },
-            "cloudNight": {
-                "title": "Cloud Night",
-                "organization": "HSD İnönü - Huawei",
-                "period": "2025",
-                "description": "Cloud technologies and Huawei Cloud training"
-            },
-            "hsdDevOps": {
-                "title": "DevOps Developer",
-                "organization": "HSD İNÖNÜ",
-                "period": "Oct 2025 - Present",
-                "description": "Building CI/CD pipelines for community projects, Docker container management, automation with GitHub Actions, and server administration. Implementing DevOps culture and best practices."
-            },
-            "cyberSecurityOrg": {
-                "title": "Organization President",
-                "organization": "İnönü University Cyber Security Community",
-                "period": "Nov 2024 - Sep 2025",
-                "description": "During 11-month tenure: planning community events, organizing training programs, team management, and raising cybersecurity awareness. Developing leadership and organizational skills."
-            }
+        "1": {
+          "title": "Organization President - Cyber Security Community",
+          "description": "Nov 2024 - Sep 2025 • 11 months leadership, event organization, team management"
         },
-        "modal": {
-            "learned": "What I Learned"
+        "2": {
+          "title": "Machine Learning Certifications",
+          "description": "Miuul • 2024 • ML algorithms, Feature Engineering, Python for Data Science"
         },
-        "coursesTitle": "Courses Taken",
-        "courses": {
-            "dataStructures": {
-                "title": "Data Structures",
-                "description": "Implementation of fundamental data structures and algorithms."
-            },
-            "oop": {
-                "title": "Object-Oriented Programming",
-                "description": "OOP principles and design patterns."
-            },
-            "database": {
-                "title": "Database Management Systems",
-                "description": "Relational databases and SQL."
-            },
-            "algorithms": {
-                "title": "Algorithm Analysis",
-                "description": "Algorithm design and complexity analysis."
-            },
-            "ai": {
-                "title": "Artificial Intelligence",
-                "description": "AI fundamentals and search algorithms."
-            },
-            "imageProcessing": {
-                "title": "Image Processing",
-                "description": "Digital image processing techniques."
-            },
-            "computerNetworks": {
-                "title": "Computer Networks",
-                "description": "Network protocols and communication."
-            },
-            "webProgramming": {
-                "title": "Web Programming",
-                "description": "Web development and backend systems."
-            },
-            "programmingLanguages": {
-                "title": "Programming Languages",
-                "description": "Programming paradigms and language design."
-            },
-            "softwareEng": {
-                "title": "Software Engineering",
-                "description": "Software development methodologies."
-            }
+        "3": {
+          "title": "Cloud Night",
+          "description": "HSD İnönü - Huawei • 2025 • Cloud technologies training"
         }
+      }
     },
-    "thinking": {
-        "badge": "Engineering Mindset",
-        "title": "My Problem-Solving Philosophy",
-        "subtitle": "Principles I follow when transforming complex problems into simple solutions.",
-        "quote": "A good engineer never starts coding without understanding the problem first.",
-        "principles": {
-            "firstPrinciples": {
-                "title": "Understand First, Solve Later",
-                "description": "I never start coding without fully understanding the problem. I analyze requirements, consider edge cases, then move to implementation."
-            },
-            "outcome": {
-                "title": "Simplicity First",
-                "description": "The best code is the least complex code. I avoid premature optimization and focus on readable, maintainable solutions."
-            },
-            "iterations": {
-                "title": "Bugs = Learning",
-                "description": "Every bug is an opportunity to understand how the system works. Instead of quick fixes, I investigate the root cause."
-            },
-            "systems": {
-                "title": "Data-Driven Thinking",
-                "description": "I base decisions on data, not intuition. I measure model performance with metrics and validate with A/B testing."
-            },
-            "debugging": {
-                "title": "Documentation Culture",
-                "description": "Half of software is code, the other half is documentation. I leave explanatory notes even for my future self."
-            },
-            "curiosity": {
-                "title": "Continuous Learning",
-                "description": "Technology constantly evolves. I try to learn something new every day and experiment to stay current."
-            }
+    "skills": {
+      "title": "Skills",
+      "subtitle": "My technical skills",
+      "items": {
+        "0": {
+          "title": "Programming Languages",
+          "description": "Python, JavaScript, SQL, C++, C#, C, Kotlin, Java"
+        },
+        "1": {
+          "title": "AI/ML Frameworks",
+          "description": "TensorFlow, PyTorch, Scikit-learn, Hugging Face"
+        },
+        "2": {
+          "title": "Web Technologies",
+          "description": "React, Next.js, FastAPI, Tailwind CSS"
+        },
+        "3": {
+          "title": "Tools",
+          "description": "Git, Docker, VS Code"
         }
+      }
     },
-    "roadmap": {
-        "badge": "Career Journey",
-        "title": "Looking Ahead",
-        "subtitle": "My post-graduation goals and career plan.",
-        "bottomNote": "A flexible plan. I adapt to opportunities and what I learn.",
-        "active": "Active",
-        "completed": "completed",
-        "milestones": {
-            "now": {
-                "period": "Now",
-                "title": "Senior Year - Self Development",
-                "goals": [
-                    "Strengthening my AI and machine learning projects",
-                    "Enriching my portfolio with real projects",
-                    "Researching and applying for internship opportunities"
-                ]
-            },
-            "6months": {
-                "period": "2026 - Graduation",
-                "title": "Career Start",
-                "goals": [
-                    "Earning my Computer Engineering degree",
-                    "Finding a junior position in AI/ML field",
-                    "Gaining professional work experience"
-                ],
-                "focus": "Learning > Salary"
-            },
-            "1year": {
-                "period": "1 Year Later",
-                "title": "Technical Deepening",
-                "goals": [
-                    "Gaining experience in real-world ML projects",
-                    "Specializing in deep learning and NLP",
-                    "Contributing to open-source projects"
-                ],
-                "focus": "Developing expertise"
-            },
-            "2years": {
-                "period": "2 Years Later",
-                "title": "Becoming an AI Engineer",
-                "goals": [
-                    "Reaching mid-level AI/ML Engineer position",
-                    "Bringing my own AI projects to life",
-                    "Actively contributing to the software community"
-                ],
-                "focus": "Creating value"
-            }
+    "projects": {
+      "title": "Projects",
+      "subtitle": "Featured AI, Backend, and Mobile projects",
+      "items": {
+        "0": {
+          "title": "AliağaAI — Smart City Guide",
+          "description": "Hybrid RAG smart city assistant built with Next.js, FastAPI, and PostgreSQL + pgvector."
+        },
+        "1": {
+          "title": "AI Dream Interpreter",
+          "description": "Voice & text mobile app built with React Native (Expo), FastAPI, and Groq LLM."
+        },
+        "2": {
+          "title": "Lost & Found QR System (KayipQR)",
+          "description": "Privacy-first QR recovery platform with Next.js, TypeScript, Prisma, and PostgreSQL."
+        },
+        "3": {
+          "title": "WeDo — Shared Tasks & Shopping",
+          "description": "Real-time Android app built with Jetpack Compose (Kotlin), FastAPI, and WebSockets."
+        },
+        "4": {
+          "title": "Real-Time Visual Understanding AI",
+          "description": "100% local real-time webcam scene analysis powered by Python, OpenCV, and Ollama LLaVA."
         }
+      }
+    }
+  },
+  "projectDetail": {
+    "backToProjects": "Back to Projects",
+    "liveDemo": "Live Demo",
+    "viewCode": "View Code",
+    "status": {
+      "completed": "Completed",
+      "in-progress": "In Progress",
+      "planned": "Planned"
     },
-    "aiAssistant": {
-        "badge": "Live Assistant",
-        "title": "Ask My AI Assistant",
-        "subtitle": "An intelligent assistant trained on my background, projects, and engineering approach. Feel free to ask anything directly.",
-        "chatHeader": {
-            "title": "AI Assistant",
-            "poweredBy": "Powered by my knowledge base"
-        },
-        "status": "Building...",
-        "sampleQuestionsTitle": "Sample questions you'll be able to ask:",
-        "sampleQuestions": {
-            "q1": "What projects are you most proud of?",
-            "q2": "How do you approach learning new technologies?",
-            "q3": "What's your take on the future of AI?",
-            "q4": "Walk me through your engineering process"
-        },
-        "inDevelopment": "In Development",
-        "inDevelopmentDesc": "Training on my projects, writing samples, and engineering philosophy",
-        "inputPlaceholder": "Ask me anything... (Coming Soon)",
-        "sendButton": "Send",
-        "features": {
-            "realtime": {
-                "title": "Real-time Responses",
-                "desc": "Instant answers about my projects and experience"
-            },
-            "context": {
-                "title": "Context-Aware",
-                "desc": "Understands follow-up questions and maintains conversation flow"
-            },
-            "learning": {
-                "title": "Always Learning",
-                "desc": "Updates as I complete new projects and gain experience"
-            }
-        },
-        "notifyQuestion": "Want to be notified when the AI assistant launches?",
-        "notifyButton": "Notify Me"
+    "sections": {
+      "problem": "The Problem",
+      "constraints": "Key Constraints",
+      "approach": "The Approach",
+      "modelChoice": "Model Choice",
+      "results": "Results & Evaluation",
+      "lessons": "Lessons Learned",
+      "techStack": "Tech Stack",
+      "tags": "Tags"
+    },
+    "labels": {
+      "selectedModel": "Selected Model",
+      "rationale": "Rationale",
+      "evaluationApproach": "Evaluation Approach",
+      "outcome": "Outcome"
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Type a command or search...",
+    "noResults": "No results found.",
+    "categories": {
+      "navigation": "Navigation",
+      "language": "Language",
+      "social": "Social & Contact"
+    },
+    "navigation": {
+      "home": "Go to Home",
+      "about": "About Me",
+      "projects": "View Projects",
+      "skills": "My Skills",
+      "mlVisualizer": "ML Model Visualizer",
+      "experience": "Experience & Education",
+      "thinking": "Engineering Thinking",
+      "roadmap": "Career Roadmap",
+      "aiAssistant": "AI Assistant"
+    },
+    "social": {
+      "email": "Send Email"
     },
     "footer": {
-        "tagline": "AI Engineer in Training. Building systems that solve real problems, not just adding lines to a résumé.",
-        "quickLinks": "Quick Links",
-        "getInTouch": "Get In Touch",
-        "getInTouchDesc": "Open to junior AI engineer roles and interesting problems to solve.",
-        "sendMessage": "Send a Message",
-        "builtWith": "Built with",
-        "copyright": "This portfolio is a living system—always evolving."
-    },
-    "contact": {
-        "title": "Get In Touch",
-        "name": "Your Name",
-        "email": "Email",
-        "subject": "Subject (Optional)",
-        "message": "Your Message",
-        "send": "Send",
-        "sending": "Sending...",
-        "success": "Your message has been sent successfully! I'll get back to you soon.",
-        "error": "An error occurred. Please try again."
-    },
-    "common": {
-        "learnMore": "Learn More",
-        "readMore": "Read More",
-        "viewAll": "View All",
-        "close": "Close",
-        "loading": "Loading...",
-        "error": "An error occurred",
-        "tryAgain": "Try Again",
-        "comingSoon": "Coming Soon",
-        "new": "New"
-    },
-    "resume3d": {
-        "title": "3D CV Experience",
-        "loading": "Loading world...",
-        "backToSite": "Back to Site",
-        "mobileWarning": "Best Experience on Desktop",
-        "mobileDescription": "The 3D CV experience works best on desktop browsers. Please visit from your computer.",
-        "instructions": "Click on islands to explore • Drag to rotate view",
-        "about": {
-            "title": "About Me",
-            "subtitle": "Discover who I am",
-            "items": {
-                "0": {
-                    "title": "Duran Gezer",
-                    "description": "A passionate engineer candidate in artificial intelligence and machine learning."
-                },
-                "1": {
-                    "title": "Vision",
-                    "description": "Developing intelligent systems that solve real-world problems."
-                },
-                "2": {
-                    "title": "Approach",
-                    "description": "Continuous learning, clean code, and user-centered design."
-                }
-            }
-        },
-        "education": {
-            "title": "Education",
-            "subtitle": "My academic journey",
-            "items": {
-                "0": {
-                    "title": "Computer Engineering",
-                    "description": "Bachelor's degree focused on AI and software development."
-                },
-                "1": {
-                    "title": "Online Certifications",
-                    "description": "AI/ML certifications from Coursera, Udacity, and other platforms."
-                }
-            }
-        },
-        "experience": {
-            "title": "Experience & Activities",
-            "subtitle": "My professional and community experiences",
-            "items": {
-                "0": {
-                    "title": "DevOps Developer - HSD İNÖNÜ",
-                    "description": "Oct 2025 - Present • CI/CD, Docker, GitHub Actions, server management"
-                },
-                "1": {
-                    "title": "Organization President - Cyber Security Community",
-                    "description": "Nov 2024 - Sep 2025 • 11 months leadership, event organization, team management"
-                },
-                "2": {
-                    "title": "Machine Learning Certifications",
-                    "description": "Miuul • 2024 • ML algorithms, Feature Engineering, Python for Data Science"
-                },
-                "3": {
-                    "title": "Cloud Night",
-                    "description": "HSD İnönü - Huawei • 2025 • Cloud technologies training"
-                }
-            }
-        },
-        "skills": {
-            "title": "Skills",
-            "subtitle": "My technical skills",
-            "items": {
-                "0": {
-                    "title": "Programming Languages",
-                    "description": "Python, JavaScript, SQL, C++, C#, C, Kotlin, Java"
-                },
-                "1": {
-                    "title": "AI/ML Frameworks",
-                    "description": "TensorFlow, PyTorch, Scikit-learn, Hugging Face"
-                },
-                "2": {
-                    "title": "Web Technologies",
-                    "description": "React, Next.js, FastAPI, Tailwind CSS"
-                },
-                "3": {
-                    "title": "Tools",
-                    "description": "Git, Docker, VS Code"
-                }
-            }
-        },
-        "projects": {
-            "title": "Projects",
-            "subtitle": "Projects I've built",
-            "items": {
-                "0": {
-                    "title": "AI Portfolio",
-                    "description": "Interactive 3D portfolio site with Next.js and React Three Fiber."
-                },
-                "1": {
-                    "title": "ML Model Visualizer",
-                    "description": "3D visualization of 11 different machine learning models."
-                },
-                "2": {
-                    "title": "Sentiment Analysis",
-                    "description": "Sentiment analysis application using natural language processing."
-                }
-            }
-        }
-    },
-    "projectDetail": {
-        "backToProjects": "Back to Projects",
-        "liveDemo": "Live Demo",
-        "viewCode": "View Code",
-        "status": {
-            "completed": "Completed",
-            "in-progress": "In Progress",
-            "planned": "Planned"
-        },
-        "sections": {
-            "problem": "The Problem",
-            "constraints": "Key Constraints",
-            "approach": "The Approach",
-            "modelChoice": "Model Choice",
-            "results": "Results & Evaluation",
-            "lessons": "Lessons Learned",
-            "techStack": "Tech Stack",
-            "tags": "Tags"
-        },
-        "labels": {
-            "selectedModel": "Selected Model",
-            "rationale": "Rationale",
-            "evaluationApproach": "Evaluation Approach",
-            "outcome": "Outcome"
-        }
-    },
-    "commandPalette": {
-        "placeholder": "Type a command or search...",
-        "noResults": "No results found.",
-        "categories": {
-            "navigation": "Navigation",
-            "language": "Language",
-            "social": "Social & Contact"
-        },
-        "navigation": {
-            "home": "Go to Home",
-            "about": "About Me",
-            "projects": "View Projects",
-            "skills": "My Skills",
-            "mlVisualizer": "ML Model Visualizer",
-            "experience": "Experience & Education",
-            "thinking": "Engineering Thinking",
-            "roadmap": "Career Roadmap",
-            "aiAssistant": "AI Assistant"
-        },
-        "social": {
-            "email": "Send Email"
-        },
-        "footer": {
-            "navigate": "Navigate",
-            "select": "Select"
-        }
+      "navigate": "Navigate",
+      "select": "Select"
     }
+  }
 }

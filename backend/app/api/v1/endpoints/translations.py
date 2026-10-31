@@ -4,9 +4,10 @@ Provides public reads for Next.js i18n dynamic sync,
 and protected writes for Admin CMS.
 """
 import copy
+import hashlib
 import json
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
@@ -24,39 +25,48 @@ BACKEND_DATA_DIR = Path(__file__).parent.parent.parent.parent / "data" / "messag
 FRONTEND_MESSAGES_DIR = Path(__file__).parent.parent.parent.parent.parent.parent / "frontend" / "messages"
 
 
-def _read_seed_file(lang: str) -> Dict[str, Any]:
-    """Read seed JSON from backend data or frontend messages."""
+def _read_seed_file(lang: str) -> Tuple[Dict[str, Any], str]:
+    """Read seed JSON and its SHA-256 digest from backend data or frontend messages."""
     for folder in [BACKEND_DATA_DIR, FRONTEND_MESSAGES_DIR]:
         candidate = folder / f"{lang}.json"
         if candidate.exists():
             try:
-                with open(candidate, "r", encoding="utf-8") as f:
-                    return json.load(f)
+                raw = candidate.read_bytes()
+                digest = hashlib.sha256(raw).hexdigest()[:16]
+                return json.loads(raw.decode("utf-8")), digest
             except Exception:
                 pass
-    return {}
+    return {}, ""
 
 
-def _mirror_to_disk(lang: str, data: Dict[str, Any]) -> None:
-    """Best-effort write to local JSON files if accessible."""
+def _mirror_to_disk(lang: str, data: Dict[str, Any]) -> str:
+    """Best-effort write to local JSON files if accessible; returns updated digest."""
+    clean_data = {k: v for k, v in data.items() if k != "_seed_hash"}
+    serialized = json.dumps(clean_data, ensure_ascii=False, indent=4).encode("utf-8")
+    digest = hashlib.sha256(serialized).hexdigest()[:16]
     for folder in [BACKEND_DATA_DIR, FRONTEND_MESSAGES_DIR]:
         if folder.exists():
             try:
                 target = folder / f"{lang}.json"
-                with open(target, "w", encoding="utf-8") as f:
-                    json.dump(data, f, ensure_ascii=False, indent=4)
+                target.write_bytes(serialized)
             except Exception:
                 pass
+    return digest
 
 
 async def _get_or_create_translation(lang: str, db: AsyncSession) -> SiteTranslation:
-    """Get translation row from DB or seed from file."""
+    """Get translation row from DB, syncing automatically when seed files change on deploy."""
+    seed_content, seed_hash = _read_seed_file(lang)
     result = await db.execute(select(SiteTranslation).where(SiteTranslation.lang == lang))
     row = result.scalars().first()
     if row is None:
-        initial_content = _read_seed_file(lang)
-        row = SiteTranslation(lang=lang, content=initial_content)
+        stored = {**seed_content, "_seed_hash": seed_hash} if seed_hash else seed_content
+        row = SiteTranslation(lang=lang, content=stored)
         db.add(row)
+        await db.commit()
+        await db.refresh(row)
+    elif seed_hash and (row.content or {}).get("_seed_hash") != seed_hash:
+        row.content = {**seed_content, "_seed_hash": seed_hash}
         await db.commit()
         await db.refresh(row)
     return row
@@ -75,7 +85,8 @@ async def get_translations(
         raise HTTPException(status_code=400, detail="Desteklenmeyen dil. 'tr' veya 'en' kullanın.")
 
     row = await _get_or_create_translation(lang, db)
-    return ContentResponse(content=row.content or {})
+    public_content = {k: v for k, v in (row.content or {}).items() if k != "_seed_hash"}
+    return ContentResponse(content=public_content)
 
 
 @router.put("/{lang}", response_model=ContentUpdateResponse)
@@ -90,9 +101,10 @@ async def update_translations(
         raise HTTPException(status_code=400, detail="Desteklenmeyen dil. 'tr' veya 'en' kullanın.")
 
     row = await _get_or_create_translation(lang, db)
-    row.content = data
+    digest = _mirror_to_disk(lang, data)
+    clean_data = {k: v for k, v in data.items() if k != "_seed_hash"}
+    row.content = {**clean_data, "_seed_hash": digest}
     await db.commit()
-    _mirror_to_disk(lang, data)
 
     return ContentUpdateResponse(
         success=True,
@@ -113,11 +125,11 @@ async def update_section(
         raise HTTPException(status_code=400, detail="Desteklenmeyen dil. 'tr' veya 'en' kullanın.")
 
     row = await _get_or_create_translation(lang, db)
-    content = copy.deepcopy(row.content or {})
+    content = {k: v for k, v in copy.deepcopy(row.content or {}).items() if k != "_seed_hash"}
     content[section] = data
-    row.content = content
+    digest = _mirror_to_disk(lang, content)
+    row.content = {**content, "_seed_hash": digest}
     await db.commit()
-    _mirror_to_disk(lang, content)
 
     return ContentUpdateResponse(
         success=True,
@@ -143,7 +155,7 @@ async def update_field(
         raise HTTPException(status_code=400, detail="Path belirtilmelidir.")
 
     row = await _get_or_create_translation(lang, db)
-    content = copy.deepcopy(row.content or {})
+    content = {k: v for k, v in copy.deepcopy(row.content or {}).items() if k != "_seed_hash"}
 
     keys = path.split(".")
     curr = content
@@ -153,9 +165,9 @@ async def update_field(
         curr = curr[key]
 
     curr[keys[-1]] = value
-    row.content = content
+    digest = _mirror_to_disk(lang, content)
+    row.content = {**content, "_seed_hash": digest}
     await db.commit()
-    _mirror_to_disk(lang, content)
 
     return ContentUpdateResponse(
         success=True,
