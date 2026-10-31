@@ -3,10 +3,6 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./i18n.ts');
 
-const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-};
+const nextConfig: NextConfig = {};
 
-export default withNextIntl(nextConfig as any);
+export default withNextIntl(nextConfig);
