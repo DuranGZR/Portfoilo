@@ -9,19 +9,13 @@ interface IntroSequenceProps {
     skip?: boolean;
 }
 
-// Bezier curve control points for cinematic camera path
 const CAMERA_PATH = {
-    // Start: Deep space, far from islands
     start: new THREE.Vector3(0, 80, 200),
-    // Control point 1: Sweeping arc
     control1: new THREE.Vector3(-50, 50, 100),
-    // Control point 2: Coming closer
     control2: new THREE.Vector3(30, 25, 50),
-    // End: Overview position - closer to islands
     end: new THREE.Vector3(0, 15, 32),
 };
 
-// Look-at targets along the path
 const LOOK_AT_PATH = {
     start: new THREE.Vector3(0, 0, -100),
     control1: new THREE.Vector3(0, 0, -20),
@@ -29,19 +23,12 @@ const LOOK_AT_PATH = {
     end: new THREE.Vector3(0, 0, 0),
 };
 
-// Easing function for smooth animation
-const easeOutExpo = (t: number): number => {
-    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-};
-
 const easeInOutCubic = (t: number): number => {
-    return t < 0.5
-        ? 4 * t * t * t
-        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 };
 
-// Cubic bezier interpolation
-function cubicBezier(
+function writeCubicBezier(
+    out: THREE.Vector3,
     t: number,
     p0: THREE.Vector3,
     p1: THREE.Vector3,
@@ -54,27 +41,25 @@ function cubicBezier(
     const uuu = uu * u;
     const ttt = tt * t;
 
-    const result = new THREE.Vector3();
-    result.copy(p0).multiplyScalar(uuu);
-    result.add(p1.clone().multiplyScalar(3 * uu * t));
-    result.add(p2.clone().multiplyScalar(3 * u * tt));
-    result.add(p3.clone().multiplyScalar(ttt));
-
-    return result;
+    out.set(
+        p0.x * uuu + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x,
+        p0.y * uuu + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y,
+        p0.z * uuu + 3 * uu * t * p1.z + 3 * u * tt * p2.z + ttt * p3.z
+    );
+    return out;
 }
 
 export default function IntroSequence({ onComplete, skip = false }: IntroSequenceProps) {
     const { camera } = useThree();
-    const progressRef = useRef(0);
     const [isComplete, setIsComplete] = useState(false);
     const startTimeRef = useRef<number | null>(null);
+    const posScratch = useRef(new THREE.Vector3());
+    const lookScratch = useRef(new THREE.Vector3());
 
-    const INTRO_DURATION = 4.5; // seconds
+    const INTRO_DURATION = 3.6;
 
-    // Handle skip
     useEffect(() => {
         if (skip && !isComplete) {
-            // Jump to end position immediately
             camera.position.copy(CAMERA_PATH.end);
             camera.lookAt(LOOK_AT_PATH.end);
             setIsComplete(true);
@@ -85,29 +70,24 @@ export default function IntroSequence({ onComplete, skip = false }: IntroSequenc
     useFrame((state) => {
         if (isComplete || skip) return;
 
-        // Initialize start time
         if (startTimeRef.current === null) {
             startTimeRef.current = state.clock.elapsedTime;
         }
 
         const elapsed = state.clock.elapsedTime - startTimeRef.current;
         const rawProgress = Math.min(elapsed / INTRO_DURATION, 1);
+        const t = easeInOutCubic(rawProgress);
 
-        // Apply easing for smooth feel
-        progressRef.current = easeInOutCubic(rawProgress);
-        const t = progressRef.current;
-
-        // Calculate camera position along bezier curve
-        const newPosition = cubicBezier(
+        writeCubicBezier(
+            posScratch.current,
             t,
             CAMERA_PATH.start,
             CAMERA_PATH.control1,
             CAMERA_PATH.control2,
             CAMERA_PATH.end
         );
-
-        // Calculate look-at target along bezier curve
-        const newLookAt = cubicBezier(
+        writeCubicBezier(
+            lookScratch.current,
             t,
             LOOK_AT_PATH.start,
             LOOK_AT_PATH.control1,
@@ -115,16 +95,14 @@ export default function IntroSequence({ onComplete, skip = false }: IntroSequenc
             LOOK_AT_PATH.end
         );
 
-        // Apply camera transforms
-        camera.position.copy(newPosition);
-        camera.lookAt(newLookAt);
+        camera.position.copy(posScratch.current);
+        camera.lookAt(lookScratch.current);
 
-        // Check completion
         if (rawProgress >= 1 && !isComplete) {
             setIsComplete(true);
             onComplete();
         }
     });
 
-    return null; // This is a controller component, no visual output
+    return null;
 }

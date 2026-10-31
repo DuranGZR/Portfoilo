@@ -5,7 +5,7 @@ import { Suspense, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Loader2, Monitor, SkipForward } from 'lucide-react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 // Dynamic import for 3D components (no SSR)
 const World3D = dynamic(() => import('@/components/3d-resume/World3D'), {
@@ -14,6 +14,7 @@ const World3D = dynamic(() => import('@/components/3d-resume/World3D'), {
 });
 
 function LoadingScreen() {
+    const locale = useLocale();
     return (
         <div className="fixed inset-0 bg-[#050505] flex flex-col items-center justify-center gap-6">
             <motion.div
@@ -27,7 +28,7 @@ function LoadingScreen() {
                 animate={{ opacity: 1 }}
                 className="text-[#f3f5f9]/70 text-lg"
             >
-                Dünya yükleniyor...
+                {locale === 'en' ? 'Loading 3D world...' : 'Dünya yükleniyor...'}
             </motion.p>
         </div>
     );
@@ -35,6 +36,7 @@ function LoadingScreen() {
 
 function MobileWarning() {
     const t = useTranslations('resume3d');
+    const locale = useLocale();
 
     return (
         <div className="fixed inset-0 bg-[#050505] flex flex-col items-center justify-center gap-6 p-8 text-center md:hidden z-50">
@@ -44,7 +46,7 @@ function MobileWarning() {
                 {t('mobileDescription')}
             </p>
             <Link
-                href="/"
+                href={`/${locale}`}
                 className="mt-4 px-6 py-3 bg-[#819fa7] text-[#050505] rounded-lg font-medium hover:bg-[#819fa7]/90 transition-colors"
             >
                 {t('backToSite')}
@@ -55,6 +57,7 @@ function MobileWarning() {
 
 export default function Resume3DPage() {
     const t = useTranslations('resume3d');
+    const locale = useLocale();
     const [selectedIsland, setSelectedIsland] = useState<string | null>(null);
 
     // Intro sequence state
@@ -74,8 +77,7 @@ export default function Resume3DPage() {
     // Show UI after intro completes
     useEffect(() => {
         if (introComplete) {
-            // Small delay for smooth transition
-            const timer = setTimeout(() => setShowUI(true), 300);
+            const timer = setTimeout(() => setShowUI(true), 250);
             return () => clearTimeout(timer);
         }
     }, [introComplete]);
@@ -108,38 +110,40 @@ export default function Resume3DPage() {
             {/* Mobile Warning */}
             <MobileWarning />
 
-            {/* Skip Intro Button */}
+            {/* Skip Intro Button (opaque GPU surface, no backdrop-blur over WebGL) */}
             <AnimatePresence>
                 {!introComplete && (
                     <motion.button
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        transition={{ delay: 0.5 }}
+                        exit={{ opacity: 0, y: 16 }}
+                        transition={{ duration: 0.2 }}
                         onClick={handleSkipIntro}
-                        className="fixed bottom-8 right-8 z-50 hidden md:flex items-center gap-2 px-4 py-2 bg-[#1a1a1a]/60 backdrop-blur-md border border-[#819fa7]/20 rounded-lg text-[#f3f5f9]/60 hover:text-[#f3f5f9] hover:border-[#819fa7]/40 transition-all"
+                        className="fixed bottom-8 right-8 z-40 hidden md:flex items-center gap-2 px-4 py-2 bg-[#121519]/92 border border-[#819fa7]/25 rounded-lg text-[#f3f5f9]/70 hover:text-[#f3f5f9] hover:border-[#819fa7]/45 transition-colors"
                     >
-                        <span className="text-sm">Skip</span>
+                        <span className="text-sm">{locale === 'en' ? 'Skip' : 'Atla'}</span>
                         <SkipForward className="w-4 h-4" />
                     </motion.button>
                 )}
             </AnimatePresence>
 
-            {/* Intro Overlay - Cinematic bars effect */}
+            {/* Intro Overlay - Cinematic bars using GPU scaleY */}
             <AnimatePresence>
                 {!introComplete && (
                     <>
                         <motion.div
-                            initial={{ height: '12%' }}
-                            exit={{ height: 0 }}
-                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                            className="fixed top-0 left-0 right-0 bg-black z-40"
+                            initial={{ scaleY: 1 }}
+                            exit={{ scaleY: 0 }}
+                            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ transformOrigin: 'top' }}
+                            className="fixed top-0 left-0 right-0 h-[12%] bg-black z-30 pointer-events-none"
                         />
                         <motion.div
-                            initial={{ height: '12%' }}
-                            exit={{ height: 0 }}
-                            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                            className="fixed bottom-0 left-0 right-0 bg-black z-40"
+                            initial={{ scaleY: 1 }}
+                            exit={{ scaleY: 0 }}
+                            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+                            style={{ transformOrigin: 'bottom' }}
+                            className="fixed bottom-0 left-0 right-0 h-[12%] bg-black z-30 pointer-events-none"
                         />
                     </>
                 )}
@@ -149,14 +153,14 @@ export default function Resume3DPage() {
             <AnimatePresence>
                 {showUI && (
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 0, x: -16 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="fixed top-6 left-6 z-50 hidden md:block"
+                        transition={{ duration: 0.2 }}
+                        className="fixed top-6 left-6 z-30 hidden md:block"
                     >
                         <Link
-                            href="/"
-                            className="flex items-center gap-2 px-4 py-2 bg-[#1a1a1a]/80 backdrop-blur-lg border border-[#819fa7]/20 rounded-lg text-[#f3f5f9]/80 hover:text-[#f3f5f9] hover:border-[#819fa7]/40 transition-all group"
+                            href={`/${locale}`}
+                            className="flex items-center gap-2 px-4 py-2 bg-[#121519]/92 border border-[#819fa7]/22 rounded-lg text-[#f3f5f9]/85 hover:text-[#f3f5f9] hover:border-[#819fa7]/45 transition-colors group"
                         >
                             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                             <span className="text-sm font-medium">{t('backToSite')}</span>
@@ -165,17 +169,18 @@ export default function Resume3DPage() {
                 )}
             </AnimatePresence>
 
-            {/* Instructions */}
+            {/* Instructions (hidden while a detail panel is open) */}
             <AnimatePresence>
-                {showUI && (
+                {showUI && !selectedIsland && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden md:block"
+                        exit={{ opacity: 0, y: 12 }}
+                        transition={{ duration: 0.2 }}
+                        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 hidden md:block pointer-events-none"
                     >
-                        <div className="px-6 py-3 bg-[#1a1a1a]/80 backdrop-blur-lg border border-[#819fa7]/20 rounded-full">
-                            <p className="text-sm text-[#f3f5f9]/60">
+                        <div className="px-6 py-3 bg-[#121519]/92 border border-[#819fa7]/22 rounded-full">
+                            <p className="text-sm text-[#f3f5f9]/65">
                                 {t('instructions')}
                             </p>
                         </div>

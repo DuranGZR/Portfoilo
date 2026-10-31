@@ -1,168 +1,166 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useTranslations } from 'next-intl';
-import { Rocket, Github, ExternalLink, Eye, Camera, Brain, Activity, Gamepad2, DollarSign, MessageSquare, Bus } from 'lucide-react';
+import Link from 'next/link';
+import { useTranslations, useLocale } from 'next-intl';
+import { Rocket, Github, ExternalLink, ArrowUpRight } from 'lucide-react';
 
 interface ProjectsPanelProps {
     color: string;
 }
 
-const projects = [
+const FEATURED_PROJECTS = [
+    {
+        key: 'aliagaAI',
+        slug: 'aliaga-ai',
+        image: '/projects/aliagaai.png',
+        techs: ['Next.js', 'FastAPI', 'PostgreSQL', 'pgvector', 'RAG'],
+        github: 'https://github.com/DuranGZR/AliagaAI',
+    },
+    {
+        key: 'aiDreamInterpreter',
+        slug: 'ai-dream-interpreter',
+        image: '/projects/dream-interpreter.png',
+        techs: ['React Native', 'Expo', 'TypeScript', 'FastAPI', 'Groq LLM'],
+        github: 'https://github.com/DuranGZR/Ai-Dream-Interpreter',
+    },
+    {
+        key: 'kayipQR',
+        slug: 'kayip-qr',
+        image: '/projects/kayipqr.png',
+        techs: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Docker'],
+        github: 'https://github.com/DuranGZR/KayipQR',
+    },
+    {
+        key: 'weDo',
+        slug: 'wedo',
+        image: '/projects/wedo-card.png',
+        techs: ['Jetpack Compose', 'Kotlin', 'FastAPI', 'WebSocket'],
+        github: 'https://github.com/DuranGZR/WeDo',
+    },
     {
         key: 'visualAI',
-        icon: Camera,
+        slug: 'real-time-visual-understanding',
+        image: '/projects/visual-ai.png',
         techs: ['Python', 'Ollama', 'LLaVA', 'OpenCV'],
-        github: 'https://github.com/DuranGZR/Real-Time-Visual-Understanding'
-    },
-    {
-        key: 'handwriting',
-        icon: Brain,
-        techs: ['TensorFlow', 'Keras', 'CNN', 'OpenCV'],
-        github: 'https://github.com/DuranGZR/El_Yazisi_Tahmin'
-    },
-    {
-        key: 'diabetes',
-        icon: Activity,
-        techs: ['Scikit-learn', 'Pandas', 'NumPy'],
-        github: 'https://github.com/DuranGZR/Diabetes_Prediction'
-    },
-    {
-        key: 'xoxBot',
-        icon: Gamepad2,
-        techs: ['Python', 'Q-Learning', 'RL'],
-        github: 'https://github.com/DuranGZR/XOX_Bot'
-    },
-    {
-        key: 'salary',
-        icon: DollarSign,
-        techs: ['Scikit-learn', 'Feature Eng.'],
-        github: 'https://github.com/DuranGZR/Salary_Prediction_with_Mahcine_Learning'
-    },
-    {
-        key: 'telegramBot',
-        icon: MessageSquare,
-        techs: ['Python', 'Telegram API'],
-        github: 'https://github.com/DuranGZR/Telegram_dogum_gunu_bot'
+        github: 'https://github.com/DuranGZR/Real-Time-Visual-Understanding',
     },
 ];
 
 export default function ProjectsPanel({ color }: ProjectsPanelProps) {
     const t = useTranslations('projects');
     const t3d = useTranslations('resume3d.projects');
+    const locale = useLocale();
 
     return (
         <div className="space-y-4">
             {/* Header */}
-            <motion.div
-                className="flex items-center gap-3 mb-2"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-            >
+            <div className="flex items-center gap-3 mb-1">
                 <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center"
-                    style={{ background: `${color}15`, border: `1px solid ${color}25` }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: `${color}18`, border: `1px solid ${color}30` }}
                 >
                     <Rocket className="w-5 h-5" style={{ color }} />
                 </div>
                 <div>
                     <h3 className="text-lg font-semibold text-white">{t3d('title')}</h3>
-                    <p className="text-sm text-white/40">{t3d('subtitle')}</p>
+                    <p className="text-xs sm:text-sm text-white/45">{t3d('subtitle')}</p>
                 </div>
-            </motion.div>
+            </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-2 gap-3 max-h-[45vh] overflow-y-auto pr-1">
-                {projects.map((project, index) => {
-                    const Icon = project.icon;
-                    return (
-                        <motion.div
-                            key={project.key}
-                            className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/15 transition-all group relative overflow-hidden"
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.15 + index * 0.05 }}
-                            whileHover={{ scale: 1.02 }}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {FEATURED_PROJECTS.map((project) => (
+                    <div
+                        key={project.key}
+                        className="rounded-xl bg-white/[0.025] border border-white/10 hover:border-white/25 transition-colors duration-200 group flex flex-col overflow-hidden"
+                    >
+                        {/* Project Showcase Thumbnail */}
+                        <Link
+                            href={`/${locale}/projects/${project.slug}`}
+                            className="relative aspect-[16/10] w-full bg-[#0a0c0f] overflow-hidden border-b border-white/5 block"
                         >
-                            {/* Hover glow */}
-                            <div
-                                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-                                style={{
-                                    background: `radial-gradient(circle at top left, ${color}10 0%, transparent 50%)`
-                                }}
+                            <img
+                                src={project.image}
+                                alt={t(`items.${project.key}.title`)}
+                                loading="lazy"
+                                decoding="async"
+                                className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
                             />
+                        </Link>
 
-                            {/* Icon */}
-                            <div className="flex items-start justify-between mb-3">
-                                <div
-                                    className="w-9 h-9 rounded-lg flex items-center justify-center"
-                                    style={{ background: `${color}15`, border: `1px solid ${color}20` }}
-                                >
-                                    <Icon className="w-4 h-4" style={{ color }} />
+                        <div className="p-3.5 flex-1 flex flex-col justify-between gap-3">
+                            <div>
+                                {/* Title + Actions */}
+                                <div className="flex items-start justify-between gap-2 mb-1.5">
+                                    <Link
+                                        href={`/${locale}/projects/${project.slug}`}
+                                        className="text-sm font-semibold text-white/95 hover:text-white transition-colors line-clamp-1"
+                                    >
+                                        {t(`items.${project.key}.title`)}
+                                    </Link>
+
+                                    <div className="flex items-center gap-1 shrink-0">
+                                        <a
+                                            href={project.github}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            aria-label="GitHub"
+                                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-white/60 hover:text-white transition-colors"
+                                        >
+                                            <Github className="w-3.5 h-3.5" />
+                                        </a>
+                                        <Link
+                                            href={`/${locale}/projects/${project.slug}`}
+                                            aria-label={locale === 'en' ? 'View project' : 'Projeyi incele'}
+                                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/15 border border-white/10 text-white/60 hover:text-white transition-colors"
+                                        >
+                                            <ArrowUpRight className="w-3.5 h-3.5" />
+                                        </Link>
+                                    </div>
                                 </div>
 
-                                {/* GitHub link */}
-                                <a
-                                    href={project.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 transition-colors opacity-0 group-hover:opacity-100"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <Github className="w-3.5 h-3.5 text-white/50 hover:text-white/80" />
-                                </a>
+                                {/* Description */}
+                                <p className="text-xs text-white/50 line-clamp-2 leading-relaxed">
+                                    {t(`items.${project.key}.tagline`)}
+                                </p>
                             </div>
-
-                            {/* Title */}
-                            <h4 className="text-sm font-medium text-white/90 mb-1 line-clamp-2">
-                                {t(`items.${project.key}.title`)}
-                            </h4>
-
-                            {/* Description */}
-                            <p className="text-xs text-white/40 mb-3 line-clamp-2">
-                                {t(`items.${project.key}.tagline`)}
-                            </p>
 
                             {/* Tech tags */}
                             <div className="flex flex-wrap gap-1">
-                                {project.techs.slice(0, 3).map((tech, techIndex) => (
+                                {project.techs.slice(0, 4).map((tech) => (
                                     <span
                                         key={tech}
-                                        className="px-1.5 py-0.5 text-[10px] rounded bg-white/[0.04] text-white/50"
+                                        className="px-2 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] border border-white/5 text-white/60"
                                     >
                                         {tech}
                                     </span>
                                 ))}
-                                {project.techs.length > 3 && (
-                                    <span className="px-1.5 py-0.5 text-[10px] rounded bg-white/[0.04] text-white/40">
-                                        +{project.techs.length - 3}
+                                {project.techs.length > 4 && (
+                                    <span className="px-1.5 py-0.5 text-[10px] font-mono rounded-md bg-white/[0.04] text-white/40">
+                                        +{project.techs.length - 4}
                                     </span>
                                 )}
                             </div>
-                        </motion.div>
-                    );
-                })}
+                        </div>
+                    </div>
+                ))}
             </div>
 
             {/* View all link */}
-            <motion.div
-                className="text-center pt-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-            >
+            <div className="text-center pt-1">
                 <a
                     href="https://github.com/DuranGZR"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-xs text-white/40 hover:text-white/70 transition-colors"
+                    className="inline-flex items-center gap-2 text-xs text-white/45 hover:text-white/80 transition-colors"
                 >
                     <Github className="w-3.5 h-3.5" />
-                    Tüm projeler için GitHub'ı ziyaret edin
+                    {locale === 'en'
+                        ? 'Visit GitHub for all projects'
+                        : "Tüm projeler için GitHub'ı ziyaret edin"}
                     <ExternalLink className="w-3 h-3" />
                 </a>
-            </motion.div>
+            </div>
         </div>
     );
 }
