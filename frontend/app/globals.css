@@ -23,11 +23,15 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
-/* Scroll offset for fixed header */
+/* Scroll offset for fixed header & strict horizontal clip */
 section[id] {
   scroll-margin-top: 70px;
+  overflow-x: clip;
 }
 
 @media (max-width: 768px) {
@@ -37,11 +41,20 @@ section[id] {
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   font-family: var(--font-body);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 /* ===== TYPOGRAPHY ===== */

@@ -19,7 +19,7 @@ export default function Hero() {
   const t = useTranslations('hero');
 
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
+    <section id="hero" className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-[#0a0a0a] to-[#0d0d0d]" />
 

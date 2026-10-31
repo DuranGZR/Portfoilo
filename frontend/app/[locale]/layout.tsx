@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -17,6 +17,14 @@ import ConditionalLayout from '@/components/layout/ConditionalLayout';
 import '../globals.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://durangezer.dev';
+
+export const viewport: Viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    interactiveWidget: 'overlays-content',
+};
 
 export async function generateMetadata({
     params

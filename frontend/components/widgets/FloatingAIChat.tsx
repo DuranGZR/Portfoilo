@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
   motion,
   AnimatePresence,
@@ -177,10 +178,14 @@ export default function FloatingAIChat() {
   const [typingProgress, setTypingProgress] = useState(0.5);
   const [transientMood, setTransientMood] = useState<'greeting' | 'happy' | 'error' | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [keyboardOffset, setKeyboardOffset] = useState(0);
-  const [visualHeight, setVisualHeight] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
+  const fixedFrameRef = useRef<HTMLDivElement>(null);
+  const stageLiftRef = useRef<HTMLDivElement>(null);
+  const isInputFocusedRef = useRef(false);
+  const lockedScrollYRef = useRef<number | null>(null);
   const hasSpokenIntroRef = useRef(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -226,24 +231,34 @@ export default function FloatingAIChat() {
     }, durationMs);
   }, []);
 
-  // Track exact inner viewport dimensions
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Track exact inner viewport dimensions without thrashing during mobile keyboard open
   useEffect(() => {
     const updateViewport = () => {
-      setViewport({
-        w: document.documentElement.clientWidth || window.innerWidth,
-        h: window.innerHeight,
-      });
+      if (isInputFocusedRef.current && window.innerWidth < 640) {
+        return;
+      }
+      const vv = window.visualViewport;
+      const w =
+        fixedFrameRef.current?.clientWidth ||
+        document.documentElement.clientWidth ||
+        window.innerWidth;
+      const h = Math.round(vv ? vv.offsetTop + vv.height : window.innerHeight);
+      setViewport((prev) =>
+        prev.w === w && Math.abs(prev.h - h) < 2 ? prev : { w, h }
+      );
     };
 
     updateViewport();
     window.addEventListener('resize', updateViewport, { passive: true });
-
-    const ro = new ResizeObserver(updateViewport);
-    ro.observe(document.documentElement);
+    window.visualViewport?.addEventListener('resize', updateViewport);
 
     return () => {
       window.removeEventListener('resize', updateViewport);
-      ro.disconnect();
+      window.visualViewport?.removeEventListener('resize', updateViewport);
     };
   }, []);
 
@@ -527,25 +542,87 @@ export default function FloatingAIChat() {
     }
   })();
 
-  // Track mobile virtual keyboard via VisualViewport so input always glides above keyboard
+  // Direct 60fps GPU keyboard lift so ONLY the assistant glides up while background page stays still
   const syncVisualViewport = useCallback(() => {
     if (typeof window === 'undefined') return;
-    const vv = window.visualViewport;
-    const layoutH = window.innerHeight;
-    if (vv) {
-      const nextOffset = Math.max(0, Math.round(layoutH - (vv.offsetTop + vv.height)));
-      setKeyboardOffset((prev) => (Math.abs(prev - nextOffset) >= 1 ? nextOffset : prev));
-      setVisualHeight(Math.round(vv.height));
-    } else {
-      setKeyboardOffset(0);
-      setVisualHeight(layoutH);
+
+    // Keep background page strictly at its exact scroll position while mobile keyboard is active
+    if (isInputFocusedRef.current && lockedScrollYRef.current !== null && window.innerWidth < 640) {
+      if (Math.abs(window.scrollY - lockedScrollYRef.current) >= 1 || window.scrollX !== 0) {
+        window.scrollTo({
+          top: lockedScrollYRef.current,
+          left: 0,
+          behavior: 'instant' as ScrollBehavior,
+        });
+      }
     }
+
+    const frameEl = fixedFrameRef.current;
+    const stageEl = stageLiftRef.current;
+    const vv = window.visualViewport;
+
+    const frameW = frameEl?.clientWidth || document.documentElement.clientWidth || window.innerWidth;
+    const frameH =
+      frameEl?.getBoundingClientRect().height ||
+      document.documentElement.clientHeight ||
+      window.innerHeight;
+
+    const isMobileTouch =
+      frameW < 640 || window.matchMedia('(pointer: coarse)').matches;
+
+    if (!isMobileTouch) {
+      if (stageEl) {
+        stageEl.style.transform = 'translate3d(0, 0, 0)';
+      }
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.style.maxHeight = '265px';
+      }
+      setIsKeyboardVisible(false);
+      return;
+    }
+
+    const vvBottom = vv ? vv.offsetTop + vv.height : window.innerHeight;
+    const visibleH = vv ? vv.height : window.innerHeight;
+    const occludedBottom = Math.max(0, Math.round(frameH - vvBottom));
+
+    const keyboardActive =
+      occludedBottom > 110 ||
+      (isInputFocusedRef.current && visibleH < frameH - 95);
+
+    const baseBottom = 16;
+    const desiredGap = keyboardActive ? 10 : 14;
+    const liftPx =
+      occludedBottom > 0
+        ? Math.max(0, occludedBottom + desiredGap - baseBottom)
+        : 0;
+
+    if (stageEl) {
+      stageEl.style.transform =
+        liftPx > 0 ? `translate3d(0, -${liftPx}px, 0)` : 'translate3d(0, 0, 0)';
+    }
+
+    if (messagesContainerRef.current) {
+      const maxH = Math.max(
+        84,
+        Math.min(230, Math.round(visibleH - (keyboardActive ? 124 : 210)))
+      );
+      messagesContainerRef.current.style.maxHeight = `${maxH}px`;
+      if (keyboardActive) {
+        messagesContainerRef.current.scrollTop =
+          messagesContainerRef.current.scrollHeight;
+      }
+    }
+
+    setIsKeyboardVisible((prev) => (prev !== keyboardActive ? keyboardActive : prev));
   }, []);
 
   useEffect(() => {
     if (!isOpen) {
-      setKeyboardOffset(0);
+      isInputFocusedRef.current = false;
+      lockedScrollYRef.current = null;
+      document.documentElement.style.scrollBehavior = '';
       setIsInputFocused(false);
+      setIsKeyboardVisible(false);
       return;
     }
 
@@ -573,7 +650,72 @@ export default function FloatingAIChat() {
     };
   }, [isOpen, syncVisualViewport]);
 
-  // Keep conversation scrolled smoothly to latest bubble (including when mobile keyboard opens)
+  // Freeze background page scroll/shift on mobile while virtual keyboard input is focused
+  useEffect(() => {
+    if (!isOpen || !isInputFocused) return;
+    if (typeof window === 'undefined' || window.innerWidth >= 640) return;
+
+    if (lockedScrollYRef.current === null) {
+      lockedScrollYRef.current = window.scrollY;
+    }
+    const savedY = lockedScrollYRef.current;
+    document.documentElement.style.scrollBehavior = 'auto';
+
+    const lockWindowScroll = () => {
+      if (lockedScrollYRef.current === null) return;
+      if (Math.abs(window.scrollY - lockedScrollYRef.current) >= 1 || window.scrollX !== 0) {
+        window.scrollTo({
+          top: lockedScrollYRef.current,
+          left: 0,
+          behavior: 'instant' as ScrollBehavior,
+        });
+      }
+      syncVisualViewport();
+    };
+
+    const handleDocumentTouchStart = (e: TouchEvent) => {
+      const target = e.target as Node | null;
+      if (target && stageLiftRef.current && !stageLiftRef.current.contains(target)) {
+        inputRef.current?.blur();
+      }
+    };
+
+    const handleStageTouchMove = (e: TouchEvent) => {
+      const target = e.target as Node | null;
+      const msgBox = messagesContainerRef.current;
+      if (
+        target &&
+        msgBox &&
+        msgBox.contains(target) &&
+        msgBox.scrollHeight > msgBox.clientHeight
+      ) {
+        return;
+      }
+      e.preventDefault();
+    };
+
+    const stageEl = stageLiftRef.current;
+    window.addEventListener('scroll', lockWindowScroll, { passive: true });
+    document.addEventListener('touchstart', handleDocumentTouchStart, { passive: true });
+    stageEl?.addEventListener('touchmove', handleStageTouchMove, { passive: false });
+
+    return () => {
+      window.removeEventListener('scroll', lockWindowScroll);
+      document.removeEventListener('touchstart', handleDocumentTouchStart);
+      stageEl?.removeEventListener('touchmove', handleStageTouchMove);
+      if (Math.abs(window.scrollY - savedY) >= 1 || window.scrollX !== 0) {
+        window.scrollTo({
+          top: savedY,
+          left: 0,
+          behavior: 'instant' as ScrollBehavior,
+        });
+      }
+      lockedScrollYRef.current = null;
+      document.documentElement.style.scrollBehavior = '';
+    };
+  }, [isOpen, isInputFocused, syncVisualViewport]);
+
+  // Keep conversation scrolled smoothly to latest bubble
   useEffect(() => {
     if (isOpen && messagesContainerRef.current) {
       messagesContainerRef.current.scrollTo({
@@ -581,7 +723,7 @@ export default function FloatingAIChat() {
         behavior: 'smooth',
       });
     }
-  }, [messages, isLoading, isOpen, keyboardOffset]);
+  }, [messages, isLoading, isOpen, isKeyboardVisible]);
 
   // Focus input on desktop & speak live welcome greeting on first open!
   useEffect(() => {
@@ -705,6 +847,7 @@ export default function FloatingAIChat() {
   };
 
   const handleCloseChat = () => {
+    inputRef.current?.blur();
     if (isSpeaking) {
       completeActiveStreamImmediately();
     }
@@ -743,15 +886,6 @@ export default function FloatingAIChat() {
       : null;
 
   const isMobileViewport = viewport.w > 0 && viewport.w < 640;
-  const effectiveVisualH = visualHeight || viewport.h || 700;
-  const isKeyboardVisible =
-    isMobileViewport &&
-    (keyboardOffset > 70 || (isInputFocused && effectiveVisualH < 520));
-  const openStageBottomPx =
-    (isMobileViewport ? (isKeyboardVisible ? 10 : 16) : 24) + keyboardOffset;
-  const dynamicMessagesMaxH = isMobileViewport
-    ? Math.max(96, Math.min(240, effectiveVisualH - (isKeyboardVisible ? 132 : 210)))
-    : 265;
 
   // Show only recent exchanges in the frameless air stream so screen stays clean, while keeping scrollability
   const lastAssistantIdx = (() => {
@@ -761,8 +895,15 @@ export default function FloatingAIChat() {
     return -1;
   })();
 
-  return (
-    <>
+  if (!mounted || typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      ref={fixedFrameRef}
+      className="fixed inset-0 z-[70] pointer-events-none overflow-hidden"
+    >
       {/* 1. CLOSED ROAMING STATE: Silky 3D Corner-Gliding Mascot + Tiny 1-Line Bubble */}
       {hasEntered && targetCoords && !isOpen && (
         <motion.div
@@ -810,7 +951,7 @@ export default function FloatingAIChat() {
           }}
           onMouseEnter={() => setIsPodOrBubbleHovered(true)}
           onMouseLeave={() => setIsPodOrBubbleHovered(false)}
-          className="fixed top-0 left-0 z-50 pointer-events-auto"
+          className="absolute top-0 left-0 z-10 pointer-events-auto"
         >
           <div
             aria-hidden="true"
@@ -900,33 +1041,40 @@ export default function FloatingAIChat() {
       {/* 2. OPEN CONVERSATION STATE: STİL 1 — FRAMELESS FLOATING COMPANION STAGE! */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+          <div
+            ref={stageLiftRef}
             style={{
-              bottom: `${openStageBottomPx}px`,
-              transition: 'bottom 0.18s cubic-bezier(0.22, 1, 0.36, 1)',
+              bottom: isMobileViewport ? 16 : 24,
+              transition: 'transform 0.14s cubic-bezier(0.22, 1, 0.36, 1)',
+              willChange: 'transform',
             }}
-            className={`fixed ${
-              isRightSide ? 'right-3.5 sm:right-6 items-end' : 'left-3.5 sm:left-6 items-start'
-            } z-[70] w-[calc(100vw-1.75rem)] sm:w-[372px] flex flex-col ${
-              isKeyboardVisible ? 'gap-2' : 'gap-2.5'
-            } pointer-events-none`}
+            className={`absolute left-3 right-3 ${
+              isRightSide
+                ? 'sm:left-auto sm:right-6'
+                : 'sm:left-6 sm:right-auto'
+            } sm:w-[372px] z-20 pointer-events-none`}
           >
-            {/* Soft Open-Air Atmospheric Stage Glow */}
-            <div
-              aria-hidden="true"
-              className={`absolute -bottom-8 ${
-                isRightSide ? '-right-8' : '-left-8'
-              } w-72 h-72 rounded-full pointer-events-none -z-10`}
-              style={{
-                background:
-                  'radial-gradient(circle, rgba(142, 188, 204, 0.22) 0%, rgba(129, 159, 167, 0.06) 52%, transparent 75%)',
-                filter: 'blur(16px)',
-              }}
-            />
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.95 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className={`relative w-full flex flex-col ${
+                isRightSide ? 'items-end' : 'items-start'
+              } ${isKeyboardVisible ? 'gap-2' : 'gap-2.5'} pointer-events-none`}
+            >
+              {/* Soft Open-Air Atmospheric Stage Glow */}
+              <div
+                aria-hidden="true"
+                className={`absolute -bottom-4 ${
+                  isRightSide ? 'right-0' : 'left-0'
+                } w-64 h-64 rounded-full pointer-events-none -z-10`}
+                style={{
+                  background:
+                    'radial-gradient(circle, rgba(142, 188, 204, 0.22) 0%, rgba(129, 159, 167, 0.06) 52%, transparent 75%)',
+                  filter: 'blur(16px)',
+                }}
+              />
 
             {/* A. Floating Mini Status & Controls Pill */}
             <div
@@ -995,7 +1143,7 @@ export default function FloatingAIChat() {
             <div
               ref={messagesContainerRef}
               style={{
-                maxHeight: `${dynamicMessagesMaxH}px`,
+                maxHeight: isMobileViewport ? '200px' : '265px',
                 maskImage:
                   messages.length > 2
                     ? 'linear-gradient(to bottom, transparent 0%, black 16%, black 100%)'
@@ -1139,16 +1287,34 @@ export default function FloatingAIChat() {
                   enterKeyHint="send"
                   value={input}
                   onChange={handleInputChange}
+                  onTouchStart={() => {
+                    if (typeof window !== 'undefined' && window.innerWidth < 640) {
+                      lockedScrollYRef.current = window.scrollY;
+                      document.documentElement.style.scrollBehavior = 'auto';
+                    }
+                  }}
                   onFocus={() => {
+                    if (
+                      typeof window !== 'undefined' &&
+                      window.innerWidth < 640 &&
+                      lockedScrollYRef.current === null
+                    ) {
+                      lockedScrollYRef.current = window.scrollY;
+                      document.documentElement.style.scrollBehavior = 'auto';
+                    }
+                    isInputFocusedRef.current = true;
                     setIsInputFocused(true);
                     syncVisualViewport();
-                    setTimeout(syncVisualViewport, 110);
-                    setTimeout(syncVisualViewport, 280);
+                    setTimeout(syncVisualViewport, 60);
+                    setTimeout(syncVisualViewport, 160);
+                    setTimeout(syncVisualViewport, 320);
                   }}
                   onBlur={() => {
                     setIsUserTyping(false);
+                    isInputFocusedRef.current = false;
                     setIsInputFocused(false);
-                    setTimeout(syncVisualViewport, 120);
+                    setTimeout(syncVisualViewport, 80);
+                    setTimeout(syncVisualViewport, 240);
                   }}
                   placeholder={copy.inputPlaceholder}
                   disabled={isLoading}
@@ -1158,6 +1324,7 @@ export default function FloatingAIChat() {
                 <button
                   type="submit"
                   onMouseDown={(e) => e.preventDefault()}
+                  onPointerDown={(e) => e.preventDefault()}
                   disabled={!input.trim() || isLoading}
                   aria-label="Send"
                   style={{ outline: 'none' }}
@@ -1174,7 +1341,7 @@ export default function FloatingAIChat() {
               {/* Full-Size Open-Air 3D Visor Pod Talking Directly To You! */}
               <div className="shrink-0">
                 <VisorPodMascot
-                  size={isKeyboardVisible ? 'md' : 'xl'}
+                  size={isKeyboardVisible ? 'md' : isMobileViewport ? 'lg' : 'xl'}
                   mood={activeMood}
                   facing={podFacing}
                   typingProgress={typingProgress}
@@ -1190,9 +1357,11 @@ export default function FloatingAIChat() {
                 />
               </div>
             </div>
-          </motion.div>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
-    </>
+    </div>,
+    document.body
   );
 }
