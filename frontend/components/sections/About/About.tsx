@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Code2, FlaskConical, Rocket } from 'lucide-react';
-import { useTranslations, useMessages } from 'next-intl';
+import { useTranslations, useMessages, useLocale } from 'next-intl';
 import SectionReveal from '@/components/animations/SectionReveal';
 
 // Exact transform coordinates matching Richard Miculob's portfolio card stack
@@ -25,7 +25,10 @@ const FALLBACK_TRAITS = [
 
 export default function About() {
   const t = useTranslations('about');
+  const locale = useLocale();
   const messages = useMessages() as any;
+  const activeCvHref =
+    locale === 'en' ? '/cv/Duran_Gezer_CV_EN.pdf' : '/cv/Duran_Gezer_CV_TR.pdf';
 
   // Localized traits array from i18n messages
   const traits: string[] = messages?.about?.traits?.items || FALLBACK_TRAITS;
@@ -143,11 +146,34 @@ export default function About() {
               <p>
                 {t('resumeCta')}{' '}
                 <a
-                  href="/3d-resume"
+                  href={activeCvHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-white font-semibold underline underline-offset-4 hover:opacity-75 transition-opacity"
                 >
                   {t('resumeLink')}
-                </a>
+                </a>{' '}
+                <span className="text-xs font-mono text-white/40">
+                  (
+                  <a
+                    href="/cv/Duran_Gezer_CV_TR.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    TR
+                  </a>
+                  {' · '}
+                  <a
+                    href="/cv/Duran_Gezer_CV_EN.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
+                  >
+                    EN
+                  </a>
+                  )
+                </span>
                 .
               </p>
             </div>

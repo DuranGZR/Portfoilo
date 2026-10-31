@@ -19,7 +19,7 @@ export default function Hero() {
   const t = useTranslations('hero');
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] via-[#0a0a0a] to-[#0d0d0d]" />
 
@@ -65,12 +65,12 @@ export default function Hero() {
             {t('title')}
           </motion.p>
 
-          {/* Subtitle */}
+          {/* Focus Areas */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="text-sm sm:text-base md:text-lg text-[#f3f5f9]/50 max-w-xl mx-auto mb-10 leading-relaxed"
+            className="text-xs sm:text-[13px] md:text-sm text-[#f3f5f9]/50 max-w-xl mx-auto mb-10 leading-relaxed"
           >
             {t('subtitle')}
           </motion.p>
