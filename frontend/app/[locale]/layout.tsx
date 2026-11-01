@@ -14,6 +14,7 @@ import KonamiListener from '@/components/widgets/EasterEggs/KonamiListener';
 import PageTransition from '@/components/transitions/PageTransition';
 import WebVitalsInit from '@/components/layout/WebVitalsInit';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
+import NoktiqDevTools from '@/components/dev/NoktiqDevTools';
 import '../globals.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://durangezer.dev';
@@ -146,6 +147,7 @@ export default async function LocaleLayout({
                         <KonamiListener />
                     </ConditionalLayout>
                     <WebVitalsInit />
+                    <NoktiqDevTools />
                 </NextIntlClientProvider>
             </body>
         </html>

@@ -825,14 +825,14 @@
     "copyright": "Bu portföy yaşayan bir sistem—sürekli gelişiyor."
   },
   "aiAssistant": {
-    "badge": "Yakında",
+    "badge": "Çevrimiçi Asistan",
     "title": "AI Asistanıma Sor",
     "subtitle": "Özgeçmişimden daha iyi tanıyan bir AI inşa ediyorum. İşlerim, düşüncelerim veya problemlere yaklaşımım hakkında her şeyi sorabilirsiniz.",
     "chatHeader": {
       "title": "AI Asistan",
       "poweredBy": "Bilgi tabanım tarafından destekleniyor"
     },
-    "status": "Geliştiriliyor...",
+    "status": "Çevrimiçi",
     "sampleQuestionsTitle": "Sorabileceğiniz örnek sorular:",
     "sampleQuestions": {
       "q1": "En gurur duyduğun projeler hangileri?",
@@ -842,7 +842,7 @@
     },
     "inDevelopment": "Geliştirme Aşamasında",
     "inDevelopmentDesc": "Projelerim, yazı örneklerim ve mühendislik felsefem üzerinde eğitiliyor",
-    "inputPlaceholder": "Bana bir şey sor... (Yakında)",
+    "inputPlaceholder": "Bana bir şey sor...",
     "sendButton": "Gönder",
     "features": {
       "realtime": {

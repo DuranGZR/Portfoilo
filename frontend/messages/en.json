@@ -694,14 +694,14 @@
     }
   },
   "aiAssistant": {
-    "badge": "Live Assistant",
+    "badge": "Online Assistant",
     "title": "Ask My AI Assistant",
     "subtitle": "An intelligent assistant trained on my background, projects, and engineering approach. Feel free to ask anything directly.",
     "chatHeader": {
       "title": "AI Assistant",
       "poweredBy": "Powered by my knowledge base"
     },
-    "status": "Building...",
+    "status": "Online",
     "sampleQuestionsTitle": "Sample questions you'll be able to ask:",
     "sampleQuestions": {
       "q1": "What projects are you most proud of?",
@@ -711,7 +711,7 @@
     },
     "inDevelopment": "In Development",
     "inDevelopmentDesc": "Training on my projects, writing samples, and engineering philosophy",
-    "inputPlaceholder": "Ask me anything... (Coming Soon)",
+    "inputPlaceholder": "Ask me anything...",
     "sendButton": "Send",
     "features": {
       "realtime": {

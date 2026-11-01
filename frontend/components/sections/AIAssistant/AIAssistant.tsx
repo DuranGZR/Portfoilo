@@ -120,8 +120,8 @@ export default function AIAssistant() {
           <div className="mb-6 sm:mb-10">
             <div className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#819fa7] uppercase mb-1.5 sm:mb-2 flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-40" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white/80" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
               </span>
               {t('badge')}
             </div>

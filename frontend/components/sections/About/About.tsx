@@ -79,9 +79,9 @@ export default function About() {
         {/* Profile Card Layout: Sol tarafta Profil Resmi, Sağ tarafta İsim + Sayaçlar + Bio */}
         <SectionReveal delay={0.12}>
           <div className="flex flex-col sm:flex-row items-start gap-6 md:gap-7">
-          {/* Avatar (120x120px tam yuvarlak profil çerçevesi) */}
+          {/* Avatar (140x140px tam yuvarlak profil çerçevesi) */}
           <div className="shrink-0">
-            <div className="w-[120px] h-[120px] rounded-full overflow-hidden border border-white/10 bg-[#161616] relative flex items-center justify-center">
+            <div className="w-[140px] h-[140px] rounded-full overflow-hidden border border-white/10 bg-[#161616] relative flex items-center justify-center">
               {!imgFailed ? (
                 <img
                   src="/profilFoto.jpg"
