@@ -105,7 +105,7 @@ export default async function LocaleLayout({
     }
 
     const messages = await getMessages({ locale });
-    const heroTheme = (await cookies()).get('hero-theme')?.value === 'light' ? 'light' : 'dark';
+    const heroTheme = (await cookies()).get('hero-theme')?.value === 'dark' ? 'dark' : 'light';
 
     // JSON-LD structured data
     const jsonLd = {
