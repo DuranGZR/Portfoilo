@@ -1,12 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import { fontVariables } from '@/lib/fonts';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
-import LoadingScreen from '@/components/layout/LoadingScreen';
 import NoiseTexture from '@/components/effects/NoiseTexture';
 import FloatingAIChat from '@/components/widgets/FloatingAIChat';
 import CommandPalette from '@/components/widgets/CommandPalette';
@@ -14,7 +14,6 @@ import KonamiListener from '@/components/widgets/EasterEggs/KonamiListener';
 import PageTransition from '@/components/transitions/PageTransition';
 import WebVitalsInit from '@/components/layout/WebVitalsInit';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
-import NoktiqDevTools from '@/components/dev/NoktiqDevTools';
 import '../globals.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://durangezer.dev';
@@ -101,11 +100,12 @@ export default async function LocaleLayout({
 }) {
     const { locale } = await params;
 
-    if (!locales.includes(locale as any)) {
+    if (!locales.some((supportedLocale) => supportedLocale === locale)) {
         notFound();
     }
 
     const messages = await getMessages({ locale });
+    const heroTheme = (await cookies()).get('hero-theme')?.value === 'light' ? 'light' : 'dark';
 
     // JSON-LD structured data
     const jsonLd = {
@@ -123,7 +123,7 @@ export default async function LocaleLayout({
     };
 
     return (
-        <html lang={locale} className={`scroll-smooth ${fontVariables}`} suppressHydrationWarning>
+        <html lang={locale} data-hero-theme={heroTheme} className={`scroll-smooth ${fontVariables}`} suppressHydrationWarning>
             <head>
                 <script
                     type="application/ld+json"
@@ -133,9 +133,8 @@ export default async function LocaleLayout({
             <body className="bg-primary text-text-primary antialiased font-body" suppressHydrationWarning>
                 <NextIntlClientProvider messages={messages} locale={locale}>
                     <ConditionalLayout>
-                        <LoadingScreen />
                         <NoiseTexture />
-                        <Navigation />
+                        <Navigation heroTheme={heroTheme} />
                     </ConditionalLayout>
                     <PageTransition>
                         {children}
@@ -147,7 +146,6 @@ export default async function LocaleLayout({
                         <KonamiListener />
                     </ConditionalLayout>
                     <WebVitalsInit />
-                    <NoktiqDevTools />
                 </NextIntlClientProvider>
             </body>
         </html>

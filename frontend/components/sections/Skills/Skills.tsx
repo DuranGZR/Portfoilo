@@ -99,20 +99,20 @@ export default function Skills() {
   };
 
   const renderBentoCard = (card: typeof card1) => (
-    <div className="bg-[#141414] border border-white/10 rounded-[20px] p-5 sm:p-7 flex flex-col justify-between h-full transition-all duration-400 hover:-translate-y-1 hover:border-white/20 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)] relative group">
+    <div className="bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line rounded-[20px] p-5 sm:p-7 flex flex-col justify-between h-full transition-all duration-400 hover:-translate-y-1 hover:border-white/20 portfolio-light:hover:border-paper-line-strong hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)] portfolio-light:hover:shadow-paper relative group">
       <div>
         {/* Header: Number (Left) & Category (Right-aligned 2-3 lines) */}
         <div className="flex justify-between items-start mb-4 sm:mb-5">
-          <span className="font-sans font-extralight text-3xl sm:text-5xl text-[#f3f5f9] tracking-tighter leading-none select-none">
+          <span className="font-sans font-extralight text-3xl sm:text-5xl text-[#f3f5f9] portfolio-light:text-ink tracking-tighter leading-none select-none">
             {card.number}
           </span>
-          <span className="font-mono text-[10px] tracking-[0.2em] text-[#819fa7] uppercase text-right leading-tight max-w-[130px] whitespace-pre-line">
+          <span className="font-mono text-[10px] tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase text-right leading-tight max-w-[130px] whitespace-pre-line">
             {card.category}
           </span>
         </div>
 
         {/* Center Visual (GIF / Custom Image) */}
-        <div className="h-16 sm:h-20 mb-4 sm:mb-5 flex items-center justify-center opacity-85 group-hover:opacity-100 transition-opacity">
+        <div className="skill-card-visual h-16 sm:h-20 mb-4 sm:mb-5 flex items-center justify-center opacity-85 group-hover:opacity-100 transition-opacity">
           <img
             src={card.image || card.gif || '/images/gif/coding.gif'}
             alt={card.title || 'Skills visual'}
@@ -122,23 +122,23 @@ export default function Skills() {
         </div>
 
         {card.title && (
-          <h3 className="text-sm sm:text-base font-semibold text-white/95 mb-2">
+          <h3 className="text-sm sm:text-base font-semibold text-white/95 portfolio-light:text-ink mb-2">
             {card.title}
           </h3>
         )}
 
         {/* Description */}
-        <p className="text-[13px] sm:text-[13.5px] leading-[1.65] text-white/60 mb-5 sm:mb-6 font-sans">
+        <p className="text-[13px] sm:text-[13.5px] leading-[1.65] text-white/60 portfolio-light:text-ink-muted mb-5 sm:mb-6 font-sans">
           {card.description}
         </p>
       </div>
 
       {/* Tag Cloud */}
-      <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-white/5 mt-auto">
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-white/5 portfolio-light:border-paper-line mt-auto">
         {(card.tags || []).map((tag: string, idx: number) => (
           <span
             key={idx}
-            className="font-mono text-[9.5px] sm:text-[10px] px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/[0.03] border border-white/10 text-white/70 hover:text-white hover:border-white/30 transition-colors cursor-default"
+            className="font-mono text-[9.5px] sm:text-[10px] portfolio-light:text-[11px] sm:portfolio-light:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/[0.03] portfolio-light:bg-paper-tint border border-white/10 portfolio-light:border-paper-line text-white/70 portfolio-light:text-ink-accent hover:text-white portfolio-light:hover:text-ink hover:border-white/30 portfolio-light:hover:border-paper-line-strong transition-colors cursor-default"
           >
             {tag}
           </span>
@@ -150,10 +150,10 @@ export default function Skills() {
   return (
     <section
       id="skills"
-      className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] content-visibility-auto overflow-hidden"
+      className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto overflow-hidden"
     >
       {/* Background dark gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
+      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1200px] w-full mx-auto md:my-auto">
         {/* Exact Richard Miculob Layout: Grid with Left (Headline + 4 Columns Tech Stack) and Right (2 Side-by-Side Bento Cards) */}
@@ -162,13 +162,13 @@ export default function Skills() {
           {/* Left Column (what-i-can-do-left) */}
           <SectionReveal delay={0} direction="left">
             <div className="flex flex-col">
-              <div className="font-mono text-xs font-semibold tracking-[0.25em] text-[#819fa7] uppercase mb-2 sm:mb-3">
+              <div className="font-mono text-xs font-semibold tracking-[0.25em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2 sm:mb-3">
                 {t('badge')}
               </div>
-              <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] tracking-tight leading-[1.08] mb-3 sm:mb-4">
+              <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08] mb-3 sm:mb-4">
                 {t('title')}
               </h2>
-              <p className="text-sm sm:text-[15px] leading-[1.7] text-white/60 max-w-[480px] mb-5 sm:mb-8">
+              <p className="text-sm sm:text-[15px] leading-[1.7] text-white/60 portfolio-light:text-ink-muted max-w-[480px] mb-5 sm:mb-8">
                 {t('subtitle')}
               </p>
 
@@ -177,7 +177,7 @@ export default function Skills() {
                 {allTechs.map((tech) => (
                   <div
                     key={tech.name}
-                    className="w-10 h-10 rounded-xl bg-[#141414] border border-white/10 flex items-center justify-center relative group select-none"
+                    className="w-10 h-10 rounded-xl bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line flex items-center justify-center relative group select-none"
                     title={tech.name}
                   >
                     <img
@@ -197,7 +197,7 @@ export default function Skills() {
                     {column.map((tech: TechItem) => (
                       <div
                         key={tech.name}
-                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#141414] border border-white/10 flex items-center justify-center relative group transition-all duration-300 hover:border-white/40 hover:-translate-y-1 hover:shadow-xl hover:z-50 cursor-default select-none"
+                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line flex items-center justify-center relative group transition-all duration-300 hover:border-white/40 portfolio-light:hover:border-paper-line-strong hover:-translate-y-1 hover:shadow-xl portfolio-light:hover:shadow-paper-elevated hover:z-50 cursor-default select-none"
                       >
                         <img
                           src={tech.icon}
@@ -207,9 +207,9 @@ export default function Skills() {
                         />
 
                         {/* Tooltip on hover */}
-                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 px-3 py-1.5 rounded-lg bg-[#181920] border border-white/20 text-xs font-mono font-medium text-white whitespace-nowrap opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none z-50 shadow-[0_10px_25px_rgba(0,0,0,0.95)]">
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2.5 px-3 py-1.5 rounded-lg bg-[#181920] portfolio-light:bg-paper-raised border border-white/20 portfolio-light:border-paper-line-strong text-xs font-mono font-medium text-white portfolio-light:text-ink whitespace-nowrap opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0 transition-all duration-200 pointer-events-none z-50 shadow-[0_10px_25px_rgba(0,0,0,0.95)] portfolio-light:shadow-paper">
                           {tech.name}
-                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#181920] border-r border-b border-white/20 rotate-45" />
+                          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#181920] portfolio-light:bg-paper-raised border-r border-b border-white/20 portfolio-light:border-paper-line-strong rotate-45" />
                         </div>
                       </div>
                     ))}
@@ -224,13 +224,13 @@ export default function Skills() {
             {/* MOBİL: 01 / 02 Sekmeli Geçiş (Sayfa Yüksekliğini 800px Kısaltır) */}
             <div className="lg:hidden mt-6">
               <div className="flex justify-center mb-4">
-                <div className="inline-flex p-1 rounded-xl bg-[#141414] border border-white/10 gap-1">
+                <div className="inline-flex p-1 rounded-xl bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line gap-1">
                   <button
                     onClick={() => setActiveBento(0)}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
                       activeBento === 0
-                        ? 'bg-white text-black shadow-sm font-semibold'
-                        : 'text-white/50 hover:text-white'
+                        ? 'bg-white portfolio-light:paper-action text-black portfolio-light:text-paper-raised shadow-sm font-semibold'
+                        : 'text-white/50 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink'
                     }`}
                   >
                     01 AI & Görü
@@ -239,8 +239,8 @@ export default function Skills() {
                     onClick={() => setActiveBento(1)}
                     className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-all ${
                       activeBento === 1
-                        ? 'bg-white text-black shadow-sm font-semibold'
-                        : 'text-white/50 hover:text-white'
+                        ? 'bg-white portfolio-light:paper-action text-black portfolio-light:text-paper-raised shadow-sm font-semibold'
+                        : 'text-white/50 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink'
                     }`}
                   >
                     02 Backend & Sistem

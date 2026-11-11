@@ -31,12 +31,12 @@ export default function GradientMesh() {
         : { animate: undefined };
 
     return (
-        <div ref={containerRef} className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div ref={containerRef} className="hero-mesh absolute inset-0 overflow-hidden pointer-events-none">
             {/* Primary blob - top left */}
             <motion.div
                 className="absolute -top-1/4 -left-1/4 w-[800px] h-[800px] rounded-full"
                 style={{
-                    background: 'radial-gradient(circle, rgba(129, 159, 167, 0.12) 0%, transparent 60%)',
+                    background: 'radial-gradient(circle, rgba(145, 149, 151, 0.12) 0%, transparent 60%)',
                     willChange: isVisible ? 'transform' : 'auto',
                     transform: 'translateZ(0)',
                 }}
@@ -56,7 +56,7 @@ export default function GradientMesh() {
             <motion.div
                 className="absolute -bottom-1/4 -right-1/4 w-[700px] h-[700px] rounded-full"
                 style={{
-                    background: 'radial-gradient(circle, rgba(91, 110, 116, 0.1) 0%, transparent 60%)',
+                    background: 'radial-gradient(circle, rgba(105, 108, 110, 0.1) 0%, transparent 60%)',
                     willChange: isVisible ? 'transform' : 'auto',
                     transform: 'translateZ(0)',
                 }}
@@ -77,7 +77,7 @@ export default function GradientMesh() {
             <motion.div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full"
                 style={{
-                    background: 'radial-gradient(circle, rgba(129, 159, 167, 0.06) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(145, 149, 151, 0.06) 0%, transparent 70%)',
                     willChange: isVisible ? 'transform, opacity' : 'auto',
                     transform: 'translateZ(0)',
                 }}
@@ -97,7 +97,7 @@ export default function GradientMesh() {
             <motion.div
                 className="absolute top-1/3 right-1/4 w-[300px] h-[300px] rounded-full"
                 style={{
-                    background: 'radial-gradient(circle, rgba(129, 159, 167, 0.08) 0%, transparent 70%)',
+                    background: 'radial-gradient(circle, rgba(145, 149, 151, 0.08) 0%, transparent 70%)',
                     willChange: isVisible ? 'transform' : 'auto',
                     transform: 'translateZ(0)',
                 }}

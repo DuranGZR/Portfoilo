@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { useState, useEffect, useCallback, useRef, useSyncExternalStore } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useMessages, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -36,6 +36,13 @@ const PROJECT_LIST: ProjectItem[] = [
 ];
 
 const TOTAL = PROJECT_LIST.length;
+const reducedMotionQuery = '(prefers-reduced-motion: reduce)';
+
+function subscribeToReducedMotion(onChange: () => void) {
+  const media = window.matchMedia(reducedMotionQuery);
+  media.addEventListener('change', onChange);
+  return () => media.removeEventListener('change', onChange);
+}
 
 /**
  * Signed shortest circular distance in [-2, -1, 0, 1, 2] for 5 items.
@@ -53,7 +60,11 @@ export default function Projects() {
   const messages = useMessages() as any;
   const locale = useLocale();
   const router = useRouter();
-  const prefersReducedMotion = useReducedMotion();
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    () => window.matchMedia(reducedMotionQuery).matches,
+    () => true
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0); // Start on AliağaAI
   const [viewportW, setViewportW] = useState(1200);
@@ -104,7 +115,7 @@ export default function Projects() {
 
   // Auto-rotate every 5.5s when not hovered / touched
   useEffect(() => {
-    if (isPaused) {
+    if (isPaused || prefersReducedMotion) {
       if (timerRef.current) clearInterval(timerRef.current);
       return;
     }
@@ -113,7 +124,7 @@ export default function Projects() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, goNext, currentIndex]);
+  }, [isPaused, goNext, currentIndex, prefersReducedMotion]);
 
   // Bidirectional Pointer / Touch Swipe Handler (Smooth mobile left & right swipe)
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -224,23 +235,23 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] content-visibility-auto overflow-hidden"
+      className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto overflow-hidden"
     >
       {/* Background dark gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
+      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1140px] w-full mx-auto md:my-auto flex flex-col justify-center">
         {/* Header Layout */}
         <SectionReveal delay={0}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 md:mb-10">
             <div>
-              <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] uppercase mb-2">
+              <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2">
                 {t('badge')}
               </div>
-              <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] tracking-tight leading-[1.08]">
+              <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
                 {t('title')}
               </h2>
-              <p className="text-sm sm:text-base text-white/50 max-w-xl mt-3 leading-relaxed">
+              <p className="text-sm sm:text-base text-white/50 portfolio-light:text-ink-muted max-w-xl mt-3 leading-relaxed">
                 {t('subtitle')}
               </p>
             </div>
@@ -249,7 +260,7 @@ export default function Projects() {
               href="https://github.com/DuranGZR?tab=repositories"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 self-start sm:self-auto px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs tracking-wider uppercase hover:bg-white/90 hover:-translate-y-0.5 transition-all duration-300 shadow-lg hover:shadow-white/10 shrink-0"
+              className="inline-flex items-center gap-2 self-start sm:self-auto px-5 py-2.5 rounded-xl bg-white portfolio-light:paper-action text-black portfolio-light:text-paper-raised font-semibold text-xs tracking-wider uppercase hover:bg-white/90 portfolio-light:hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300 shadow-lg portfolio-light:shadow-paper hover:shadow-white/10 portfolio-light:hover:shadow-paper shrink-0"
             >
               {t('viewMore')}
               <ExternalLink className="w-3.5 h-3.5" />
@@ -264,7 +275,6 @@ export default function Projects() {
             onKeyDown={handleKeyDown}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            style={{ outline: 'none' }}
             className="relative w-full my-2 sm:my-6 flex flex-col items-center select-none"
           >
             {/* Interactive Swipe & Coverflow Stage */}
@@ -322,14 +332,16 @@ export default function Projects() {
                       rotateY: targetRotateY,
                     }}
                     transition={
-                      dragOffset !== 0
-                        ? { type: 'tween', duration: 0.05, ease: 'linear' }
-                        : {
-                            type: 'spring',
-                            stiffness: 225,
-                            damping: 28,
-                            mass: 0.88,
-                          }
+                      prefersReducedMotion
+                        ? { duration: 0 }
+                        : dragOffset !== 0
+                          ? { type: 'tween', duration: 0.05, ease: 'linear' }
+                          : {
+                              type: 'spring',
+                              stiffness: 225,
+                              damping: 28,
+                              mass: 0.88,
+                            }
                     }
                     onClick={() => {
                       if (pointerStateRef.current.didSwipe) {
@@ -348,20 +360,20 @@ export default function Projects() {
                       willChange: 'transform, opacity',
                       pointerEvents: isMobile && absRel > 1 ? 'none' : 'auto',
                     }}
-                    className={`group/card absolute w-[276px] sm:w-[410px] md:w-[490px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer ${
+                    className={`project-cover-frame group/card absolute w-[276px] sm:w-[410px] md:w-[490px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer ${
                       isCenter
-                        ? 'border border-white/25 shadow-[0_28px_65px_-15px_rgba(0,0,0,0.92),0_0_40px_rgba(129,159,167,0.2)]'
-                        : 'border border-white/10 shadow-[0_16px_32px_-10px_rgba(0,0,0,0.65)]'
+                        ? 'border border-white/25 shadow-[0_28px_65px_-15px_rgba(0,0,0,0.92),0_0_40px_rgba(129,159,167,0.2)] portfolio-light:shadow-paper-elevated'
+                        : 'border border-white/10 shadow-[0_16px_32px_-10px_rgba(0,0,0,0.65)] portfolio-light:shadow-paper'
                     }`}
                   >
                     <img
                       src={imgSrc}
                       alt={projData.title || proj.key}
-                      className="w-full h-full object-cover select-none pointer-events-none bg-[#121417] transition-transform duration-500 group-hover/card:scale-[1.02]"
+                      className="w-full h-full object-cover select-none pointer-events-none bg-[#121417] portfolio-light:bg-paper-raised transition-transform duration-500 group-hover/card:scale-[1.02]"
                       draggable={false}
                     />
                     {!isCenter && (
-                      <div className="absolute inset-0 bg-black/38 group-hover/card:bg-black/15 transition-colors duration-300" />
+                      <div className="absolute inset-0 bg-black/38 group-hover/card:bg-black/15 portfolio-light:hidden transition-colors duration-300" />
                     )}
                   </motion.div>
                 );
@@ -375,8 +387,7 @@ export default function Projects() {
                   goPrev();
                 }}
                 aria-label={locale === 'tr' ? 'Önceki proje' : 'Previous project'}
-                style={{ outline: 'none' }}
-                className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 hover:bg-[#202831] backdrop-blur-xl border border-white/15 hover:border-[#819fa7]/60 text-white/80 hover:text-white flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] active:scale-90 transition-all cursor-pointer"
+                className="absolute left-0 sm:left-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 portfolio-light:bg-paper-raised hover:bg-[#202831] portfolio-light:hover:bg-paper-tint backdrop-blur-xl border border-white/15 portfolio-light:border-paper-line hover:border-[#819fa7]/60 portfolio-light:hover:border-paper-line-strong text-white/80 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] portfolio-light:shadow-paper active:scale-90 transition-all cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
@@ -389,8 +400,7 @@ export default function Projects() {
                   goNext();
                 }}
                 aria-label={locale === 'tr' ? 'Sonraki proje' : 'Next project'}
-                style={{ outline: 'none' }}
-                className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 hover:bg-[#202831] backdrop-blur-xl border border-white/15 hover:border-[#819fa7]/60 text-white/80 hover:text-white flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] active:scale-90 transition-all cursor-pointer"
+                className="absolute right-0 sm:right-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[#151a20]/85 portfolio-light:bg-paper-raised hover:bg-[#202831] portfolio-light:hover:bg-paper-tint backdrop-blur-xl border border-white/15 portfolio-light:border-paper-line hover:border-[#819fa7]/60 portfolio-light:hover:border-paper-line-strong text-white/80 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.65)] portfolio-light:shadow-paper active:scale-90 transition-all cursor-pointer"
               >
                 <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
@@ -405,12 +415,11 @@ export default function Projects() {
                     key={proj.key}
                     type="button"
                     onClick={() => goToIndex(idx)}
-                    aria-label={`Project ${idx + 1}`}
-                    style={{ outline: 'none' }}
+                    aria-label={`${locale === 'tr' ? 'Proje' : 'Project'} ${idx + 1}`}
                     className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                       isActive
-                        ? 'w-7 bg-[#819fa7]'
-                        : 'w-1.5 bg-white/20 hover:bg-white/45'
+                        ? 'w-7 bg-[#819fa7] portfolio-light:bg-ink-accent'
+                        : 'w-1.5 bg-white/20 portfolio-light:bg-paper-line-strong hover:bg-white/45 portfolio-light:hover:bg-ink-accent'
                     }`}
                   />
                 );
@@ -430,23 +439,23 @@ export default function Projects() {
                 className="space-y-3"
               >
                 {activeData.category && (
-                  <div className="inline-block font-mono text-[11px] font-semibold tracking-[0.16em] uppercase text-[#819fa7]/90">
+                  <div className="inline-block font-mono text-[11px] font-semibold tracking-[0.16em] uppercase text-[#819fa7]/90 portfolio-light:text-ink-accent">
                     {activeData.category}
                   </div>
                 )}
 
-                <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-bold text-[#f3f5f9] tracking-tight">
+                <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight">
                   {activeData.title || 'Project'}
                 </h3>
 
-                <p className="text-sm sm:text-[15px] leading-relaxed text-white/60 max-w-[660px] mx-auto">
+                <p className="text-sm sm:text-[15px] leading-relaxed text-white/60 portfolio-light:text-ink-muted max-w-[660px] mx-auto">
                   {activeData.tagline || ''}
                 </p>
 
                 <div className="pt-2">
                   <Link
                     href={`/${locale}/projects/${activeProjectMeta.slug}`}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-[#819fa7] border-b border-white hover:border-[#819fa7] pb-1 transition-all duration-200 group"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-white portfolio-light:text-ink hover:text-[#819fa7] portfolio-light:hover:text-ink-accent border-b border-white portfolio-light:border-paper-line-strong hover:border-[#819fa7] portfolio-light:hover:border-paper-line-strong pb-1 transition-all duration-200 group"
                   >
                     <span>{t('viewProject')}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

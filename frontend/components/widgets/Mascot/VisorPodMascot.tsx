@@ -9,6 +9,11 @@ import {
   useReducedMotion,
 } from 'framer-motion';
 
+export const MASCOT_IDLE_EYES = [
+  'M 33 55.5 C 34.8 45, 46.2 45, 48 55.5',
+  'M 61 55.5 C 62.8 45, 74.2 45, 76 55.5',
+] as const;
+
 export type MascotMood =
   | 'idle'
   | 'greeting'
@@ -25,6 +30,7 @@ interface VisorPodMascotProps {
   facing?: 'left' | 'right';
   /** Whether the pod is currently gliding between corners */
   isFlying?: boolean;
+  isIntroducing?: boolean;
   /** Normalized 0..1 reading sweep progress while the user types */
   typingProgress?: number;
   /** Live syllable energy (0..1) driving the 5-bar LED voice equalizer & audio aura */
@@ -60,6 +66,7 @@ export default function VisorPodMascot({
   size = 'lg',
   facing = 'left',
   isFlying = false,
+  isIntroducing = false,
   typingProgress = 0,
   speechEnergy = 0,
   speechTick = 0,
@@ -180,7 +187,10 @@ export default function VisorPodMascot({
 
   // Mood-specific gaze overrides & natural speaking eye gestures
   useEffect(() => {
-    if (mood === 'user-typing') {
+    if (isIntroducing) {
+      rawLookX.set(0.4);
+      rawLookY.set(0.65);
+    } else if (mood === 'user-typing') {
       const sweep = (typingProgress - 0.5) * 1.45;
       rawLookX.set(Math.max(-0.8, Math.min(0.85, sweep)));
       rawLookY.set(0.68);
@@ -197,7 +207,7 @@ export default function VisorPodMascot({
       rawLookX.set(0);
       rawLookY.set(0.25);
     }
-  }, [mood, typingProgress, facing, speechTick, rawLookX, rawLookY]);
+  }, [isIntroducing, mood, typingProgress, facing, speechTick, rawLookX, rawLookY]);
 
   // Thinking gaze oscillation
   useEffect(() => {
@@ -254,7 +264,7 @@ export default function VisorPodMascot({
       }, delay);
     };
 
-    scheduleNextBlink();
+    if (!isIntroducing) scheduleNextBlink();
 
     return () => {
       clearTimeout(blinkTimeout);
@@ -262,7 +272,7 @@ export default function VisorPodMascot({
       clearTimeout(doubleTimeout);
       clearTimeout(doubleResetTimeout);
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, isIntroducing]);
 
   const dimensions = SIZE_MAP[size];
   const isActivelySpeaking = mood === 'speaking' && speechEnergy > 0.14;
@@ -321,7 +331,7 @@ export default function VisorPodMascot({
         height: dimensions.height,
         perspective: 520,
       }}
-      className={`relative select-none flex items-center justify-center ${
+      className={`visor-pod relative select-none flex items-center justify-center ${
         onClick
           ? 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9ac4d2]/60 rounded-2xl'
           : ''
@@ -331,7 +341,7 @@ export default function VisorPodMascot({
       <div
         className="w-full h-full relative flex items-center justify-center"
         style={
-          prefersReducedMotion
+          prefersReducedMotion || isIntroducing
             ? undefined
             : { animation: 'float 3.6s ease-in-out infinite' }
         }
@@ -411,7 +421,7 @@ export default function VisorPodMascot({
             viewBox="0 0 128 114"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-full overflow-visible drop-shadow-[0_10px_20px_rgba(0,0,0,0.75)]"
+            className="visor-pod-art w-full h-full overflow-visible drop-shadow-[0_10px_20px_rgba(0,0,0,0.75)]"
           >
             <defs>
               <radialGradient
@@ -422,11 +432,11 @@ export default function VisorPodMascot({
                 fx="48%"
                 fy="10%"
               >
-                <stop offset="0%" stopColor="#586573" />
-                <stop offset="24%" stopColor="#3e4854" />
-                <stop offset="54%" stopColor="#283038" />
-                <stop offset="82%" stopColor="#191e24" />
-                <stop offset="100%" stopColor="#101419" />
+                <stop offset="0%" stopColor="var(--mascot-shell-highlight, #586573)" />
+                <stop offset="24%" stopColor="var(--mascot-shell-light, #3e4854)" />
+                <stop offset="54%" stopColor="var(--mascot-shell-mid, #283038)" />
+                <stop offset="82%" stopColor="var(--mascot-shell-shade, #191e24)" />
+                <stop offset="100%" stopColor="var(--mascot-shell-edge, #101419)" />
               </radialGradient>
 
               <radialGradient id={`${uid}-cheek-right`} cx="85%" cy="38%" r="54%">
@@ -443,7 +453,7 @@ export default function VisorPodMascot({
 
               <linearGradient id={`${uid}-chin-ao`} x1="50%" y1="60%" x2="50%" y2="100%">
                 <stop offset="0%" stopColor="#000000" stopOpacity="0" />
-                <stop offset="100%" stopColor="#050709" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#050709" stopOpacity="var(--mascot-chin-opacity, 0.55)" />
               </linearGradient>
 
               <linearGradient id={`${uid}-rim-light`} x1="25%" y1="0%" x2="75%" y2="100%">
@@ -454,9 +464,9 @@ export default function VisorPodMascot({
               </linearGradient>
 
               <radialGradient id={`${uid}-visor-glass`} cx="50%" cy="46%" r="65%">
-                <stop offset="0%" stopColor="#172129" />
-                <stop offset="52%" stopColor="#0a0e13" />
-                <stop offset="100%" stopColor="#040608" />
+                <stop offset="0%" stopColor="var(--mascot-visor-center, #172129)" />
+                <stop offset="52%" stopColor="var(--mascot-visor-mid, #0a0e13)" />
+                <stop offset="100%" stopColor="var(--mascot-visor-edge, #040608)" />
               </radialGradient>
 
               <linearGradient id={`${uid}-visor-top-arc`} x1="20%" y1="0%" x2="80%" y2="100%">
@@ -570,7 +580,8 @@ export default function VisorPodMascot({
                   />
 
                   <motion.g
-                    animate={{ scaleY: isBlinking ? 0.08 : 1 }}
+                    data-mascot-eyes
+                    animate={{ scaleY: isBlinking && !isIntroducing ? 0.08 : 1 }}
                     transition={{ duration: 0.09, ease: 'easeInOut' }}
                     style={{ transformOrigin: '54.5px 50px' }}
                     filter={`url(#${uid}-eye-glow)`}
@@ -618,7 +629,7 @@ export default function VisorPodMascot({
                           d={
                             mood === 'speaking'
                               ? 'M 33 52.5 C 34.8 42.5, 46.2 42.5, 48 52.5'
-                              : 'M 33 55.5 C 34.8 45, 46.2 45, 48 55.5'
+                              : MASCOT_IDLE_EYES[0]
                           }
                           stroke="#d6f3fc"
                           strokeWidth="6.8"
@@ -628,7 +639,7 @@ export default function VisorPodMascot({
                           d={
                             mood === 'speaking'
                               ? 'M 61 52.5 C 62.8 42.5, 74.2 42.5, 76 52.5'
-                              : 'M 61 55.5 C 62.8 45, 74.2 45, 76 55.5'
+                              : MASCOT_IDLE_EYES[1]
                           }
                           stroke="#d6f3fc"
                           strokeWidth="6.8"
@@ -734,7 +745,7 @@ export default function VisorPodMascot({
           style={{
             opacity: isFlying ? 0.25 : 0.75,
             background:
-              'radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 80%)',
+              'var(--mascot-floor-shadow, radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 80%))',
             filter: 'blur(2px)',
           }}
         />

@@ -31,6 +31,10 @@ function getAudioContext(): AudioContext | null {
   }
 }
 
+export function unlockMascotAudio(): void {
+  getAudioContext();
+}
+
 /**
  * Plays a soft syllable murmur synced to text streaming.
  * Automatically throttled to ~62ms so speech sounds natural and warm.

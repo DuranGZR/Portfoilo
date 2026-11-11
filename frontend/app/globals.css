@@ -1,9 +1,32 @@
 @import "tailwindcss";
 
+@custom-variant portfolio-light (&:where(html[data-hero-theme='light']:has([data-portfolio-page]) *));
+
+@theme {
+  --color-paper: #f7f8f2;
+  --color-paper-raised: #fcfcf8;
+  --color-paper-tint: #e8efec;
+  --color-paper-selected: #d8e5e4;
+  --color-paper-line: #cbd7d5;
+  --color-paper-line-strong: #9eafb1;
+  --color-paper-veil: #263e46;
+  --color-ink: #19272c;
+  --color-ink-muted: #4f6267;
+  --color-ink-accent: #38565f;
+  --shadow-paper: 0 12px 28px -16px rgb(42 68 75 / 35%);
+  --shadow-paper-elevated: 0 22px 48px -18px rgb(42 68 75 / 42%);
+}
+
+@utility paper-action {
+  background-image: linear-gradient(135deg, #4d6870, #3d565e);
+}
+
 /* ===== THEME COLORS (PRESERVED) ===== */
 :root {
   --accent: #819fa7;
   --accent-dark: #5b6e74;
+  --accent-gradient: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  --light-action-gradient: linear-gradient(135deg, #55737a, #3c555d);
   --bg-primary: #0d0d0d;
   --bg-secondary: #1a1a1a;
   --text-primary: #f3f5f9;
@@ -49,6 +72,11 @@ body {
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]),
+html[data-hero-theme='light']:has([data-portfolio-page]) body {
+  background-color: var(--color-paper);
 }
 
 main {
@@ -279,7 +307,7 @@ main {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.875rem 1.5rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  background: var(--accent-gradient);
   color: var(--text-primary);
   border-radius: 0.75rem;
   font-weight: 500;
@@ -479,6 +507,530 @@ section[id] {
   -ms-overflow-style: none;
 }
 .mascot-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html:has([data-portfolio-page]) {
+  --portfolio-glow: #242627;
+  --portfolio-footer-glow: #181a1b;
+  --hero-glow-top: #292b2d;
+  --hero-glow-bottom: #252729;
+  --hero-ground: var(--bg-primary);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) {
+  --portfolio-glow: #dde1df;
+  --portfolio-footer-glow: #e8eae7;
+  --hero-glow-top: #d6dcdb;
+  --hero-glow-bottom: #d9dedc;
+  --hero-ground: var(--color-paper);
+}
+
+html:has([data-portfolio-page]) .portfolio-section-backdrop {
+  background-image: radial-gradient(ellipse 80% 65% at var(--section-glow-origin, 18% 21%), var(--portfolio-glow), transparent 76%);
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
+}
+
+html:has([data-portfolio-page]) :is(#projects, #experience, #ai-assistant) .portfolio-section-backdrop {
+  --section-glow-origin: 86% 79%;
+}
+
+html:has([data-portfolio-page]) footer .portfolio-section-backdrop {
+  background-image: linear-gradient(180deg, transparent, var(--portfolio-footer-glow));
+  mask-image: none;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) #about {
+  --about-card-raised: var(--color-paper-raised);
+  --about-card-tint: var(--color-paper-tint);
+  --about-card-selected: var(--color-paper-selected);
+  --about-card-line: var(--color-paper-line);
+  --about-card-shadow: var(--shadow-paper);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .project-cover-frame {
+  border-color: var(--color-paper-line-strong);
+  border-radius: 1rem;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) :is(#projects, .portfolio-project) img[src='/projects/visual-ai.png'] {
+  content: url('/projects/visual-ai-light.svg');
+}
+
+/* These covers are 1600 × 1000 composites. The masks reveal their original phone screenshots. */
+html[data-hero-theme='light']:has([data-portfolio-page]) :is(#projects, .portfolio-project)
+  :has(> img:is([src='/projects/aliagaai.png'], [src='/projects/wedo-card.png'], [src='/projects/dream-interpreter.png'])) {
+  background-image:
+    radial-gradient(ellipse at 25% 16%, #fcfcf8 0%, transparent 65%),
+    radial-gradient(ellipse at 88% 88%, #c9dbda 0%, transparent 65%),
+    linear-gradient(135deg, #edf3ef, #dce9e8);
+
+  > img {
+    mask: var(--project-phone-mask) center / 100% 100% no-repeat;
+  }
+}
+
+:is(#projects, .portfolio-project) img[src='/projects/aliagaai.png'] {
+  --project-phone-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000'><rect x='365' y='72' width='398' height='856' rx='31'/><rect x='837' y='72' width='398' height='856' rx='31'/></svg>");
+}
+
+:is(#projects, .portfolio-project) img[src='/projects/wedo-card.png'] {
+  --project-phone-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000'><rect x='367' y='72' width='396' height='856' rx='30'/><rect x='837' y='72' width='396' height='856' rx='30'/></svg>");
+}
+
+:is(#projects, .portfolio-project) img[src='/projects/dream-interpreter.png'] {
+  --project-phone-mask: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 1000'><rect x='353' y='72' width='412' height='856' rx='33'/><rect x='835' y='72' width='412' height='856' rx='33'/></svg>");
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) #skills img[src='/images/skills/ollama.svg'] {
+  filter: brightness(0) saturate(100%) opacity(0.78);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) #skills
+  .skill-card-visual:has(> img:is([src='/images/gif/coding.gif'], [src='/images/gif/assistant.gif'])) {
+  mix-blend-mode: multiply;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) #about .text-gradient {
+  background-image: linear-gradient(118deg, var(--color-ink), var(--color-ink-accent));
+}
+
+[data-hero-theme='light'] #hero {
+  background-color: var(--color-paper);
+}
+
+#hero .hero-background {
+  background-image:
+    linear-gradient(180deg, transparent 84%, var(--hero-ground)),
+    radial-gradient(ellipse 57% 51% at 0% 7%, var(--hero-glow-top), transparent),
+    radial-gradient(ellipse 53% 47% at 100% 86%, var(--hero-glow-bottom), transparent);
+}
+
+[data-hero-theme='light'] #hero .hero-mesh {
+  opacity: 0.5;
+}
+
+[data-hero-theme='light'] #hero .hero-network canvas {
+  filter: brightness(0.68) saturate(1.2);
+  mask-image: radial-gradient(ellipse at 50% 44%, rgb(0 0 0 / 42%), #000 68%);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod {
+  --mascot-shell-highlight: #fbfcf8;
+  --mascot-shell-light: #e1eceb;
+  --mascot-shell-mid: #bed1d3;
+  --mascot-shell-shade: #8ca8ae;
+  --mascot-shell-edge: #718c94;
+  --mascot-chin-opacity: 0.12;
+  --mascot-visor-center: #36515d;
+  --mascot-visor-mid: #253d48;
+  --mascot-visor-edge: #192c36;
+  --mascot-floor-shadow: radial-gradient(ellipse at center, rgb(43 69 77 / 36%), transparent 78%);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
+  filter: drop-shadow(0 5px 7px rgb(43 69 77 / 22%));
+}
+
+[data-hero-theme='light'] #hero .text-gradient {
+  background-image: linear-gradient(118deg, #152024 10%, #32474d 52%, #54727b 100%);
+  filter: drop-shadow(0 1px 0 #fcfcf7) drop-shadow(0 8px 20px rgb(56 83 91 / 18%));
+}
+
+[data-hero-theme='light'] #hero .hero-divider {
+  width: 6rem;
+  background-image: linear-gradient(90deg, transparent, var(--accent-dark), transparent);
+}
+
+[data-hero-theme='light'] #hero .hero-description {
+  color: #47595e;
+}
+
+[data-hero-theme='light'] #hero .btn-secondary {
+  color: #242d2f;
+  background-color: rgb(252 252 248 / 45%);
+  border-color: rgb(91 110 116 / 48%);
+}
+
+[data-hero-theme='light'] #hero .btn-primary {
+  background-image: var(--light-action-gradient);
+  color: var(--color-paper-raised);
+  box-shadow: 0 10px 22px -12px rgb(45 75 83 / 52%);
+}
+
+[data-hero-theme='light'] #hero .btn-primary::before {
+  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 4%), transparent);
+}
+
+[data-hero-theme='light'] #hero .btn-secondary:hover {
+  background-color: rgb(129 159 167 / 14%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #hero :is(.hero-background, .hero-network) {
+    animation: hero-atmosphere-in 900ms ease-out backwards;
+  }
+
+  #hero:not([data-hero-intro]) .hero-name {
+    animation: hero-name-in 850ms cubic-bezier(.22, 1, .36, 1) 60ms backwards;
+  }
+
+  #hero:not([data-hero-intro]) .hero-divider {
+    animation: hero-divider-in 650ms cubic-bezier(.22, 1, .36, 1) 360ms backwards;
+  }
+
+  #hero:not([data-hero-intro]) :is(.hero-role, .hero-description, .hero-actions, .hero-socials, .hero-scroll) {
+    animation: hero-line-arrive 520ms cubic-bezier(.22, 1, .36, 1) 490ms backwards;
+  }
+
+  #hero:not([data-hero-intro]) .hero-description {
+    animation-delay: 600ms;
+  }
+
+  #hero:not([data-hero-intro]) .hero-actions {
+    animation-delay: 700ms;
+  }
+
+  #hero:not([data-hero-intro]) .hero-socials {
+    animation-delay: 820ms;
+  }
+
+  #hero:not([data-hero-intro]) .hero-scroll {
+    animation-delay: 960ms;
+  }
+}
+
+@keyframes hero-atmosphere-in {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+@keyframes hero-name-in {
+  from { opacity: 0; transform: translateY(28px); clip-path: inset(85% -10% -40%); }
+  to { opacity: 1; transform: translateY(0); clip-path: inset(-45% -10% -45%); }
+}
+
+@keyframes hero-divider-in {
+  from { opacity: 0; transform: scaleX(0); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+#hero {
+  --hero-impact-color: #c9f0ff;
+  --hero-sheen-color: #e4f8ff;
+}
+
+[data-hero-theme='light'] #hero {
+  --hero-impact-color: #537780;
+  --hero-sheen-color: #819397;
+}
+
+.hero-title-light {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  color: transparent;
+  background: var(--hero-sheen-color);
+  background-clip: text;
+  mask: linear-gradient(105deg, transparent 8%, #000 50%, transparent 92%) no-repeat;
+  mask-size: 48% 100%;
+}
+
+.hero-visor-opening {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 47%, #142b36 0%, #0a151c 36%, #060b0f 76%);
+}
+
+.hero-visor-eye-pair {
+  width: clamp(138px, 22vw, 248px);
+  color: #d6f3fc;
+}
+
+.hero-visor-eye-pair svg {
+  display: block;
+  width: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 9px #77c8e6) drop-shadow(0 0 23px #4486a3);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-visor-opening {
+    display: grid;
+  }
+
+  .hero-visor-eye-pair svg {
+    animation: hero-visor-blink 680ms linear both;
+  }
+
+  #hero:not([data-hero-intro]) .hero-visor-opening {
+    animation: hero-visor-fallback 350ms ease-out 2.2s both;
+  }
+}
+
+@keyframes hero-visor-fallback {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes hero-visor-blink {
+  0%, 12%, 37%, 55%, 78%, 100% { scale: 1 1; }
+  21%, 25% { scale: 1 .08; }
+  64%, 68% { scale: 1 .1; }
+  78% { translate: 0 0; }
+  100% { translate: 0 4px; }
+}
+
+.hero-impact {
+  position: absolute;
+  z-index: 6;
+  pointer-events: none;
+  color: var(--hero-impact-color);
+}
+
+.hero-impact-ring {
+  position: absolute;
+  inset: -28px -60px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.hero-impact-spark {
+  position: absolute;
+  width: 12px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, currentColor 80%);
+  border-radius: 2px;
+  opacity: 0;
+}
+
+@keyframes hero-line-arrive {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#hero .hero-ink {
+  display: inline-block;
+}
+
+#hero .hero-pen {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  color: #a7d4de;
+  background: currentColor;
+  box-shadow: 0 0 7px currentColor;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-hero-theme='light'] #hero .hero-pen {
+  color: #487986;
+}
+
+.hero-mascot-stage {
+  transform-origin: 50% 77%;
+}
+
+.hero-writing-arm {
+  --hero-arm-highlight: #9cb6bd;
+  --hero-arm-shade: #344c58;
+  --hero-arm-light: #b5e0e8;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: 50px 37px;
+}
+
+[data-hero-theme='light'] .hero-writing-arm {
+  --hero-arm-highlight: #e2eeeb;
+  --hero-arm-shade: #6c8992;
+  --hero-arm-light: #527985;
+}
+
+.hero-arm-shaft {
+  transform-origin: 0 0;
+}
+
+[data-hero-theme='light'] #hero :is(.hero-role, .btn-secondary svg, .hero-socials a),
+html[data-hero-theme='light']:has([data-portfolio-page]) .portfolio-nav .nav-cv {
+  color: var(--accent-dark);
+}
+
+[data-hero-theme='light'] #hero .hero-socials a {
+  background-color: rgb(252 252 248 / 68%);
+  border-color: rgb(129 159 167 / 34%);
+  box-shadow: inset 0 1px rgb(255 255 255 / 80%), 0 5px 12px -8px rgb(56 83 91 / 36%);
+}
+
+[data-hero-theme='light'] #hero .hero-socials a:hover {
+  border-color: var(--accent-dark);
+}
+
+.portfolio-nav[data-scrolled] {
+  background-color: transparent;
+  backdrop-filter: none;
+}
+
+.portfolio-nav[data-scrolled]::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 -10px;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--nav-glass-fill, color-mix(in srgb, var(--bg-primary) 60%, transparent));
+  backdrop-filter: blur(12px);
+  mask-image: linear-gradient(#000 0 65%, transparent 100%);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .portfolio-nav {
+  --nav-glass-fill: color-mix(in srgb, var(--color-paper) 42%, transparent);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .portfolio-nav .nav-logo {
+  color: #1a1a1a;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .portfolio-nav :is(.nav-link, .nav-control) {
+  color: #414d50;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) .portfolio-nav :is(.nav-logo, .nav-link, .nav-control):hover {
+  color: #242d2f;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) :is([data-portfolio-page], .portfolio-nav, [data-portfolio-chat]) :focus-visible {
+  outline-color: var(--accent-dark);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] {
+  --hero-chat-shadow: none;
+  --hero-chat-message-mask: none;
+  --hero-chat-focus: var(--color-ink-accent);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-accent-surface {
+  background: var(--color-paper-tint);
+  border-color: var(--color-paper-line);
+  box-shadow: var(--hero-chat-shadow);
+  color: var(--color-ink);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] :is(.chat-status, .chat-user-bubble) {
+  background: var(--color-paper-selected);
+  color: var(--color-ink);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] form.chat-accent-surface {
+  background: var(--color-paper-raised);
+  border-color: var(--color-paper-line-strong);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] :is(.chat-accent-surface, .chat-user-bubble) {
+  backdrop-filter: none;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-stage-glow {
+  display: none;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-greeting button {
+  background-color: #f7f8f2;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-greeting p,
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-accent-surface :is(.chat-status-copy, button, input),
+html[data-hero-theme='light']:has([data-portfolio-page]) .chat-assistant-copy :is(strong, a, code, .text-white, .select-none) {
+  color: inherit;
+  filter: none;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-accent-surface input::placeholder {
+  color: var(--color-ink-muted);
+  opacity: 1;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-accent-surface :is(button, a):is(:hover, :focus-visible) {
+  background-color: rgb(255 255 255 / 24%);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] form.chat-accent-surface:focus-within {
+  border-color: var(--color-ink-accent);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] form.chat-accent-surface button[type='submit'] {
+  background: var(--light-action-gradient);
+  color: var(--color-paper-raised);
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] form.chat-accent-surface button[type='submit']:disabled {
+  background: var(--color-paper-tint);
+  color: var(--color-ink-muted);
+  opacity: 1;
+}
+
+html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-tail {
+  background-color: inherit;
+  border-color: inherit;
+}
+
+[data-portfolio-chat] form:has(input:focus-visible) {
+  outline: 2px solid var(--hero-chat-focus, var(--accent));
+  outline-offset: 2px;
+}
+
+[data-portfolio-chat] form input:focus-visible {
+  outline: none;
+}
+
+/* The ink frames reveal the new viewport over the original theme. */
+html.theme-ink-transition :is(.portfolio-nav, .portfolio-nav *, #hero .btn-secondary) {
+  transition-duration: 0s;
+}
+
+html.theme-ink-transition::view-transition-group(root),
+html.theme-ink-transition::view-transition-old(root) {
+  animation: none;
+}
+
+html.theme-ink-transition::view-transition-old(root),
+html.theme-ink-transition::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+html.theme-ink-transition::view-transition-new(root) {
+  animation: none;
+  clip-path: inset(100%);
+}
+
+html.theme-ink-transition #hero .hero-network {
+  view-transition-name: hero-particles;
+}
+
+html.theme-ink-transition::view-transition-group(hero-particles),
+html.theme-ink-transition::view-transition-new(hero-particles) {
+  animation: none;
+}
+
+html.theme-ink-transition::view-transition-new(hero-particles) {
+  mix-blend-mode: normal;
+}
+
+html.theme-ink-transition::view-transition-old(hero-particles) {
   display: none;
 }
 

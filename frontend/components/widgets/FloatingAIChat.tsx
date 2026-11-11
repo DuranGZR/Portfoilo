@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import {
   motion,
@@ -18,6 +18,8 @@ import {
 import { useLocale } from 'next-intl';
 import { sendChatMessage } from '@/lib/api';
 import ChatMessageContent from '@/components/ui/ChatMessageContent';
+import HeroWritingArm from '@/components/sections/Hero/HeroWritingArm';
+import { HERO_INTRO_READY, isAtHeroStart, playHeroIntro } from '@/components/sections/Hero/heroIntro';
 import VisorPodMascot, { type MascotMood } from '@/components/widgets/Mascot/VisorPodMascot';
 import {
   playSyllableBlip,
@@ -96,6 +98,7 @@ const UI_COPY = {
     statusHappy: 'Selam! 👋',
     statusError: 'Bağlantı sorunu',
     inputPlaceholder: 'Bana bir şey sor...',
+    send: 'Gönder',
     fallbackOfflineReply:
       'Şu anda arka plan AI servisine ulaşamıyorum, ama hemen özetleyeyim: Duran Gezer; AI Systems, Backend ve DevOps alanlarına odaklanan (RAG mimarileri, Python, FastAPI, Docker, Next.js) bir Bilgisayar Mühendisliği öğrencisidir.',
     clearChat: 'Sohbeti sıfırla',
@@ -114,6 +117,7 @@ const UI_COPY = {
     statusHappy: 'Hello! 👋',
     statusError: 'Connection issue',
     inputPlaceholder: 'Ask me anything...',
+    send: 'Send',
     fallbackOfflineReply:
       "I couldn't reach the live AI backend right now, but here's a quick summary: Duran Gezer is a Computer Engineering student focusing on AI Systems, Backend, and DevOps (RAG architectures, Python, FastAPI, Docker, Next.js).",
     clearChat: 'Reset chat',
@@ -159,6 +163,7 @@ export default function FloatingAIChat() {
 
   const [viewport, setViewport] = useState<{ w: number; h: number }>({ w: 0, h: 0 });
   const [hasEntered, setHasEntered] = useState(false);
+  const [isWritingIntro, setIsWritingIntro] = useState(false);
   const [activeSection, setActiveSection] = useState<SectionKey>('hero');
   const [activeCorner, setActiveCorner] = useState<CornerKey>('bottom-right');
   const [isFlying, setIsFlying] = useState(false);
@@ -184,6 +189,7 @@ export default function FloatingAIChat() {
   const [isInputFocused, setIsInputFocused] = useState(false);
 
   const fixedFrameRef = useRef<HTMLDivElement>(null);
+  const closedPodRef = useRef<HTMLDivElement>(null);
   const stageLiftRef = useRef<HTMLDivElement>(null);
   const isInputFocusedRef = useRef(false);
   const lockedScrollYRef = useRef<number | null>(null);
@@ -278,22 +284,43 @@ export default function FloatingAIChat() {
     );
   }, [activeCorner, isOpen]);
 
-  // Initial entrance at bottom-right
+  // The home page entrance writes the hero's two lines before docking.
   useEffect(() => {
-    const enterTimer = setTimeout(() => {
+    const enter = () => {
       setHasEntered(true);
       flashMood('greeting', 1800);
-    }, 2150);
+    };
+    const enterTimer = setTimeout(enter, 2150);
+    const startHeroIntro = () => {
+      if (!document.getElementById('hero') || !isAtHeroStart()) return;
+      clearTimeout(enterTimer);
+      setIsWritingIntro(!window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+      enter();
+    };
 
+    window.addEventListener(HERO_INTRO_READY, startHeroIntro);
+    startHeroIntro();
     const firstBubbleTimer = setTimeout(() => {
       setShowBubble(true);
     }, 2600);
 
     return () => {
+      window.removeEventListener(HERO_INTRO_READY, startHeroIntro);
       clearTimeout(enterTimer);
       clearTimeout(firstBubbleTimer);
     };
   }, [flashMood]);
+
+  const isPodVisible = hasEntered && viewport.w > 0 && !isOpen;
+  useLayoutEffect(() => {
+    if (!isWritingIntro || !isPodVisible || !closedPodRef.current) return;
+    return playHeroIntro(
+      closedPodRef.current,
+      () => flashMood('happy', 720),
+      () => setIsWritingIntro(false),
+      () => !isMutedRef.current
+    );
+  }, [flashMood, isWritingIntro, isPodVisible]);
 
   // Auto-hide tiny section bubble softly
   useEffect(() => {
@@ -318,7 +345,7 @@ export default function FloatingAIChat() {
 
   // Smooth scroll-spy across all 7 sections
   useEffect(() => {
-    if (!hasEntered) return;
+    if (!hasEntered || isWritingIntro) return;
 
     let rafId: number | null = null;
     let settleTimer: ReturnType<typeof setTimeout> | null = null;
@@ -394,12 +421,13 @@ export default function FloatingAIChat() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
       if (settleTimer) clearTimeout(settleTimer);
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [hasEntered, isOpen, prefersReducedMotion, flashMood]);
+  }, [hasEntered, isOpen, isWritingIntro, prefersReducedMotion, flashMood]);
 
   // Cleanup all timers on unmount
   useEffect(() => {
@@ -840,6 +868,7 @@ export default function FloatingAIChat() {
   };
 
   const handleOpenChat = () => {
+    setIsWritingIntro(false);
     setShowBubble(false);
     if (!isMutedRef.current) {
       playWakeChime();
@@ -880,13 +909,16 @@ export default function FloatingAIChat() {
   const isRightSide = activeCorner.endsWith('right');
   const podFacing: 'left' | 'right' = isRightSide ? 'left' : 'right';
   const currentLine = lines[activeSection];
-  const isBubbleVisible = !isFlying && (showBubble || isPodOrBubbleHovered);
+  const isBubbleVisible = !isWritingIntro && !isFlying && (showBubble || isPodOrBubbleHovered);
   const targetCoords =
     viewport.w > 0
       ? computeCornerCoords(activeCorner, viewport.w, viewport.h)
       : null;
 
   const isMobileViewport = viewport.w > 0 && viewport.w < 640;
+  const messagesFade = messages.length > 2
+    ? 'var(--hero-chat-message-mask, linear-gradient(to bottom, transparent 0%, black 16%, black 100%))'
+    : undefined;
 
   // Show only recent exchanges in the frameless air stream so screen stays clean, while keeping scrollability
   const lastAssistantIdx = (() => {
@@ -903,12 +935,14 @@ export default function FloatingAIChat() {
   return createPortal(
     <div
       ref={fixedFrameRef}
+      data-portfolio-chat
       className="fixed inset-0 z-[70] pointer-events-none overflow-hidden"
     >
       {/* 1. CLOSED ROAMING STATE: Silky 3D Corner-Gliding Mascot + Tiny 1-Line Bubble */}
-      {hasEntered && targetCoords && !isOpen && (
+      {isPodVisible && targetCoords && (
         <motion.div
-          initial={{
+          ref={closedPodRef}
+          initial={isWritingIntro || prefersReducedMotion ? false : {
             x: targetCoords.x,
             y: targetCoords.y + 80,
             opacity: 0,
@@ -954,7 +988,7 @@ export default function FloatingAIChat() {
           onMouseLeave={() => setIsPodOrBubbleHovered(false)}
           className="absolute top-0 left-0 z-10 pointer-events-auto"
         >
-          <div
+          {!isWritingIntro && <div
             aria-hidden="true"
             className="absolute -inset-6 rounded-full pointer-events-none -z-10"
             style={{
@@ -962,7 +996,7 @@ export default function FloatingAIChat() {
                 'radial-gradient(circle, rgba(142, 184, 198, 0.24) 0%, rgba(129, 159, 167, 0.08) 50%, transparent 76%)',
               filter: 'blur(9px)',
             }}
-          />
+          />}
 
           <AnimatePresence mode="wait">
             {isBubbleVisible && (
@@ -995,15 +1029,15 @@ export default function FloatingAIChat() {
                 }}
                 style={{
                   boxShadow:
-                    '0 10px 28px rgba(0, 0, 0, 0.72), 0 0 20px rgba(129, 159, 167, 0.14), inset 0 1px 0 rgba(220, 242, 250, 0.22)',
+                    'var(--hero-chat-shadow, 0 10px 28px rgba(0, 0, 0, 0.72), 0 0 20px rgba(129, 159, 167, 0.14), inset 0 1px 0 rgba(220, 242, 250, 0.22))',
                 }}
-                className={`group/bubble absolute top-1/2 -translate-y-1/2 ${
+                className={`chat-greeting chat-accent-surface group/bubble absolute top-1/2 -translate-y-1/2 ${
                   isRightSide ? 'right-full mr-3' : 'left-full ml-3'
                 } w-max max-w-[185px] sm:max-w-[215px] bg-gradient-to-br from-[#242f38]/95 to-[#171e25]/96 hover:from-[#2b3843]/98 hover:to-[#1b232c]/98 backdrop-blur-xl border border-[#9ec3d0]/42 hover:border-[#bee2ef]/65 rounded-xl px-3 py-2 transition-colors cursor-pointer`}
               >
                 <span
                   aria-hidden="true"
-                  className={`absolute top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#1d262e] ${
+                  className={`chat-tail absolute top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#1d262e] ${
                     isRightSide
                       ? '-right-[5px] border-t border-r border-[#9ec3d0]/42'
                       : '-left-[5px] border-b border-l border-[#9ec3d0]/42'
@@ -1026,16 +1060,20 @@ export default function FloatingAIChat() {
             )}
           </AnimatePresence>
 
-          <VisorPodMascot
-            size="lg"
-            mood={activeMood}
-            facing={podFacing}
-            isFlying={isFlying}
-            enableCursorTracking
-            showShadow
-            onClick={handleOpenChat}
-            ariaLabel={copy.openChat}
-          />
+          <div className="hero-mascot-stage relative">
+            {isWritingIntro && <HeroWritingArm />}
+            <VisorPodMascot
+              size="lg"
+              mood={activeMood}
+              facing={isWritingIntro ? 'right' : podFacing}
+              isFlying={isFlying || isWritingIntro}
+              isIntroducing={isWritingIntro}
+              enableCursorTracking={!isWritingIntro}
+              showShadow={!isWritingIntro}
+              onClick={handleOpenChat}
+              ariaLabel={copy.openChat}
+            />
+          </div>
         </motion.div>
       )}
 
@@ -1067,7 +1105,7 @@ export default function FloatingAIChat() {
               {/* Soft Open-Air Atmospheric Stage Glow */}
               <div
                 aria-hidden="true"
-                className={`absolute -bottom-4 ${
+                className={`chat-stage-glow absolute -bottom-4 ${
                   isRightSide ? 'right-0' : 'left-0'
                 } w-64 h-64 rounded-full pointer-events-none -z-10`}
                 style={{
@@ -1079,7 +1117,7 @@ export default function FloatingAIChat() {
 
             {/* A. Floating Mini Status & Controls Pill */}
             <div
-              className={`pointer-events-auto inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#172028]/88 backdrop-blur-xl border border-[#9ec3d0]/32 shadow-[0_8px_24px_rgba(0,0,0,0.6)]`}
+              className="chat-status chat-accent-surface pointer-events-auto inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#172028]/88 backdrop-blur-xl border border-[#9ec3d0]/32 shadow-[0_8px_24px_rgba(0,0,0,0.6)]"
             >
               <span
                 className={`w-1.5 h-1.5 rounded-full ${
@@ -1088,11 +1126,11 @@ export default function FloatingAIChat() {
                     : activeMood === 'speaking' ||
                         activeMood === 'thinking' ||
                         activeMood === 'user-typing'
-                      ? 'bg-[#d6f3fc] animate-ping'
-                      : 'bg-[#9ec3d0]'
+                      ? 'bg-[#d6f3fc] portfolio-light:bg-ink-accent animate-ping'
+                      : 'bg-[#9ec3d0] portfolio-light:bg-ink-accent'
                 }`}
               />
-              <span className="text-[11px] font-medium text-[#bed9e4] pr-1 select-none">
+              <span className="chat-status-copy text-[11px] font-medium text-[#bed9e4] pr-1 select-none">
                 {statusText}
               </span>
 
@@ -1103,7 +1141,6 @@ export default function FloatingAIChat() {
                 onClick={toggleMute}
                 title={copy.muteToggle}
                 aria-label={copy.muteToggle}
-                style={{ outline: 'none' }}
                 className={`p-1 rounded-full transition-colors ${
                   isMuted
                     ? 'text-[#8ea8b4]/55 hover:text-[#f3f8fb]'
@@ -1122,7 +1159,6 @@ export default function FloatingAIChat() {
                 onClick={handleResetChat}
                 title={copy.clearChat}
                 aria-label={copy.clearChat}
-                style={{ outline: 'none' }}
                 className="p-1 rounded-full text-[#9ebbc7]/70 hover:text-[#f3f8fb] transition-colors"
               >
                 <RotateCcw className="w-3 h-3" />
@@ -1133,7 +1169,6 @@ export default function FloatingAIChat() {
                 onClick={handleCloseChat}
                 title={copy.closeChat}
                 aria-label={copy.closeChat}
-                style={{ outline: 'none' }}
                 className="p-1 rounded-full text-[#9ebbc7]/70 hover:text-[#f3f8fb] transition-colors"
               >
                 <X className="w-3.5 h-3.5" />
@@ -1145,16 +1180,10 @@ export default function FloatingAIChat() {
               ref={messagesContainerRef}
               style={{
                 maxHeight: isMobileViewport ? '200px' : '265px',
-                maskImage:
-                  messages.length > 2
-                    ? 'linear-gradient(to bottom, transparent 0%, black 16%, black 100%)'
-                    : undefined,
-                WebkitMaskImage:
-                  messages.length > 2
-                    ? 'linear-gradient(to bottom, transparent 0%, black 16%, black 100%)'
-                    : undefined,
+                maskImage: messagesFade,
+                WebkitMaskImage: messagesFade,
               }}
-              className="pointer-events-auto w-full overflow-y-auto overscroll-contain mascot-no-scrollbar flex flex-col gap-2.5 pt-2 pb-1.5 px-1"
+              className="pointer-events-auto w-full min-h-0 overflow-y-auto overscroll-contain mascot-no-scrollbar flex flex-col gap-2.5 pt-2 pb-1.5 px-1"
             >
               {messages.map((message, idx) => {
                 const isUser = message.role === 'user';
@@ -1166,7 +1195,7 @@ export default function FloatingAIChat() {
                     initial={{ opacity: 0, y: 12, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-                    className={`flex w-full ${
+                    className={`flex w-full shrink-0 ${
                       isUser
                         ? isRightSide
                           ? 'justify-start'
@@ -1183,17 +1212,17 @@ export default function FloatingAIChat() {
                       style={
                         isUser
                           ? {
-                              boxShadow: '0 10px 26px rgba(0, 0, 0, 0.55)',
+                              boxShadow: 'var(--hero-chat-shadow, 0 10px 26px rgba(0, 0, 0, 0.55))',
                             }
                           : {
                               boxShadow:
-                                '0 14px 36px rgba(0, 0, 0, 0.76), 0 0 24px rgba(138, 184, 198, 0.14), inset 0 1px 0 rgba(224, 244, 252, 0.22)',
+                                'var(--hero-chat-shadow, 0 14px 36px rgba(0, 0, 0, 0.76), 0 0 24px rgba(138, 184, 198, 0.14), inset 0 1px 0 rgba(224, 244, 252, 0.22))',
                             }
                       }
                       className={`relative max-w-[88%] px-4 py-2.5 rounded-2xl text-[12.5px] sm:text-[13px] leading-[1.48] ${
                         isUser
-                          ? 'bg-gradient-to-br from-[#9abcc8]/95 to-[#6b848d]/95 text-[#090c10] font-medium backdrop-blur-xl'
-                          : `bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 text-[#f2f7fa] border ${
+                          ? 'chat-user-bubble bg-gradient-to-br from-[#9abcc8]/95 to-[#6b848d]/95 text-[#090c10] font-medium backdrop-blur-xl'
+                          : `chat-accent-surface bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 text-[#f2f7fa] border ${
                               message.isStreaming
                                 ? 'border-[#bae2f0]/60 cursor-pointer'
                                 : 'border-[#9ec3d0]/40'
@@ -1206,7 +1235,7 @@ export default function FloatingAIChat() {
                           aria-hidden="true"
                           className={`absolute -bottom-[5px] ${
                             isRightSide ? 'right-8' : 'left-8'
-                          } w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r ${
+                          } chat-tail w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r ${
                             message.isStreaming
                               ? 'border-[#bae2f0]/60'
                               : 'border-[#9ec3d0]/40'
@@ -1215,6 +1244,7 @@ export default function FloatingAIChat() {
                       )}
 
                       <ChatMessageContent
+                        className={isUser ? undefined : 'chat-assistant-copy'}
                         content={message.content}
                         isStreaming={message.isStreaming}
                         isUser={isUser}
@@ -1236,15 +1266,15 @@ export default function FloatingAIChat() {
                   <div
                     style={{
                       boxShadow:
-                        '0 12px 28px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(220, 242, 250, 0.2)',
+                        'var(--hero-chat-shadow, 0 12px 28px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(220, 242, 250, 0.2))',
                     }}
-                    className="relative bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 border border-[#9ec3d0]/42 backdrop-blur-2xl px-4 py-3 rounded-2xl flex items-center gap-1.5"
+                    className="chat-accent-surface relative bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 border border-[#9ec3d0]/42 backdrop-blur-2xl px-4 py-3 rounded-2xl flex items-center gap-1.5"
                   >
                     <span
                       aria-hidden="true"
                       className={`absolute -bottom-[5px] ${
                         isRightSide ? 'right-7' : 'left-7'
-                      } w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r border-[#9ec3d0]/42`}
+                      } chat-tail w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r border-[#9ec3d0]/42`}
                     />
                     <span
                       className="w-1.5 h-1.5 bg-[#d4f2fc] rounded-full animate-bounce"
@@ -1265,7 +1295,7 @@ export default function FloatingAIChat() {
 
             {/* C. Bottom Companion Stage: Full-Size Open-Air Visor Pod + Single-Piece Floating Input Capsule */}
             <div
-              className={`pointer-events-auto w-full flex items-center gap-2.5 ${
+              className={`pointer-events-auto w-full flex shrink-0 items-center gap-2.5 ${
                 isRightSide ? 'flex-row' : 'flex-row-reverse'
               }`}
             >
@@ -1277,9 +1307,9 @@ export default function FloatingAIChat() {
                 }}
                 style={{
                   boxShadow:
-                    '0 14px 36px rgba(0, 0, 0, 0.78), 0 0 22px rgba(129, 159, 167, 0.12), inset 0 1px 0 rgba(224, 244, 252, 0.2)',
+                    'var(--hero-chat-shadow, 0 14px 36px rgba(0, 0, 0, 0.78), 0 0 22px rgba(129, 159, 167, 0.12), inset 0 1px 0 rgba(224, 244, 252, 0.2))',
                 }}
-                className="flex-1 min-w-0 flex items-center gap-1.5 bg-gradient-to-br from-[#202a33]/94 to-[#141a21]/97 backdrop-blur-2xl border border-[#9ec3d0]/42 focus-within:border-[#c6ebf7]/75 rounded-2xl pl-3.5 pr-1.5 py-1.5 transition-colors"
+                className="chat-accent-surface flex-1 min-w-0 flex items-center gap-1.5 bg-gradient-to-br from-[#202a33]/94 to-[#141a21]/97 backdrop-blur-2xl border border-[#9ec3d0]/42 focus-within:border-[#c6ebf7]/75 rounded-2xl pl-3.5 pr-1.5 py-1.5 transition-colors"
               >
                 <input
                   ref={inputRef}
@@ -1317,17 +1347,16 @@ export default function FloatingAIChat() {
                     setTimeout(syncVisualViewport, 240);
                   }}
                   placeholder={copy.inputPlaceholder}
+                  aria-label={copy.inputPlaceholder}
                   disabled={isLoading}
-                  style={{ outline: 'none', boxShadow: 'none' }}
-                  className="flex-1 min-w-0 bg-transparent border-none text-base sm:text-[13px] text-[#f5f9fc] placeholder-[#9ab3be]/55 outline-none focus:outline-none focus:ring-0 disabled:opacity-50 py-1"
+                  className="flex-1 min-w-0 bg-transparent border-none text-base sm:text-[13px] text-[#f5f9fc] placeholder-[#9ab3be]/55 disabled:opacity-50 py-1"
                 />
                 <button
                   type="submit"
                   onMouseDown={(e) => e.preventDefault()}
                   onPointerDown={(e) => e.preventDefault()}
                   disabled={!input.trim() || isLoading}
-                  aria-label="Send"
-                  style={{ outline: 'none' }}
+                  aria-label={copy.send}
                   className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#a8cad6] to-[#6a838c] text-[#090c10] flex items-center justify-center hover:opacity-95 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0 shadow-xs"
                 >
                   {isLoading ? (

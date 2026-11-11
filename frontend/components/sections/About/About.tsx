@@ -59,18 +59,18 @@ export default function About() {
   };
 
   return (
-    <section id="about" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] content-visibility-auto">
+    <section id="about" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto">
       {/* Eski orijinal temiz arka plan (Koyu degrade) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d] to-[#0a0a0a]" />
+      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0d0d0d] to-[#0a0a0a]" />
 
       <div className="relative z-10 max-w-[1100px] w-full mx-auto md:my-auto">
         {/* Section Label + Title (Dile göre dinamik: TR'de HAKKIMDA, EN'de ABOUT ME) */}
         <SectionReveal delay={0}>
           <div className="mb-8">
-            <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] uppercase mb-2">
+            <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2">
               {t('badge')}
             </div>
-            <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] tracking-tight leading-[1.08]">
+            <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
               {t('headline')}
             </h2>
           </div>
@@ -81,7 +81,7 @@ export default function About() {
           <div className="flex flex-col sm:flex-row items-start gap-6 md:gap-7">
           {/* Avatar (140x140px tam yuvarlak profil çerçevesi) */}
           <div className="shrink-0">
-            <div className="w-[140px] h-[140px] rounded-full overflow-hidden border border-white/10 bg-[#161616] relative flex items-center justify-center">
+            <div className="w-[140px] h-[140px] rounded-full overflow-hidden border border-white/10 portfolio-light:border-paper-line bg-[#161616] portfolio-light:bg-paper-tint relative flex items-center justify-center">
               {!imgFailed ? (
                 <img
                   src="/profilFoto.jpg"
@@ -91,7 +91,7 @@ export default function About() {
                   draggable={false}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a2327] to-[#0f1416] text-[#819fa7] select-none">
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#1a2327] portfolio-light:from-paper-tint to-[#0f1416] portfolio-light:to-paper-raised text-[#819fa7] portfolio-light:text-ink-accent select-none">
                   <span className="font-display font-bold text-3xl tracking-wider text-gradient">
                     DG
                   </span>
@@ -103,7 +103,7 @@ export default function About() {
           {/* Profile Info (İsim, Mavi Rozet, Sayaçlar ve Biyografi) */}
           <div className="flex-1 flex flex-col gap-2">
             {/* İsim + Mavi Onay Rozeti (Verified Badge) */}
-            <div className="inline-flex items-center gap-2 text-xl font-bold text-[#f3f5f9] tracking-tight font-display">
+            <div className="inline-flex items-center gap-2 text-xl font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight font-display">
               <span>{t('name')}</span>
               <svg className="w-5 h-5 text-[#3b82f6] shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
@@ -113,33 +113,33 @@ export default function About() {
             {/* Quick Stats: PROJECTS | CERTIFICATES | GRADUATED */}
             <div className="flex flex-row items-center gap-8 mt-1">
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 tracking-[0.15em] uppercase">
+                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
                   {t('stats.projectsLabel')}
                 </span>
-                <span className="text-base font-bold text-[#f3f5f9] leading-tight">
+                <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                   {t('stats.projectsValue')}
                 </span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 tracking-[0.15em] uppercase">
+                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
                   {t('stats.certsLabel')}
                 </span>
-                <span className="text-base font-bold text-[#f3f5f9] leading-tight">
+                <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                   {t('stats.certsValue')}
                 </span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 tracking-[0.15em] uppercase">
+                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
                   {t('stats.gradLabel')}
                 </span>
-                <span className="text-base font-bold text-[#f3f5f9] leading-tight">
+                <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                   {t('stats.gradValue')}
                 </span>
               </div>
             </div>
 
             {/* Description Paragraph */}
-            <div className="text-[15px] leading-[1.8] text-white/60 mt-3 space-y-4 max-w-[950px]">
+            <div className="text-[15px] leading-[1.8] text-white/60 portfolio-light:text-ink-muted mt-3 space-y-4 max-w-[950px]">
               <p>
                 {t('bio')}
               </p>
@@ -149,17 +149,17 @@ export default function About() {
                   href={activeCvHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white font-semibold underline underline-offset-4 hover:opacity-75 transition-opacity"
+                  className="text-white portfolio-light:text-ink font-semibold underline underline-offset-4 hover:opacity-75 transition-opacity"
                 >
                   {t('resumeLink')}
                 </a>{' '}
-                <span className="text-xs font-mono text-white/40">
+                <span className="text-xs font-mono text-white/40 portfolio-light:text-ink-muted">
                   (
                   <a
                     href="/cv/Duran_Gezer_CV_TR.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white portfolio-light:hover:text-ink transition-colors"
                   >
                     TR
                   </a>
@@ -168,7 +168,7 @@ export default function About() {
                     href="/cv/Duran_Gezer_CV_EN.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-white transition-colors"
+                    className="hover:text-white portfolio-light:hover:text-ink transition-colors"
                   >
                     EN
                   </a>
@@ -186,20 +186,20 @@ export default function About() {
           <div className="mt-8 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Sol Taraf: CURRENTLY Strip */}
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[11px] font-medium tracking-[0.12em] text-white/40 uppercase">
+            <div className="font-mono text-[11px] font-medium tracking-[0.12em] text-white/40 portfolio-light:text-ink-muted uppercase">
               {t('currently.title')}
             </div>
             <div className="flex flex-wrap items-center gap-6 sm:gap-7">
               {/* Building */}
               <div className="flex items-center gap-2.5">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] border border-white/10 text-[#f3f5f9] shrink-0">
-                  <Code2 className="w-4 h-4 text-[#819fa7]" />
+                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line text-[#f3f5f9] portfolio-light:text-ink shrink-0">
+                  <Code2 className="w-4 h-4 text-[#819fa7] portfolio-light:text-ink-accent" />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-[#f3f5f9] leading-tight">
+                  <span className="text-sm font-semibold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                     {t('currently.buildingLabel')}
                   </span>
-                  <span className="text-xs text-white/40 leading-tight">
+                  <span className="text-xs text-white/40 portfolio-light:text-ink-muted leading-tight">
                     {t('currently.buildingDesc')}
                   </span>
                 </div>
@@ -207,14 +207,14 @@ export default function About() {
 
               {/* Exploring */}
               <div className="flex items-center gap-2.5">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] border border-white/10 text-[#f3f5f9] shrink-0">
-                  <FlaskConical className="w-4 h-4 text-[#819fa7]" />
+                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line text-[#f3f5f9] portfolio-light:text-ink shrink-0">
+                  <FlaskConical className="w-4 h-4 text-[#819fa7] portfolio-light:text-ink-accent" />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-[#f3f5f9] leading-tight">
+                  <span className="text-sm font-semibold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                     {t('currently.exploringLabel')}
                   </span>
-                  <span className="text-xs text-white/40 leading-tight">
+                  <span className="text-xs text-white/40 portfolio-light:text-ink-muted leading-tight">
                     {t('currently.exploringDesc')}
                   </span>
                 </div>
@@ -222,14 +222,14 @@ export default function About() {
 
               {/* Learning */}
               <div className="flex items-center gap-2.5">
-                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] border border-white/10 text-[#f3f5f9] shrink-0">
-                  <Rocket className="w-4 h-4 text-[#819fa7]" />
+                <span className="w-8 h-8 rounded-full flex items-center justify-center bg-[#1a1a1a] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line text-[#f3f5f9] portfolio-light:text-ink shrink-0">
+                  <Rocket className="w-4 h-4 text-[#819fa7] portfolio-light:text-ink-accent" />
                 </span>
                 <div className="flex flex-col">
-                  <span className="text-sm font-semibold text-[#f3f5f9] leading-tight">
+                  <span className="text-sm font-semibold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
                     {t('currently.learningLabel')}
                   </span>
-                  <span className="text-xs text-white/40 leading-tight">
+                  <span className="text-xs text-white/40 portfolio-light:text-ink-muted leading-tight">
                     {t('currently.learningDesc')}
                   </span>
                 </div>
@@ -265,9 +265,9 @@ export default function About() {
                   // Front Card (Tilted slightly left)
                   styleObj = {
                     ...styleObj,
-                    background: '#141414',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.7)',
+                    background: 'var(--about-card-raised, #141414)',
+                    border: '1px solid var(--about-card-line, rgba(255, 255, 255, 0.12))',
+                    boxShadow: 'var(--about-card-shadow, 0 20px 40px -15px rgba(0, 0, 0, 0.7))',
                     transform: `translate(${CARD_POSITIONS[0].tx}px, ${CARD_POSITIONS[0].ty}px) rotate(${CARD_POSITIONS[0].rot}deg) scale(${CARD_POSITIONS[0].sc})`,
                     opacity: CARD_POSITIONS[0].op,
                     zIndex: CARD_POSITIONS[0].z,
@@ -276,9 +276,9 @@ export default function About() {
                   // Second Card (Tilted right)
                   styleObj = {
                     ...styleObj,
-                    background: '#131313',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    boxShadow: '0 14px 30px -12px rgba(0, 0, 0, 0.5)',
+                    background: 'var(--about-card-tint, #131313)',
+                    border: '1px solid var(--about-card-line, rgba(255, 255, 255, 0.08))',
+                    boxShadow: 'var(--about-card-shadow, 0 14px 30px -12px rgba(0, 0, 0, 0.5))',
                     transform: `translate(${CARD_POSITIONS[1].tx}px, ${CARD_POSITIONS[1].ty}px) rotate(${CARD_POSITIONS[1].rot}deg) scale(${CARD_POSITIONS[1].sc})`,
                     opacity: CARD_POSITIONS[1].op,
                     zIndex: CARD_POSITIONS[1].z,
@@ -287,9 +287,9 @@ export default function About() {
                   // Third Card (Tilted left)
                   styleObj = {
                     ...styleObj,
-                    background: '#111111',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
-                    boxShadow: '0 10px 25px -12px rgba(0, 0, 0, 0.4)',
+                    background: 'var(--about-card-selected, #111111)',
+                    border: '1px solid var(--about-card-line, rgba(255, 255, 255, 0.05))',
+                    boxShadow: 'var(--about-card-shadow, 0 10px 25px -12px rgba(0, 0, 0, 0.4))',
                     transform: `translate(${CARD_POSITIONS[2].tx}px, ${CARD_POSITIONS[2].ty}px) rotate(${CARD_POSITIONS[2].rot}deg) scale(${CARD_POSITIONS[2].sc})`,
                     opacity: CARD_POSITIONS[2].op,
                     zIndex: CARD_POSITIONS[2].z,
@@ -298,8 +298,8 @@ export default function About() {
                   // Exiting Card (Sliding out to the top-right)
                   styleObj = {
                     ...styleObj,
-                    background: '#141414',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    background: 'var(--about-card-raised, #141414)',
+                    border: '1px solid var(--about-card-line, rgba(255, 255, 255, 0.05))',
                     transform: `translate(${CARD_POSITIONS[3].tx}px, ${CARD_POSITIONS[3].ty}px) rotate(${CARD_POSITIONS[3].rot}deg) scale(${CARD_POSITIONS[3].sc})`,
                     opacity: 0,
                     zIndex: 5,
@@ -309,7 +309,7 @@ export default function About() {
                   // Other hidden cards
                   styleObj = {
                     ...styleObj,
-                    background: '#111111',
+                    background: 'var(--about-card-selected, #111111)',
                     border: 'none',
                     transform: 'translate(40px, 30px) scale(0.8)',
                     opacity: 0,
@@ -324,10 +324,10 @@ export default function About() {
                     style={styleObj}
                     className="hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <div className="font-mono text-[10px] font-semibold text-white/40 tracking-[0.2em] uppercase">
+                    <div className="font-mono text-[10px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.2em] uppercase">
                       {t('traits.label')}
                     </div>
-                    <div className="text-lg font-bold text-[#f3f5f9] tracking-tight">
+                    <div className="text-lg font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight">
                       {trait}
                     </div>
                   </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from 'react';
+import { HERO_LANDING, type HeroLanding } from '@/components/sections/Hero/heroIntro';
 
 // ─── Configuration (Halved particle count & tuned for locked 60/120 FPS) ───
 const CONFIG = {
@@ -142,6 +143,8 @@ export default function ParticleNetwork() {
 
     const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
     if (!ctx) return;
+    const hero = container.closest('#hero');
+    let landing: (HeroLanding & { start: number; light: boolean }) | undefined;
 
     // Pre-bake sprites once at startup (zero per-frame gradient allocations)
     const primarySprite = createParticleSprite(
@@ -159,6 +162,7 @@ export default function ParticleNetwork() {
       CONFIG.colors.glow.g,
       CONFIG.colors.glow.b
     );
+    const lightLandingSprite = createParticleSprite(62, 100, 112);
 
     // Pre-allocate reusable bucket arrays to avoid GC churn
     const buckets: number[][] = Array.from({ length: LINE_BUCKETS }, () => []);
@@ -221,6 +225,8 @@ export default function ParticleNetwork() {
       const len = particles.length;
       const mouse = mouseRef.current;
       const timeSec = time * 0.001;
+      const landingAge = landing ? (time - landing.start) / 680 : 0;
+      if (landing && (landingAge >= 1 || landing.signal.aborted)) landing = undefined;
 
       ctx.clearRect(0, 0, w, h);
 
@@ -367,6 +373,16 @@ export default function ParticleNetwork() {
           drawSize,
           drawSize
         );
+
+        if (landing) {
+          const distance = Math.hypot(p.x - landing.x, p.y - landing.y);
+          const pulse = Math.max(0, 1 - Math.abs(distance - landingAge * 440) / 66) * (1 - landingAge);
+          if (pulse > 0) {
+            const size = drawSize * (1.35 + pulse);
+            ctx.globalAlpha = Math.min(1, pulse * 1.45);
+            ctx.drawImage(landing.light ? lightLandingSprite : altSprite, p.x - size / 2, p.y - size / 2, size, size);
+          }
+        }
       }
 
       ctx.globalAlpha = 1;
@@ -418,6 +434,19 @@ export default function ParticleNetwork() {
       updateRect();
     };
 
+    const handleLanding = (event: Event) => {
+      if (!dimensionsRef.current.w) return;
+      updateRect();
+      const { x, y, signal } = (event as CustomEvent<HeroLanding>).detail;
+      landing = {
+        x: x - canvasRect.left,
+        y: y - canvasRect.top,
+        signal,
+        start: performance.now(),
+        light: document.documentElement.dataset.heroTheme === 'light',
+      };
+    };
+
     // Completely halt rAF when Hero leaves the viewport (zero background CPU/GPU cost)
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -438,6 +467,7 @@ export default function ParticleNetwork() {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('resize', handleResize, { passive: true });
     window.addEventListener('scroll', updateRect, { passive: true });
+    hero?.addEventListener(HERO_LANDING, handleLanding);
 
     startLoop();
 
@@ -449,6 +479,7 @@ export default function ParticleNetwork() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', updateRect);
+      hero?.removeEventListener(HERO_LANDING, handleLanding);
     };
   }, [initParticles]);
 

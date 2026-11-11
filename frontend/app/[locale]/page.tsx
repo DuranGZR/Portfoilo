@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <>
       <BackToTop />
-      <main className="min-h-screen">
+      <main data-portfolio-page className="min-h-screen">
         <Hero />
         <About />
         <Projects />

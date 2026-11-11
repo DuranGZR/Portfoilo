@@ -57,7 +57,7 @@ export default function BackToTop() {
                     onClick={scrollToTop}
                     className={`fixed bottom-6 ${
                         placeOnRight ? 'right-6' : 'left-6'
-                    } z-40 w-11 h-11 rounded-full bg-[#14181d]/85 border border-[#819fa7]/25 backdrop-blur-md flex items-center justify-center text-[#819fa7] hover:bg-[#819fa7]/20 hover:border-[#819fa7]/45 transition-colors shadow-lg`}
+                    } z-40 w-11 h-11 rounded-full bg-[#14181d]/85 portfolio-light:bg-paper-raised border border-[#819fa7]/25 portfolio-light:border-paper-line-strong backdrop-blur-md flex items-center justify-center text-[#819fa7] portfolio-light:text-ink-accent hover:bg-[#819fa7]/20 portfolio-light:hover:bg-paper-selected hover:border-[#819fa7]/45 portfolio-light:hover:border-paper-line-strong transition-colors shadow-lg portfolio-light:shadow-paper`}
                     aria-label="Back to top"
                 >
                     <ArrowUp className="w-5 h-5" />

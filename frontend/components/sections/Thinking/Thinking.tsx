@@ -59,21 +59,21 @@ export default function Thinking() {
   };
 
   return (
-    <section id="thinking" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] content-visibility-auto">
+    <section id="thinking" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto">
       {/* Koyu degrade arka plan (Monokrom, Hakkımda & Deneyim ile birebir aynı) */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
+      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1100px] w-full mx-auto md:my-auto">
         {/* Section Header (Hakkımda & Deneyim ile aynı tipografi) */}
         <SectionReveal delay={0}>
           <div className="mb-6 sm:mb-16">
-            <div className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#819fa7] uppercase mb-1.5 sm:mb-2">
+            <div className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-1.5 sm:mb-2">
               {t('badge')}
             </div>
-            <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] tracking-tight leading-[1.1] mb-2 sm:mb-3">
+            <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.1] mb-2 sm:mb-3">
               {t('title')}
             </h2>
-            <p className="text-xs sm:text-[15px] leading-relaxed sm:leading-[1.8] text-white/60 max-w-[680px]">
+            <p className="text-xs sm:text-[15px] leading-relaxed sm:leading-[1.8] text-white/60 portfolio-light:text-ink-muted max-w-[680px]">
               {t('subtitle')}
             </p>
           </div>
@@ -98,28 +98,28 @@ export default function Thinking() {
                   key={principle.key}
                   className={`snap-center shrink-0 w-[84vw] max-w-[320px] rounded-2xl p-5 border transition-all duration-300 flex flex-col justify-between ${
                     isActive
-                      ? 'bg-[#141414] border-white/20 shadow-lg'
-                      : 'bg-[#111111]/70 border-white/10 opacity-70'
+                      ? 'bg-[#141414] portfolio-light:bg-paper-raised border-white/20 portfolio-light:border-paper-line-strong shadow-lg portfolio-light:shadow-paper'
+                      : 'bg-[#111111]/70 portfolio-light:bg-paper-tint border-white/10 portfolio-light:border-paper-line opacity-70'
                   }`}
                 >
                   <div>
                     {/* Top row: Number & Icon */}
                     <div className="flex items-center justify-between mb-3">
-                      <span className="font-mono text-xs font-semibold text-[#819fa7] tracking-widest select-none">
+                      <span className="font-mono text-xs font-semibold text-[#819fa7] portfolio-light:text-ink-accent tracking-widest select-none">
                         0{index + 1} / 0{principles.length}
                       </span>
-                      <div className="w-8 h-8 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#819fa7]">
+                      <div className="w-8 h-8 rounded-xl bg-white/5 portfolio-light:bg-paper-tint border border-white/10 portfolio-light:border-paper-line flex items-center justify-center text-[#819fa7] portfolio-light:text-ink-accent">
                         <Icon className="w-4 h-4" />
                       </div>
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-display font-bold text-[#f3f5f9] mb-2 leading-snug">
+                    <h3 className="text-base font-display font-bold text-[#f3f5f9] portfolio-light:text-ink mb-2 leading-snug">
                       {t(`principles.${principle.key}.title`)}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-[13px] leading-[1.7] text-white/65">
+                    <p className="text-[13px] leading-[1.7] text-white/65 portfolio-light:text-ink-muted">
                       {t(`principles.${principle.key}.description`)}
                     </p>
                   </div>
@@ -129,11 +129,11 @@ export default function Thinking() {
           </div>
 
           {/* Bottom Bar: Prev / Next + Dots Indicator */}
-          <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10 px-1">
+          <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10 portfolio-light:border-paper-line px-1">
             <button
               onClick={() => scrollToCard(Math.max(0, activeIndex - 1))}
               disabled={activeIndex === 0}
-              className="text-xs font-mono font-medium text-white/60 hover:text-white disabled:opacity-20 flex items-center gap-1 transition-colors px-2 py-1"
+              className="text-xs font-mono font-medium text-white/60 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink disabled:opacity-20 flex items-center gap-1 transition-colors px-2 py-1"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               <span>{locale === 'tr' ? 'Önceki' : 'Prev'}</span>
@@ -146,7 +146,7 @@ export default function Thinking() {
                   key={idx}
                   onClick={() => scrollToCard(idx)}
                   className={`h-1.5 rounded-full transition-all duration-300 ${
-                    activeIndex === idx ? 'w-5 bg-white' : 'w-1.5 bg-white/20'
+                    activeIndex === idx ? 'w-5 bg-white portfolio-light:bg-ink-accent' : 'w-1.5 bg-white/20 portfolio-light:bg-paper-line-strong'
                   }`}
                   aria-label={`Kart 0${idx + 1}`}
                 />
@@ -156,7 +156,7 @@ export default function Thinking() {
             <button
               onClick={() => scrollToCard(Math.min(principles.length - 1, activeIndex + 1))}
               disabled={activeIndex === principles.length - 1}
-              className="text-xs font-mono font-medium text-white/60 hover:text-white disabled:opacity-20 flex items-center gap-1 transition-colors px-2 py-1"
+              className="text-xs font-mono font-medium text-white/60 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink disabled:opacity-20 flex items-center gap-1 transition-colors px-2 py-1"
             >
               <span>{locale === 'tr' ? 'Sonraki' : 'Next'}</span>
               <ChevronRight className="w-3.5 h-3.5" />
@@ -172,24 +172,24 @@ export default function Thinking() {
             const Icon = principle.icon;
             return (
               <SectionReveal key={principle.key} delay={0.06 + index * 0.05}>
-                <div className="group relative flex flex-col pt-6 border-t border-white/10 hover:border-white/30 transition-all duration-300">
+                <div className="group relative flex flex-col pt-6 border-t border-white/10 portfolio-light:border-paper-line hover:border-white/30 portfolio-light:hover:border-paper-line-strong transition-all duration-300">
                   {/* Üst Satır: Numara (01-06) ve Minimal İkon */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="font-mono text-xs font-semibold text-[#819fa7] tracking-widest select-none">
+                    <span className="font-mono text-xs font-semibold text-[#819fa7] portfolio-light:text-ink-accent tracking-widest select-none">
                       0{index + 1}
                     </span>
-                    <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#819fa7] group-hover:text-white group-hover:border-white/20 transition-all">
+                    <div className="w-9 h-9 rounded-xl bg-white/5 portfolio-light:bg-paper-tint border border-white/10 portfolio-light:border-paper-line flex items-center justify-center text-[#819fa7] portfolio-light:text-ink-accent group-hover:text-white portfolio-light:group-hover:text-ink group-hover:border-white/20 portfolio-light:group-hover:border-paper-line-strong transition-all">
                       <Icon className="w-4 h-4" />
                     </div>
                   </div>
 
                   {/* İlke Başlığı */}
-                  <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] mb-2.5 group-hover:text-white transition-colors">
+                  <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] portfolio-light:text-ink mb-2.5 group-hover:text-white portfolio-light:group-hover:text-ink transition-colors">
                     {t(`principles.${principle.key}.title`)}
                   </h3>
 
                   {/* İlke Açıklaması */}
-                  <p className="text-[14.5px] leading-[1.75] text-white/60">
+                  <p className="text-[14.5px] leading-[1.75] text-white/60 portfolio-light:text-ink-muted">
                     {t(`principles.${principle.key}.description`)}
                   </p>
                 </div>
