@@ -8,6 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1
 export interface ChatRequest {
     message: string;
     session_id?: string;
+    locale: 'tr' | 'en';
 }
 
 export interface ChatResponse {
@@ -43,20 +44,39 @@ export interface AnalyticsEvent {
 }
 
 // API Functions
-export async function sendChatMessage(data: ChatRequest): Promise<ChatResponse> {
+export class ChatApiError extends Error {
+    constructor(public code: string, public retryAfter = 0) { super(code); }
+}
+
+export async function sendChatMessage(data: ChatRequest, clientKey: string, signal: AbortSignal): Promise<ChatResponse> {
     const response = await fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'X-Chat-Client': clientKey,
         },
         body: JSON.stringify(data),
+        signal,
+        cache: 'no-store',
     });
 
     if (!response.ok) {
-        throw new Error(`Chat API error: ${response.status}`);
+        const body = await response.json().catch(() => null);
+        const code = body?.detail?.code || (response.status === 429 ? 'usage_limit' : response.status === 422 ? 'invalid_message' : 'service_unavailable');
+        throw new ChatApiError(code, Math.min(86400, Math.max(0, Number(response.headers.get('Retry-After')) || 0)));
     }
 
-    return response.json();
+    const result = await response.json();
+    if (typeof result?.response !== 'string' || !/^[A-Za-z0-9_-]{43}$/.test(result?.session_id)) throw new ChatApiError('service_unavailable');
+    return result;
+}
+
+export async function resetChatSession(sessionId: string | null, clientKey: string): Promise<void> {
+    const response = await fetch(`${API_URL}/chat/reset`, {
+        method: 'POST', headers: {'Content-Type': 'application/json', 'X-Chat-Client': clientKey},
+        body: JSON.stringify({session_id: sessionId}), signal: AbortSignal.timeout(5000), cache: 'no-store',
+    });
+    if (!response.ok) throw new ChatApiError('reset_failed');
 }
 
 export async function getChatSuggestions(): Promise<ChatSuggestionsResponse> {

@@ -25,12 +25,17 @@
     "subtitle": "AI Systems • Backend • DevOps",
     "location": "İzmir, Turkey",
     "cta": {
-      "primary": "Explore My Projects",
-      "secondary": "Talk to My AI Assistant",
+      "primary": "View projects",
+      "secondary": "View CV",
       "3dresume": "Explore My 3D CV"
     },
     "scrollHint": "Discover more",
-    "status": "Available for opportunities"
+    "status": "Available for opportunities",
+    "socialLinks": {
+      "github": "Duran Gezer’s GitHub profile (opens in a new tab)",
+      "linkedin": "Duran Gezer’s LinkedIn profile (opens in a new tab)",
+      "email": "Send an email to Duran Gezer"
+    }
   },
   "about": {
     "title": "About Me",
@@ -60,23 +65,23 @@
     "quote": "Learning is a journey, every project is a new discovery.",
     "status": {
       "available": "Open to Opportunities",
-      "graduating": "Graduating: 2026"
+      "graduating": "Graduating: 2027"
     },
-    "badge": "ABOUT ME",
+    "badge": "About me",
     "headline": "Learning, Experimenting, Building.",
     "name": "DURAN GEZER",
     "stats": {
-      "projectsLabel": "PROJECTS",
+      "projectsLabel": "Projects",
       "projectsValue": "20+",
-      "certsLabel": "CERTIFICATES",
-      "certsValue": "9",
-      "gradLabel": "BSIT GRADUATED",
-      "gradValue": "2026"
+      "certsLabel": "Listed certificates",
+      "certsValue": "6",
+      "gradLabel": "Computer eng.",
+      "gradValue": "2027"
     },
     "resumeCta": "Want to know more about my experience?",
     "resumeLink": "Download my resume",
     "currently": {
-      "title": "CURRENTLY",
+      "title": "Currently",
       "buildingLabel": "Building",
       "buildingDesc": "Web & digital projects",
       "exploringLabel": "Exploring",
@@ -85,15 +90,12 @@
       "learningDesc": "Deep Learning & Agents"
     },
     "traits": {
-      "label": "TRAIT",
+      "label": "Project decisions",
+      "next": "Show the next project example",
       "items": [
-        "Problem Solver",
-        "Detail-Oriented",
-        "Reliable",
-        "Continuous Learner",
-        "User-Focused",
-        "Analytical Thinker",
-        "Open to Feedback"
+        "AliağaAI: From answers to local sources",
+        "KayıpQR: Messaging without sharing contact details",
+        "AskDocs: Keep document processing separate from chat"
       ]
     }
   },
@@ -112,8 +114,9 @@
     "architecture": "Architecture & How It Works",
     "items": {
       "aliagaAI": {
+        "gallerySummary": "Brings scattered local information about Aliağa into one city assistant that cites its sources.",
         "title": "AliağaAI — Smart City Guide & Grounded RAG Assistant",
-        "tagline": "A zero-hallucination smart city assistant tailored for Aliağa, combining a React Native mobile client with a multi-stage hybrid RAG backend (FastAPI + pgvector + FTS).",
+        "tagline": "A RAG assistant grounded in local sources, with citations in its answers. Its React Native mobile app provides access to city information in Aliağa.",
         "period": "2025",
         "category": "AI Systems • Hybrid RAG • Mobile",
         "image": "/projects/aliagaai.png",
@@ -141,16 +144,16 @@
             "value": "9 Isolated Async Scrapers (APScheduler)"
           },
           {
-            "label": "RELIABILITY",
-            "value": "Zero Hallucination & [S1]/[S2] Citations"
+            "label": "SOURCE CITATIONS",
+            "value": "Clickable [S1]/[S2] source links in answers"
           }
         ],
-        "overview": "Built to overcome the fragmented, ad-heavy nature of generic search engines when citizens look for hyper-local municipal data such as on-duty pharmacies, İZBAN commuter schedules, utility outages, municipal announcements, and local directories.\n\nAliağaAI pairs an agentic query router with a multi-stage grounded RAG pipeline so every response is backed by verified local sources with clickable [S1]/[S2] citations. On mobile, its black-and-gold Stitch Design System unifies live city status signals, interactive maps, and AI chat.",
+        "overview": "Built to overcome the fragmented, ad-heavy nature of generic search engines when citizens look for hyper-local municipal data such as on-duty pharmacies, İZBAN commuter schedules, utility outages, municipal announcements, and local directories.\n\nAliağaAI pairs an agentic query router with a multi-stage grounded RAG pipeline to retrieve local source context and present answers with clickable [S1]/[S2] citations. On mobile, its black-and-gold Stitch Design System unifies live city status signals, interactive maps, and AI chat.",
         "architectureSteps": [
           "Preprocessing & Agentic Query Router: Incoming user queries are normalized, analyzed for intent, and routed across structured SQL tables, live API caches (weather, earthquakes, pharmacies), or the semantic RAG pipeline.",
           "Query Expansion & Hybrid Search: The pipeline generates 4 semantic query variants and executes pgvector HNSW cosine similarity search alongside PostgreSQL Turkish Full-Text Search (FTS) in parallel.",
           "Reciprocal Rank Fusion (RRF) & Reranking: Vector and lexical candidates are fused via RRF, filtered through dynamic similarity thresholds, and reranked for context precision.",
-          "Grounded LLM Synthesis & Isolated Scrapers: Groq Llama 3.3 synthesizes answers strictly from verified context with source citations, while 9 fault-isolated APScheduler bots continuously refresh city data in the background."
+          "Grounded LLM Synthesis & Isolated Scrapers: Groq Llama 3.3 synthesizes answers using retrieved local context with source citations, while 9 fault-isolated APScheduler bots continuously refresh city data in the background."
         ],
         "features": [
           "Agentic Query Router dynamically selecting between SQL, live city caches, and vector search",
@@ -162,6 +165,7 @@
         ]
       },
       "aiDreamInterpreter": {
+        "gallerySummary": "Keeps a dream journal and uses AI interpretations to help explore symbols and recurring themes.",
         "title": "AI Dream Interpreter — Psychological Dream Analytics",
         "tagline": "A psychological dream journaling and analysis platform grounded in Jungian archetypes and Freudian symbolism, powered by Gemini + Groq failover orchestration and symbol RAG.",
         "period": "2025",
@@ -212,6 +216,7 @@
         ]
       },
       "kayipQR": {
+        "gallerySummary": "Connects finders and owners through QR tags while keeping personal phone numbers private.",
         "title": "KayıpQR — Privacy-First Smart QR Tag Platform",
         "tagline": "Recover your belongings while keeping your phone number private. Customizable QR tags and accountless anonymous messaging between finders and owners.",
         "period": "2025",
@@ -262,6 +267,7 @@
         ]
       },
       "weDo": {
+        "gallerySummary": "Collects ideas from different apps in a shared space so couples and friends can plan together.",
         "title": "WeDo — Shared Ideas, Lists & Decision App",
         "tagline": "Save what inspires you. Decide together. Make it happen. A mobile-first collaborative app for couples and friends to capture links from any app and turn them into real plans.",
         "period": "2025",
@@ -311,62 +317,118 @@
           "SSRF-protected metadata fetcher, Argon2 + rotating refresh tokens, and full Docker Compose setup"
         ]
       },
-      "visualAI": {
-        "title": "Real-Time Visual Understanding — 100% Local Vision AI",
-        "tagline": "A privacy-first multimodal computer vision system that streams live webcam frames over WebSockets to a locally hosted Ollama LLaVA model for real-time natural language narration.",
-        "period": "2024",
-        "category": "Computer Vision • Local Multimodal AI",
-        "image": "/projects/visual-ai.png",
-        "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding",
+      "askDocs": {
+        "title": "AskDocs — Document Assistant with Source Citations",
+        "gallerySummary": "Finds answers in your documents and lets you inspect the source page behind each response.",
+        "tagline": "A RAG application that indexes PDFs and text in separate workspaces, with document-scoped search and source-cited chat.",
+        "period": "2026",
+        "category": "AI Systems • Document RAG • Backend",
+        "image": "/projects/askdocs.png",
+        "github": "https://github.com/DuranGZR/AskDocs",
         "demo": "",
         "tags": [
-          "Python 3.11+",
+          "Python",
+          "Rust / PyO3",
           "FastAPI",
-          "Ollama",
-          "LLaVA 7B (Mistral q4_0)",
-          "WebSockets",
-          "OpenCV",
-          "React"
+          "Celery",
+          "Redis",
+          "Qdrant",
+          "PyMuPDF",
+          "HuggingFace TEI",
+          "BAAI/bge-m3",
+          "Gemini",
+          "Langfuse"
         ],
         "highlights": [
           {
-            "label": "EXECUTION MODE",
-            "value": "100% Local GPU — Zero Cloud & Zero API Cost"
+            "label": "INGESTION",
+            "value": "Background indexing with Celery"
           },
           {
-            "label": "STREAMING LAYER",
-            "value": "Bi-Directional Low-Latency WebSocket Pipeline"
+            "label": "SOURCE INSPECTION",
+            "value": "Page and passage-level citations"
           },
           {
-            "label": "VISION MODEL",
-            "value": "LLaVA 7B v1.6 Mistral (4-bit Quantized)"
+            "label": "EMBEDDINGS",
+            "value": "Local TEI / BAAI/bge-m3"
           }
         ],
-        "overview": "Cloud-based vision APIs introduce privacy concerns, per-request costs, and strict rate limits when analyzing continuous camera feeds. Real-Time Visual Understanding runs 100% locally on consumer GPUs so camera frames never leave the user's machine.\n\nLive webcam frames captured in the browser are streamed over a persistent WebSocket connection to a FastAPI backend, processed by a 4-bit quantized LLaVA-7B vision-language model served via Ollama, and returned as live natural-language scene descriptions.",
+        "overview": "Built to make document answers easier to verify against their sources. Users upload PDFs and text files into separate workspaces, scope retrieval to selected files, and ask questions in natural language.\n\nIngestion and chat use separate paths: background workers handle indexing while answers stream with citation markers. A source inspector lets users compare responses against the relevant page and passage.",
         "architectureSteps": [
-          "Browser Frame Capture (React): Captures live webcam frames at controlled intervals and encodes lightweight Base64 payloads on the client.",
-          "Persistent WebSocket Transport: Streams frames over a full-duplex WebSocket channel between React and FastAPI, avoiding repetitive HTTP connection overhead.",
-          "FastAPI Frame Processor & Ollama Bridge: Validates incoming frames, manages backpressure, and dispatches multimodal prompts to the local Ollama runtime (localhost:11434).",
-          "Quantized Local GPU Inference: Runs llava:7b-v1.6-mistral-q4_0 efficiently on GPUs with 4GB+ VRAM, streaming scene narrations straight back to the UI."
+          "FastAPI validates uploaded files and queues indexing jobs with Celery.",
+          "PyMuPDF extracts page text; a Rust/PyO3 component cleans and chunks it.",
+          "Local HuggingFace TEI embeds document chunks; Qdrant filters retrieval by workspace and selected documents.",
+          "Retrieved passages become chat context. Answers stream over SSE with citations linked to the source inspector."
         ],
         "features": [
-          "100% offline-capable local inference—camera footage never leaves your device",
-          "Unlimited continuous scene analysis with zero API fees and zero rate limits",
-          "Low-latency full-duplex WebSocket frame streaming and live response updates",
-          "Optimized 4-bit quantized LLaVA-7B Mistral model running smoothly on consumer GPUs",
-          "Clean, responsive web interface supporting both desktop and mobile browsers"
+          "Workspace isolation and selected-document retrieval",
+          "Background indexing for PDFs and text files",
+          "Streaming Markdown responses with clickable citations",
+          "Source pages, similarity scores, and matched passages",
+          "Separate configuration for embedding and chat services",
+          "Circuit breakers, rate limiting, and Langfuse tracing integrations"
+        ]
+      },
+      "noktiq": {
+        "title": "Noktiq — Visual Feedback for AI Coding Agents",
+        "gallerySummary": "Selects the UI element you want changed and carries your note and source context into your coding agent.",
+        "tagline": "A React and Vue developer tool for selecting UI elements, keeping local notes, and copying change requests with source context.",
+        "period": "2026",
+        "category": "Developer Tools • AI Workflow • Frontend",
+        "image": "/projects/noktiq.png",
+        "github": "https://github.com/DuranGZR/Noktiq",
+        "demo": "",
+        "tags": [
+          "TypeScript",
+          "React",
+          "Vue",
+          "Vite",
+          "Next.js",
+          "Nuxt",
+          "Webpack",
+          "Turbopack",
+          "Browser APIs"
+        ],
+        "highlights": [
+          {
+            "label": "WORKFLOW",
+            "value": "Point. Note. Paste."
+          },
+          {
+            "label": "SOURCE CONTEXT",
+            "value": "File, line, and column when available"
+          },
+          {
+            "label": "DISTRIBUTION",
+            "value": "npm • PolyForm Shield 1.0.0"
+          }
+        ],
+        "overview": "Built around the difficulty of explaining which UI element a coding agent should change. Noktiq lets users point at the target and attach the requested change to that element.\n\nWhen available, it captures the source file and location alongside selectors, visible text, and element context in one copyable request. Paste the request into Codex, Claude Code, or another coding agent. Noktiq does not edit code itself and requires no AI API key.",
+        "architectureSteps": [
+          "A React or Vue component mounts the toolbar in development. Build integrations attach source locations where supported.",
+          "Users select an element, text, multiple elements, or an area and add notes with numbered pins.",
+          "Notes stay in browser storage. Target status and rebinding help maintain feedback as the page changes.",
+          "Copy one or all notes at different detail levels and hand them to an existing coding agent."
+        ],
+        "features": [
+          "Shared selection and note workflow for React and Vue",
+          "Source context integrations for Vite, Next.js, and Nuxt",
+          "Element, text, multi-element, and area selection",
+          "Copyable requests with source locations, selectors, and context",
+          "Local, route-aware notes with target rebinding",
+          "Keyboard controls and reduced-motion support"
         ]
       }
     }
   },
   "skills": {
-    "badge": "MY CAPABILITIES",
+    "badge": "My capabilities",
     "title": "What I Can Do",
     "subtitle": "I combine artificial intelligence, deep learning, and modern software engineering to build reliable, intelligent, and scalable digital systems.",
     "bento": {
       "card1": {
         "number": "01",
-        "category": "AI, VISION &\nDEEP LEARNING",
+        "category": "AI, vision & deep learning",
         "title": "AI, Computer Vision & Deep Learning",
         "description": "Developing real-time webcam visual understanding, deep learning models (CNN/MLP), multimodal LLMs (LLaVA), and pgvector-backed RAG architectures.",
         "tags": [
@@ -382,27 +444,31 @@
           "Ollama / LLaVA",
           "pgvector"
         ],
-        "image": "/images/gif/coding.gif"
+        "image": "/images/gif/rag-flow-dark.gif",
+        "lightImage": "/images/gif/rag-flow-light.gif",
+        "poster": "/images/gif/rag-flow-dark.png",
+        "lightPoster": "/images/gif/rag-flow-light.png"
       },
       "card2": {
         "number": "02",
-        "category": "BACKEND, SYSTEMS &\nPROGRAMMING",
+        "category": "Backend, systems & programming",
         "title": "Backend, Systems & Programming Languages",
-        "description": "Architecting high-performance FastAPI microservices, object-oriented systems (Java, C#, C++), SQL databases, and Docker pipelines that productionize intelligent solutions.",
+        "description": "Architecting high-performance FastAPI microservices, object-oriented systems (Java, C#), SQL databases, and Docker pipelines that productionize intelligent solutions.",
         "tags": [
           "FastAPI",
           "Java",
           "C#",
-          "C / C++",
           "SQL",
           "PostgreSQL",
           "Docker",
           "Git & GitHub",
           "Feature Engineering",
-          "Data Analysis",
-          "Kotlin"
+          "Data Analysis"
         ],
-        "image": "/images/gif/assistant.gif"
+        "image": "/images/gif/backend-flow-dark.gif",
+        "lightImage": "/images/gif/backend-flow-light.gif",
+        "poster": "/images/gif/backend-flow-dark.png",
+        "lightPoster": "/images/gif/backend-flow-light.png"
       }
     },
     "techColumns": [
@@ -456,16 +522,8 @@
           "icon": "/images/skills/csharp.svg"
         },
         {
-          "name": "C / C++",
-          "icon": "/images/skills/cplusplus.svg"
-        },
-        {
           "name": "SQL",
           "icon": "/images/skills/sql.svg"
-        },
-        {
-          "name": "Kotlin",
-          "icon": "/images/skills/kotlin.svg"
         }
       ],
       [
@@ -498,12 +556,15 @@
       "graduation": "Computer Eng.",
       "codeLines": "Lines of Code",
       "learningHrs": "Hours of Practice"
+    },
+    "tabs": {
+      "ai": "AI & Vision",
+      "backend": "Backend & Systems"
     }
   },
   "experience": {
     "badge": "Background",
     "title": "Education, Certifications & Activities",
-    "subtitle": "The journey that shaped my engineering vision.",
     "categories": {
       "education": "Education",
       "certifications": "Certifications",
@@ -513,8 +574,9 @@
       "degree": {
         "title": "B.S. Computer Engineering",
         "organization": "İnönü University",
-        "period": "2022 - 2026",
-        "description": "Focus on Artificial Intelligence and Machine Learning. GPA: 2.84/4.0"
+        "period": "2022 - 2027",
+        "description": "Focus on Artificial Intelligence and Machine Learning. GPA: 2.87/4.0",
+        "gpa": "2.87 / 4.0"
       },
       "mlCamp": {
         "title": "Machine Learning Camp",
@@ -662,7 +724,7 @@
         ]
       },
       "6months": {
-        "period": "2026 - Graduation",
+        "period": "2027 - Graduation",
         "title": "Career Start",
         "goals": [
           "Earning my Computer Engineering degree",
@@ -694,9 +756,9 @@
     }
   },
   "aiAssistant": {
-    "badge": "Online Assistant",
+    "badge": "AI assistant",
     "title": "Ask My AI Assistant",
-    "subtitle": "I'm building an AI that knows me better than my résumé does. Ask it anything about my work, thinking, or approach to problems.",
+    "subtitle": "An assistant that uses my knowledge base to answer questions about my projects, experience, and engineering approach. Ask what you’d like to know.",
     "chatHeader": {
       "title": "AI Assistant",
       "poweredBy": "Powered by my knowledge base"
@@ -710,34 +772,38 @@
       "q4": "Walk me through your engineering process"
     },
     "inDevelopment": "In Development",
-    "inDevelopmentDesc": "Training on my projects, writing samples, and engineering philosophy",
+    "inDevelopmentDesc": "Its knowledge base is being prepared from my projects, writing samples, and engineering approach",
     "inputPlaceholder": "Ask me anything...",
     "sendButton": "Send",
     "features": {
       "realtime": {
-        "title": "Real-time Responses",
-        "desc": "Instant answers about my projects and experience"
+        "title": "Portfolio answers",
+        "desc": "Concise answers with links to my projects and experience"
       },
       "context": {
         "title": "Context-Aware",
         "desc": "Understands follow-up questions and maintains conversation flow"
       },
       "learning": {
-        "title": "Always Learning",
-        "desc": "Updates as I complete new projects and gain experience"
+        "title": "Updated with new projects",
+        "desc": "I add new project and experience information to its knowledge base."
       }
     },
     "notifyQuestion": "Want to be notified when the AI assistant launches?",
-    "notifyButton": "Notify Me"
+    "notifyButton": "Notify Me",
+    "serviceStatus": {
+      "checking": "Checking service",
+      "available": "Service reachable",
+      "unavailable": "Service unreachable"
+    }
   },
   "footer": {
-    "tagline": "AI Engineer in Training. Building systems that solve real problems, not just adding lines to a résumé.",
+    "tagline": "I build AI systems, backend services, and mobile applications.",
     "quickLinks": "Quick Links",
     "getInTouch": "Get In Touch",
     "getInTouchDesc": "Open to junior AI engineer roles and interesting problems to solve.",
     "sendMessage": "Send a Message",
-    "builtWith": "Built with",
-    "copyright": "This portfolio is a living system—always evolving."
+    "builtWith": "Built with"
   },
   "contact": {
     "title": "Get In Touch",
@@ -791,12 +857,20 @@
       "subtitle": "My academic journey",
       "items": {
         "0": {
-          "title": "Computer Engineering",
-          "description": "Bachelor's degree focused on AI and software development."
+          "title": "B.S. Computer Engineering",
+          "description": "İnönü University · 2022 - 2027 · Focus on Artificial Intelligence and Machine Learning. GPA: 2.87/4.0"
         },
         "1": {
-          "title": "Online Certifications",
-          "description": "AI/ML certifications from Coursera, Udacity, and other platforms."
+          "title": "Machine Learning Camp",
+          "description": "Miuul · 2024 · Comprehensive machine learning bootcamp program"
+        },
+        "2": {
+          "title": "Feature Engineering",
+          "description": "Miuul · 2024 · Feature engineering and data preprocessing techniques"
+        },
+        "3": {
+          "title": "Python Programming for Data Science",
+          "description": "Miuul · 2024 · Python programming for data science"
         }
       }
     },
@@ -805,20 +879,36 @@
       "subtitle": "My professional and community experiences",
       "items": {
         "0": {
-          "title": "DevOps Developer - HSD İNÖNÜ",
-          "description": "Oct 2025 - Present • CI/CD, Docker, GitHub Actions, server management"
+          "title": "DevOps Developer",
+          "description": "HSD İNÖNÜ · Oct 2025 - Present · Building CI/CD pipelines for community projects, Docker container management, automation with GitHub Actions, and server administration. Implementing DevOps culture and best practices."
         },
         "1": {
-          "title": "Organization President - Cyber Security Community",
-          "description": "Nov 2024 - Sep 2025 • 11 months leadership, event organization, team management"
+          "title": "Organization President",
+          "description": "İnönü University Cyber Security Community · Nov 2024 - Sep 2025 · During 11-month tenure: planning community events, organizing training programs, team management, and raising cybersecurity awareness. Developing leadership and organizational skills."
         },
         "2": {
-          "title": "Machine Learning Certifications",
-          "description": "Miuul • 2024 • ML algorithms, Feature Engineering, Python for Data Science"
+          "title": "Machine Learning Camp",
+          "description": "Miuul · 2024 · Comprehensive machine learning bootcamp program"
         },
         "3": {
+          "title": "Feature Engineering",
+          "description": "Miuul · 2024 · Feature engineering and data preprocessing techniques"
+        },
+        "4": {
+          "title": "Machine Learning",
+          "description": "Miuul · 2024 · Machine learning algorithms and applications"
+        },
+        "5": {
+          "title": "Python Programming for Data Science",
+          "description": "Miuul · 2024 · Python programming for data science"
+        },
+        "6": {
+          "title": "C# Programming",
+          "description": "Udemy · 2024 · Comprehensive C# programming course for all levels"
+        },
+        "7": {
           "title": "Cloud Night",
-          "description": "HSD İnönü - Huawei • 2025 • Cloud technologies training"
+          "description": "HSD İnönü - Huawei · 2025 · Cloud technologies and Huawei Cloud training"
         }
       }
     },
@@ -827,20 +917,12 @@
       "subtitle": "My technical skills",
       "items": {
         "0": {
-          "title": "Programming Languages",
-          "description": "Python, JavaScript, SQL, C++, C#, C, Kotlin, Java"
+          "title": "AI, Computer Vision & Deep Learning",
+          "description": "Developing real-time webcam visual understanding, deep learning models (CNN/MLP), multimodal LLMs (LLaVA), and pgvector-backed RAG architectures. Python, TensorFlow / Keras, PyTorch, Scikit-learn, NumPy / Pandas, OpenCV, Computer Vision, NLP, Deep Learning, Ollama / LLaVA, pgvector"
         },
         "1": {
-          "title": "AI/ML Frameworks",
-          "description": "TensorFlow, PyTorch, Scikit-learn, Hugging Face"
-        },
-        "2": {
-          "title": "Web Technologies",
-          "description": "React, Next.js, FastAPI, Tailwind CSS"
-        },
-        "3": {
-          "title": "Tools",
-          "description": "Git, Docker, VS Code"
+          "title": "Backend, Systems & Programming Languages",
+          "description": "Architecting high-performance FastAPI microservices, object-oriented systems (Java, C#), SQL databases, and Docker pipelines that productionize intelligent solutions. FastAPI, Java, C#, SQL, PostgreSQL, Docker, Git & GitHub, Feature Engineering, Data Analysis"
         }
       }
     },
@@ -849,24 +931,28 @@
       "subtitle": "Featured AI, Backend, and Mobile projects",
       "items": {
         "0": {
-          "title": "AliağaAI — Smart City Guide",
-          "description": "Hybrid RAG smart city assistant built with Next.js, FastAPI, and PostgreSQL + pgvector."
+          "title": "AliağaAI — Smart City Guide & Grounded RAG Assistant",
+          "description": "Brings scattered local information about Aliağa into one city assistant that cites its sources."
         },
         "1": {
-          "title": "AI Dream Interpreter",
-          "description": "Voice & text mobile app built with React Native (Expo), FastAPI, and Groq LLM."
+          "title": "AI Dream Interpreter — Psychological Dream Analytics",
+          "description": "Keeps a dream journal and uses AI interpretations to help explore symbols and recurring themes."
         },
         "2": {
-          "title": "Lost & Found QR System (KayipQR)",
-          "description": "Privacy-first QR recovery platform with Next.js, TypeScript, Prisma, and PostgreSQL."
+          "title": "KayıpQR — Privacy-First Smart QR Tag Platform",
+          "description": "Connects finders and owners through QR tags while keeping personal phone numbers private."
         },
         "3": {
-          "title": "WeDo — Shared Tasks & Shopping",
-          "description": "Real-time Android app built with Jetpack Compose (Kotlin), FastAPI, and WebSockets."
+          "title": "WeDo — Shared Ideas, Lists & Decision App",
+          "description": "Collects ideas from different apps in a shared space so couples and friends can plan together."
         },
         "4": {
-          "title": "Real-Time Visual Understanding AI",
-          "description": "100% local real-time webcam scene analysis powered by Python, OpenCV, and Ollama LLaVA."
+          "title": "AskDocs — Document Assistant with Source Citations",
+          "description": "Finds answers in your documents and lets you inspect the source page behind each response."
+        },
+        "5": {
+          "title": "Noktiq — Visual Feedback for AI Coding Agents",
+          "description": "Selects the UI element you want changed and carries your note and source context into your coding agent."
         }
       }
     }

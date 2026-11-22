@@ -521,7 +521,7 @@ function DetailModal({
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] portfolio-light:text-ink leading-snug">
+                    <h3 className="text-lg sm:text-xl font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink leading-snug">
                       {t(`${prefix}.${item.key}.title`)}
                     </h3>
                     {!item.isCourse && (
@@ -549,7 +549,7 @@ function DetailModal({
               {/* Learnings list */}
               {details && details.length > 0 && (
                 <div>
-                  <h4 className="text-xs font-mono font-semibold text-[#819fa7] portfolio-light:text-ink-accent uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <h4 className="text-xs font-mono font-medium text-[#819fa7] portfolio-light:text-ink-accent normal-case tracking-normal mb-3 flex items-center gap-2">
                     <Sparkles className="w-3.5 h-3.5 text-white/60 portfolio-light:text-ink-muted" />
                     {t('modal.learned')}
                   </h4>
@@ -611,22 +611,16 @@ export default function Experience() {
 
   return (
     <section id="experience" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto">
-      {/* Koyu degrade arka plan (Monokrom) */}
-      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
-
       <div className="relative z-10 max-w-[1100px] w-full mx-auto md:my-auto">
         {/* Section Header */}
         <SectionReveal delay={0}>
           <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
-            <div className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-1.5 sm:mb-2">
+            <div className="font-mono text-xs sm:text-xs font-medium tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case mb-1.5 sm:mb-2">
               {t('badge')}
             </div>
-            <h2 className="text-2xl sm:text-4xl md:text-[52px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.1] mb-2 sm:mb-3">
+            <h2 className="text-2xl sm:text-4xl md:text-[52px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.1] mb-2 sm:mb-3">
               {t('title')}
             </h2>
-            <p className="text-xs sm:text-[15px] leading-relaxed sm:leading-[1.8] text-white/60 portfolio-light:text-ink-muted">
-              {t('subtitle')}
-            </p>
           </div>
         </SectionReveal>
 
@@ -689,10 +683,10 @@ export default function Experience() {
             >
               {/* Sol: Lisans Derecesi & Bilgiler */}
               <div className="flex-1 max-w-xl w-full">
-                <div className="font-mono text-[11px] font-semibold text-[#819fa7] portfolio-light:text-ink-accent tracking-[0.2em] uppercase mb-1.5 sm:mb-2">
+                <div className="font-mono text-xs font-medium text-[#819fa7] portfolio-light:text-ink-accent tracking-normal normal-case mb-1.5 sm:mb-2">
                   {t('categories.education')}
                 </div>
-                <h3 className="text-xl sm:text-3xl font-display font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight mb-2">
+                <h3 className="text-xl sm:text-3xl font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight mb-2">
                   {t('items.degree.title')}
                 </h3>
 
@@ -708,7 +702,7 @@ export default function Experience() {
                   </span>
                   <span className="text-white/20 portfolio-light:text-ink-muted">•</span>
                   <span className="font-mono text-[11px] sm:text-xs font-semibold text-white/90 portfolio-light:text-ink px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 portfolio-light:bg-paper-tint border border-white/15 portfolio-light:border-paper-line">
-                    GPA: 2.84 / 4.0
+                    GPA: {t('items.degree.gpa')}
                   </span>
                 </div>
 
@@ -719,7 +713,7 @@ export default function Experience() {
 
               {/* Sağ: 10 Üniversite Dersi (Çipler - Mobil 2 Sütun Grid) */}
               <div className="w-full lg:w-[480px] shrink-0 pt-2 sm:pt-0">
-                <div className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase mb-3 flex items-center justify-between">
+                <div className="font-mono text-xs font-medium text-white/40 portfolio-light:text-ink-muted tracking-normal normal-case mb-3 flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <BookOpen className="w-3.5 h-3.5 text-[#819fa7] portfolio-light:text-ink-accent" />
                     {t('coursesTitle')}
@@ -734,11 +728,11 @@ export default function Experience() {
                       <button
                         key={course.key}
                         onClick={() => setSelectedItem(course)}
-                        className="px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#141414] portfolio-light:bg-paper-raised hover:bg-white/10 portfolio-light:hover:bg-paper-selected border border-white/10 portfolio-light:border-paper-line hover:border-white/25 portfolio-light:hover:border-paper-line-strong transition-all text-left flex items-center justify-between gap-1.5 sm:gap-2.5 group/chip cursor-pointer w-full sm:w-auto"
+                        className="min-h-12 px-2.5 py-2 sm:px-3.5 sm:py-2.5 rounded-xl bg-[#141414] portfolio-light:bg-paper-raised hover:bg-white/10 portfolio-light:hover:bg-paper-selected border border-white/10 portfolio-light:border-paper-line hover:border-white/25 portfolio-light:hover:border-paper-line-strong transition-all text-left flex items-center justify-between gap-1.5 sm:gap-2.5 group/chip cursor-pointer w-full sm:w-auto"
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <CourseIcon className="w-3.5 h-3.5 text-[#819fa7] portfolio-light:text-ink-accent group-hover/chip:text-white portfolio-light:group-hover/chip:text-ink transition-colors shrink-0" />
-                          <span className="text-[11.5px] sm:text-xs font-medium text-white/80 portfolio-light:text-ink-muted group-hover/chip:text-white portfolio-light:group-hover/chip:text-ink truncate">
+                          <span className="text-[13px] sm:text-xs font-medium leading-5 text-white/80 portfolio-light:text-ink-muted group-hover/chip:text-white portfolio-light:group-hover/chip:text-ink whitespace-normal break-words">
                             {t(`courses.${course.key}.title`)}
                           </span>
                         </div>
@@ -771,12 +765,12 @@ export default function Experience() {
                   >
                     <div>
                       {/* Üst Kategori Etiketi */}
-                      <div className="font-mono text-[11px] font-semibold text-[#819fa7] portfolio-light:text-ink-accent tracking-[0.2em] uppercase mb-1.5 sm:mb-2">
+                      <div className="font-mono text-xs font-medium text-[#819fa7] portfolio-light:text-ink-accent tracking-normal normal-case mb-1.5 sm:mb-2">
                         {t(`items.${role.key}.organization`)}
                       </div>
 
                       {/* Başlık */}
-                      <h3 className="text-xl sm:text-3xl font-display font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight mb-2">
+                      <h3 className="text-xl sm:text-3xl font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight mb-2">
                         {t(`items.${role.key}.title`)}
                       </h3>
 
@@ -790,7 +784,6 @@ export default function Experience() {
                         <span className="font-mono text-xs text-white/50 portfolio-light:text-ink-muted flex items-center">
                           {isLive && (
                             <span className="relative flex h-2 w-2 mr-2">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white portfolio-light:bg-ink-accent opacity-40" />
                               <span className="relative inline-flex rounded-full h-2 w-2 bg-white/80 portfolio-light:bg-ink-accent" />
                             </span>
                           )}

@@ -7,8 +7,8 @@ export const fileSystem: FileSystemEntry = {
 ╚═══════════════════════════════════════════════════╝\r
 \r
 STATUS: 4th Year Computer Engineering Student\r
-UNIVERSITY: İnönü University (2022 - 2026)\r
-GPA: 2.84/4.0\r
+UNIVERSITY: İnönü University (2022 - 2027)\r
+GPA: 2.87/4.0\r
 LOCATION: İzmir, Turkey\r
 FOCUS: AI/ML Engineering, Full-Stack Development\r
 \r

@@ -510,36 +510,6 @@ section[id] {
   display: none;
 }
 
-html:has([data-portfolio-page]) {
-  --portfolio-glow: #242627;
-  --portfolio-footer-glow: #181a1b;
-  --hero-glow-top: #292b2d;
-  --hero-glow-bottom: #252729;
-  --hero-ground: var(--bg-primary);
-}
-
-html[data-hero-theme='light']:has([data-portfolio-page]) {
-  --portfolio-glow: #dde1df;
-  --portfolio-footer-glow: #e8eae7;
-  --hero-glow-top: #d6dcdb;
-  --hero-glow-bottom: #d9dedc;
-  --hero-ground: var(--color-paper);
-}
-
-html:has([data-portfolio-page]) .portfolio-section-backdrop {
-  background-image: radial-gradient(ellipse 80% 65% at var(--section-glow-origin, 18% 21%), var(--portfolio-glow), transparent 76%);
-  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent);
-}
-
-html:has([data-portfolio-page]) :is(#projects, #experience, #ai-assistant) .portfolio-section-backdrop {
-  --section-glow-origin: 86% 79%;
-}
-
-html:has([data-portfolio-page]) footer .portfolio-section-backdrop {
-  background-image: linear-gradient(180deg, transparent, var(--portfolio-footer-glow));
-  mask-image: none;
-}
-
 html[data-hero-theme='light']:has([data-portfolio-page]) #about {
   --about-card-raised: var(--color-paper-raised);
   --about-card-tint: var(--color-paper-tint);
@@ -599,20 +569,13 @@ html[data-hero-theme='light']:has([data-portfolio-page]) #about .text-gradient {
   background-color: var(--color-paper);
 }
 
-#hero .hero-background {
-  background-image:
-    linear-gradient(180deg, transparent 84%, var(--hero-ground)),
-    radial-gradient(ellipse 57% 51% at 0% 7%, var(--hero-glow-top), transparent),
-    radial-gradient(ellipse 53% 47% at 100% 86%, var(--hero-glow-bottom), transparent);
+#hero .btn-primary {
+  background: var(--accent-dark);
+  box-shadow: none;
 }
 
-[data-hero-theme='light'] #hero .hero-mesh {
-  opacity: 0.5;
-}
-
-[data-hero-theme='light'] #hero .hero-network canvas {
-  filter: brightness(0.68) saturate(1.2);
-  mask-image: radial-gradient(ellipse at 50% 44%, rgb(0 0 0 / 42%), #000 68%);
+#hero .btn-primary::before {
+  display: none;
 }
 
 html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod {
@@ -632,14 +595,13 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
   filter: drop-shadow(0 5px 7px rgb(43 69 77 / 22%));
 }
 
-[data-hero-theme='light'] #hero .text-gradient {
-  background-image: linear-gradient(118deg, #152024 10%, #32474d 52%, #54727b 100%);
-  filter: drop-shadow(0 1px 0 #fcfcf7) drop-shadow(0 8px 20px rgb(56 83 91 / 18%));
+[data-hero-theme='light'] #hero .hero-name {
+  color: var(--color-ink);
 }
 
 [data-hero-theme='light'] #hero .hero-divider {
   width: 6rem;
-  background-image: linear-gradient(90deg, transparent, var(--accent-dark), transparent);
+  background: var(--color-paper-line-strong);
 }
 
 [data-hero-theme='light'] #hero .hero-description {
@@ -653,13 +615,9 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
 }
 
 [data-hero-theme='light'] #hero .btn-primary {
-  background-image: var(--light-action-gradient);
+  background: var(--color-ink-accent);
   color: var(--color-paper-raised);
-  box-shadow: 0 10px 22px -12px rgb(45 75 83 / 52%);
-}
-
-[data-hero-theme='light'] #hero .btn-primary::before {
-  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 4%), transparent);
+  box-shadow: none;
 }
 
 [data-hero-theme='light'] #hero .btn-secondary:hover {
@@ -667,10 +625,6 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  #hero :is(.hero-background, .hero-network) {
-    animation: hero-atmosphere-in 900ms ease-out backwards;
-  }
-
   #hero:not([data-hero-intro]) .hero-name {
     animation: hero-name-in 850ms cubic-bezier(.22, 1, .36, 1) 60ms backwards;
   }
@@ -700,11 +654,6 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
   }
 }
 
-@keyframes hero-atmosphere-in {
-  from { opacity: 0.4; }
-  to { opacity: 1; }
-}
-
 @keyframes hero-name-in {
   from { opacity: 0; transform: translateY(28px); clip-path: inset(85% -10% -40%); }
   to { opacity: 1; transform: translateY(0); clip-path: inset(-45% -10% -45%); }
@@ -725,18 +674,6 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
   --hero-sheen-color: #819397;
 }
 
-.hero-title-light {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  color: transparent;
-  background: var(--hero-sheen-color);
-  background-clip: text;
-  mask: linear-gradient(105deg, transparent 8%, #000 50%, transparent 92%) no-repeat;
-  mask-size: 48% 100%;
-}
-
 .hero-visor-opening {
   position: absolute;
   inset: 0;
@@ -745,19 +682,32 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
   place-items: center;
   pointer-events: none;
   opacity: 0;
-  background: radial-gradient(ellipse at 50% 47%, #142b36 0%, #0a151c 36%, #060b0f 76%);
+  background: var(--bg-primary);
+}
+
+[data-hero-theme='light'] .hero-visor-opening {
+  background: var(--color-paper);
 }
 
 .hero-visor-eye-pair {
   width: clamp(138px, 22vw, 248px);
-  color: #d6f3fc;
+  color: #a5afb2;
 }
 
-.hero-visor-eye-pair svg {
+[data-hero-theme='light'] .hero-visor-eye-pair {
+  color: var(--color-ink-muted);
+}
+
+.hero-visor-eye-pair pre {
   display: block;
-  width: 100%;
+  width: max-content;
+  margin: 0 auto;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-variant-ligatures: none;
+  font-size: clamp(7px, 1.05vw, 12px);
+  line-height: 1;
+  letter-spacing: 0;
   overflow: visible;
-  filter: drop-shadow(0 0 9px #77c8e6) drop-shadow(0 0 23px #4486a3);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -765,7 +715,7 @@ html[data-hero-theme='light']:has([data-portfolio-page]) .visor-pod-art {
     display: grid;
   }
 
-  .hero-visor-eye-pair svg {
+  .hero-visor-eye-pair pre {
     animation: hero-visor-blink 680ms linear both;
   }
 
@@ -942,10 +892,6 @@ html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] f
 
 html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] :is(.chat-accent-surface, .chat-user-bubble) {
   backdrop-filter: none;
-}
-
-html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-stage-glow {
-  display: none;
 }
 
 html[data-hero-theme='light']:has([data-portfolio-page]) [data-portfolio-chat] .chat-greeting button {

@@ -25,12 +25,17 @@
     "subtitle": "AI Systems • Backend • DevOps",
     "location": "İzmir, Türkiye",
     "cta": {
-      "primary": "Projelerimi Keşfet",
-      "secondary": "AI Asistanımla Konuş",
+      "primary": "Projeleri incele",
+      "secondary": "CV’yi görüntüle",
       "3dresume": "3D CV'mi Keşfet"
     },
     "scrollHint": "Daha fazlasını keşfet",
-    "status": "İş fırsatlarına açık"
+    "status": "İş fırsatlarına açık",
+    "socialLinks": {
+      "github": "Duran Gezer’in GitHub profili (yeni sekmede açılır)",
+      "linkedin": "Duran Gezer’in LinkedIn profili (yeni sekmede açılır)",
+      "email": "Duran Gezer’e e-posta gönder"
+    }
   },
   "about": {
     "title": "Hakkımda",
@@ -60,23 +65,23 @@
     "quote": "Öğrenmek bir yolculuk, her proje yeni bir keşif.",
     "status": {
       "available": "İş Fırsatlarına Açık",
-      "graduating": "Mezuniyet: 2026"
+      "graduating": "Mezuniyet: 2027"
     },
-    "badge": "HAKKIMDA",
+    "badge": "Hakkımda",
     "headline": "Öğrenen, Deneyen, Üreten.",
     "name": "DURAN GEZER",
     "stats": {
-      "projectsLabel": "PROJELER",
+      "projectsLabel": "Projeler",
       "projectsValue": "20+",
-      "certsLabel": "SERTİFİKALAR",
-      "certsValue": "9",
-      "gradLabel": "BİLGİSAYAR MÜH.",
-      "gradValue": "2026"
+      "certsLabel": "Listelenen sertifikalar",
+      "certsValue": "6",
+      "gradLabel": "Bilgisayar müh.",
+      "gradValue": "2027"
     },
     "resumeCta": "Deneyimlerim hakkında daha fazlasını öğrenmek ister misiniz?",
     "resumeLink": "CV'mi inceleyin",
     "currently": {
-      "title": "ŞU ANDA",
+      "title": "Şu anda",
       "buildingLabel": "Geliştiriyor",
       "buildingDesc": "Web & Yapay Zeka Projeleri",
       "exploringLabel": "Keşfediyor",
@@ -85,15 +90,12 @@
       "learningDesc": "Derin Öğrenme & Ajanlar"
     },
     "traits": {
-      "label": "ÖZELLİK",
+      "label": "Projeden kararlar",
+      "next": "Sonraki proje örneğini göster",
       "items": [
-        "Problem Çözücü",
-        "Detay Odaklı",
-        "Güvenilir",
-        "Sürekli Öğrenen",
-        "Kullanıcı Odaklı",
-        "Analitik Düşünce",
-        "Geri Bildirime Açık"
+        "AliağaAI: Yanıttan yerel kaynağa erişim",
+        "KayıpQR: İletişim bilgisi paylaşmadan mesajlaşma",
+        "AskDocs: Belge işleme sohbeti bekletmesin"
       ]
     }
   },
@@ -112,8 +114,9 @@
     "architecture": "Mimari & Çalışma Mantığı",
     "items": {
       "aliagaAI": {
+        "gallerySummary": "Aliağa’daki dağınık yerel bilgileri, kaynak gösteren tek bir şehir asistanında bir araya getiriyor.",
         "title": "AliağaAI — Akıllı Şehir Rehberi & RAG Asistanı",
-        "tagline": "Aliağa ilçesine özel doğrulanmış verilerle çalışan; React Native mobil arayüzü ve çok aşamalı hibrit RAG (FastAPI + pgvector + FTS) mimarisini birleştiren halüsinasyonsuz akıllı şehir asistanı.",
+        "tagline": "Yerel kaynaklara dayanan, yanıtlarında kaynak gösteren RAG asistanı. React Native mobil arayüzüyle Aliağa’daki şehir bilgilerine erişim sunar.",
         "period": "2025",
         "category": "AI Systems • Hybrid RAG • Mobile",
         "image": "/projects/aliagaai.png",
@@ -141,16 +144,16 @@
             "value": "9 İzole Asenkron Veri Botu (APScheduler)"
           },
           {
-            "label": "GÜVENİLİRLİK",
-            "value": "Sıfır Halüsinasyon & [S1]/[S2] Kaynak Atıfı"
+            "label": "KAYNAK ATIFLARI",
+            "value": "Yanıtlarda tıklanabilir [S1]/[S2] kaynak bağlantıları"
           }
         ],
-        "overview": "Genel arama motorlarının ilçe bazlı yerel veriye (nöbetçi eczane, İZBAN saatleri, su/elektrik kesintileri, belediye duyuruları ve yerel rehber) ulaşmadaki dağınıklığını ve reklam odaklı yapısını çözmek için geliştirildi.\n\nAliağaAI; yalnızca doğrulanmış yerel veri kaynaklarına dayanan (grounded) çok aşamalı bir RAG hattı ve ajan tabanlı sorgu yönlendiricisi sayesinde uydurma bilgi üretmeden, kaynak referanslı ([S1], [S2]) doğal dil yanıtları sunar. Mobil tarafta ise Ege Altını ve Siyah tonlarında tasarlanan 'Stitch Design System' ile şehir durumu sinyallerini, interaktif haritayı ve AI sohbeti tek ekranda buluşturur.",
+        "overview": "Genel arama motorlarının ilçe bazlı yerel veriye (nöbetçi eczane, İZBAN saatleri, su/elektrik kesintileri, belediye duyuruları ve yerel rehber) ulaşmadaki dağınıklığını ve reklam odaklı yapısını çözmek için geliştirildi.\n\nAliağaAI; yerel kaynaklardan bağlam getiren çok aşamalı bir RAG hattı ve ajan tabanlı sorgu yönlendiricisi sayesinde kaynak referanslı ([S1], [S2]) doğal dil yanıtları sunar. Mobil tarafta ise Ege Altını ve Siyah tonlarında tasarlanan 'Stitch Design System' ile şehir durumu sinyallerini, interaktif haritayı ve AI sohbeti tek ekranda buluşturur.",
         "architectureSteps": [
           "Ön-İşleme & Ajanlı Sorgu Yönlendirici (Query Router): Gelen kullanıcı mesajı temizlenir, niyet analizi yapılır ve sorgunun türüne göre yapılandırılmış SQL tablolarına, canlı API önbelleğine (hava durumu, deprem, nöbetçi eczane) veya semantik RAG hattına yönlendirilir.",
           "Sorgu Genişletme & Hibrit Arama: LLM tabanlı 4 farklı sorgu varyantı üretilir; e5 embedding vektörleriyle pgvector HNSW kosinüs benzerliği araması ve PostgreSQL Türkçe Full-Text Search (FTS) paralel çalıştırılır.",
           "Reciprocal Rank Fusion (RRF) & Reranking: Vektörel ve kelime tabanlı sonuçlar RRF algoritmasıyla birleştirilir, dinamik benzerlik eşiğiyle elenir ve en alakalı bilgi parçaları yeniden sıralanır.",
-          "Kaynak Doğrulamalı Yanıt & İzole Botlar: Groq Llama 3.3 modeli yalnızca doğrulanmış bağlam üzerinden yanıt üretir; arka planda çalışan 9 izole APScheduler botu ise belediye, ulaşım ve kesinti verilerini birbirini etkilemeden periyodik günceller."
+          "Kaynak Atıflı Yanıt & İzole Botlar: Groq Llama 3.3 modeli erişilen yerel kaynakları yanıt bağlamı olarak kullanır; arka planda çalışan 9 izole APScheduler botu ise belediye, ulaşım ve kesinti verilerini birbirini etkilemeden periyodik günceller."
         ],
         "features": [
           "Ajanlı Sorgu Yönlendirici (SQL, Canlı Şehir Önbelleği ve Vektör Arama arasında akıllı seçim)",
@@ -162,6 +165,7 @@
         ]
       },
       "aiDreamInterpreter": {
+        "gallerySummary": "Rüyaları kaydedip yapay zeka destekli yorumlarla sembolleri ve tekrar eden temaları keşfetmeyi sağlıyor.",
         "title": "Rüya Yorumlayıcı (AI Dream Interpreter)",
         "tagline": "Jungiyen arketipler ve Freudyen sembolizm temelli, çoklu LLM yedekleme (Gemini + Groq Failover) ve yerel sembol RAG sözlüğüyle çalışan psikolojik rüya analiz ve takip platformu.",
         "period": "2025",
@@ -212,6 +216,7 @@
         ]
       },
       "kayipQR": {
+        "gallerySummary": "Kaybolan eşyalar için QR etiketleri üzerinden iletişim kurmayı sağlıyor; telefon numaran gizli kalıyor.",
         "title": "KayıpQR — Gizlilik Odaklı Akıllı QR Etiket Platformu",
         "tagline": "Eşyan sana dönsün, numaran sende kalsın. Kişisel telefon numarası veya e-posta paylaşmadan, dinamik QR etiketleri üzerinden üyeliksiz anonim mesajlaşma sağlayan uçtan uca platform.",
         "period": "2025",
@@ -262,6 +267,7 @@
         ]
       },
       "weDo": {
+        "gallerySummary": "Farklı uygulamalarda bulunan fikirleri ortak bir alanda toplayıp birlikte plan yapmayı kolaylaştırıyor.",
         "title": "WeDo — Ortak Fikir, Liste & Karar Uygulaması",
         "tagline": "Save what inspires you. Decide together. Çiftlerin ve arkadaş gruplarının sosyal medyada veya web'de gördükleri fikirleri tek dokunuşla ortak alana kaydedip birlikte planlamasını sağlayan mobil uygulama.",
         "period": "2025",
@@ -311,62 +317,118 @@
           "SSRF korumalı metadata çekici, Argon2 kimlik güvenliği ve uçtan uca Docker + Nginx kurulumu"
         ]
       },
-      "visualAI": {
-        "title": "Anlık Anlatım — Gerçek Zamanlı Görsel Anlama AI",
-        "tagline": "Webcam görüntülerini %100 yerel çalışan multimodal LLaVA derin öğrenme modeliyle düşük gecikmeyle analiz edip anlık doğal dil betimlemeleri üreten gizlilik odaklı görüntü anlama sistemi.",
-        "period": "2024",
-        "category": "Computer Vision • Local Multimodal AI",
-        "image": "/projects/visual-ai.png",
-        "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding",
+      "askDocs": {
+        "title": "AskDocs — Kaynak Atıflı Belge Asistanı",
+        "gallerySummary": "Belgelerinde sorularına yanıt bulmanı ve yanıtın dayandığı kaynak sayfayı incelemeni sağlıyor.",
+        "tagline": "PDF ve metin belgelerini çalışma alanlarında indeksleyen, belge kapsamlı arama ve kaynak atıflı sohbet sunan RAG uygulaması.",
+        "period": "2026",
+        "category": "AI Systems • Document RAG • Backend",
+        "image": "/projects/askdocs.png",
+        "github": "https://github.com/DuranGZR/AskDocs",
         "demo": "",
         "tags": [
-          "Python 3.11+",
+          "Python",
+          "Rust / PyO3",
           "FastAPI",
-          "Ollama",
-          "LLaVA 7B (Mistral q4_0)",
-          "WebSockets",
-          "OpenCV",
-          "React"
+          "Celery",
+          "Redis",
+          "Qdrant",
+          "PyMuPDF",
+          "HuggingFace TEI",
+          "BAAI/bge-m3",
+          "Gemini",
+          "Langfuse"
         ],
         "highlights": [
           {
-            "label": "ÇALIŞMA MODU",
-            "value": "%100 Yerel GPU — Sıfır Bulut & Sıfır API Maliyeti"
+            "label": "BELGE İŞLEME",
+            "value": "Celery ile arka planda indeksleme"
           },
           {
-            "label": "İLETİŞİM PROTOKOLÜ",
-            "value": "Çift Yönlü Düşük Gecikmeli WebSocket Akışı"
+            "label": "KAYNAK İNCELEME",
+            "value": "Sayfa ve pasaj düzeyinde atıflar"
           },
           {
-            "label": "VİZYON MODELİ",
-            "value": "LLaVA 7B v1.6 Mistral (4-bit Quantized)"
+            "label": "EMBEDDING",
+            "value": "Yerel TEI / BAAI/bge-m3"
           }
         ],
-        "overview": "Kamera görüntülerinin harici bulut sunucularına gönderilmesinin yarattığı gizlilik riskini, API maliyetlerini ve istek sınırı (rate-limit) engellerini ortadan kaldırmak için geliştirilmiş tamamen yerel bir multimodal yapay zeka sistemidir.\n\nTarayıcı üzerinden alınan canlı webcam karelerini WebSocket hattı üzerinden FastAPI sunucusuna aktarır ve yerel GPU üzerinde koşan 4-bit kuantize LLaVA-7B vizyon-dil modeliyle sahneyi gerçek zamanlı doğal dil cümlelerine dönüştürür.",
+        "overview": "Belgelerde bilgi ararken yanıtın hangi kaynağa dayandığını doğrulamayı kolaylaştırmak için geliştirildi. Kullanıcılar PDF ve metin dosyalarını ayrı çalışma alanlarına yükleyebilir, aramayı belirli dosyalarla sınırlandırabilir ve doğal dilde sorular sorabilir.\n\nBelge işleme ile sohbet akışı birbirinden ayrılır: ağır indeksleme işleri arka planda yürürken yanıtlar kaynak işaretleriyle akış halinde sunulur. Kaynak inceleme paneli, yanıtı ilgili sayfa ve metin pasajıyla karşılaştırmayı sağlar.",
         "architectureSteps": [
-          "Kare Yakalama & Ön-İşleme (React İstemci): Tarayıcıdaki canlı kamera akışından optimize edilmiş aralıklarla görüntü kareleri yakalanır ve Base64 formatında kodlanır.",
-          "Sürekli WebSocket Akışı: HTTP el sıkışma yükünü ortadan kaldırmak için istemci ile FastAPI arasında açık tutulan çift yönlü WebSocket kanalı üzerinden kareler anlık iletilir.",
-          "FastAPI Kare İşleyici & Ollama Köprüsü: Sunucu gelen kareyi doğrulayıp yerel ağda çalışan Ollama servisine (localhost:11434) sahne betimleme prompt'u ile yönlendirir.",
-          "Yerel GPU Çıkarımı (LLaVA 7B q4_0): 4GB+ VRAM üzerinde bile verimli çalışabilen kuantize multimodal model görüntüyü çözümler ve üretilen açıklamayı anında arayüze geri basar."
+          "FastAPI, yüklenen dosyaları doğrular ve indeksleme işini Celery kuyruğuna aktarır.",
+          "PyMuPDF sayfalardan metin çıkarır; Rust/PyO3 bileşeni temizleme ve parçalama işlemlerini yürütür.",
+          "Yerel HuggingFace TEI servisi belge parçalarını vektörlere dönüştürür; Qdrant çalışma alanı ve belge filtreleriyle aramayı sınırlar.",
+          "Sorguya uygun parçalar sohbet modeline bağlam olarak iletilir. Yanıt SSE üzerinden aktarılır; atıflar kaynak inceleme paneline bağlanır."
         ],
         "features": [
-          "%100 yerel çalışma: Kamera görüntüleri bilgisayardan dışarı asla çıkmaz, tam gizlilik sağlar",
-          "Harici API anahtarı, abonelik ücreti veya istek kotası (Rate Limit) olmadan sınırsız analiz",
-          "WebSocket tabanlı kesintisiz kare gönderimi ve anlık metin akışı",
-          "4-bit kuantizasyon (llava:7b-v1.6-mistral-q4_0) sayesinde tüketici sınıfı GPU'larda yüksek hız",
-          "Masaüstü ve mobil tarayıcılarla uyumlu sade ve duyarlı kontrol arayüzü"
+          "Çalışma alanı ve belge seçimiyle arama kapsamı belirleme",
+          "PDF ve metin dosyalarını arka planda indeksleme",
+          "Akış halinde Markdown yanıtlar ve tıklanabilir kaynak işaretleri",
+          "Kaynak sayfa, benzerlik skoru ve eşleşen pasajı inceleme",
+          "Embedding ve sohbet servislerini ayrı yapılandırma",
+          "Circuit breaker, hız sınırlama ve Langfuse izleme entegrasyonları"
+        ]
+      },
+      "noktiq": {
+        "title": "Noktiq — AI Kodlama Ajanları için Görsel Geri Bildirim",
+        "gallerySummary": "Arayüzde değiştirmek istediğin öğeyi seçip notunu kaynak bağlamıyla kodlama ajanına aktarmanı sağlıyor.",
+        "tagline": "React ve Vue arayüzlerinde öğe seçimi, yerel notlar ve kaynak konumu içeren kopyalanabilir değişiklik talepleri sunan geliştirici aracı.",
+        "period": "2026",
+        "category": "Developer Tools • AI Workflow • Frontend",
+        "image": "/projects/noktiq.png",
+        "github": "https://github.com/DuranGZR/Noktiq",
+        "demo": "",
+        "tags": [
+          "TypeScript",
+          "React",
+          "Vue",
+          "Vite",
+          "Next.js",
+          "Nuxt",
+          "Webpack",
+          "Turbopack",
+          "Browser APIs"
+        ],
+        "highlights": [
+          {
+            "label": "İŞ AKIŞI",
+            "value": "Point. Note. Paste."
+          },
+          {
+            "label": "KAYNAK BAĞLAMI",
+            "value": "Bulunabildiğinde dosya, satır ve sütun"
+          },
+          {
+            "label": "DAĞITIM",
+            "value": "npm • PolyForm Shield 1.0.0"
+          }
+        ],
+        "overview": "Bir arayüz değişikliğini kodlama ajanına tarif ederken hangi öğeden söz edildiğini açıklama ihtiyacından doğdu. Noktiq, ekrandaki hedefi seçip değişiklik notunu doğrudan o öğeye bağlamayı sağlar.\n\nAraç, bulunabildiğinde kaynak dosyası ve konumunu; seçici, görünür metin ve öğe bağlamıyla birlikte kopyalanabilir bir istekte toplar. İstek Codex, Claude Code veya başka bir kodlama ajanına yapıştırılır. Noktiq kodu kendisi düzenlemez ve AI API anahtarı gerektirmez.",
+        "architectureSteps": [
+          "React veya Vue bileşeni geliştirme ortamında araç çubuğunu açar. Build entegrasyonu uygun olduğunda kaynak konumunu öğelere bağlar.",
+          "Kullanıcı öğe, metin, çoklu öğe veya alan seçerek not ekler; numaralı işaretler hedefleri görünür tutar.",
+          "Notlar tarayıcıda saklanır. Hedef durumu ve yeniden bağlama, arayüz değiştiğinde geri bildirimi takip etmeye yardımcı olur.",
+          "Tek not veya tüm notlar farklı ayrıntı seviyelerinde kopyalanır ve mevcut kodlama ajanına aktarılır."
+        ],
+        "features": [
+          "React ve Vue için ortak seçim ve not akışı",
+          "Vite, Next.js ve Nuxt kaynak bağlamı entegrasyonları",
+          "Tekli, çoklu, metin ve alan seçimi",
+          "Kaynak konumu, seçici ve öğe bağlamıyla kopyalanabilir istekler",
+          "Tarayıcıda tutulan, sayfayla ilişkili notlar ve yeniden bağlama",
+          "Klavye kontrolleri ve azaltılmış hareket desteği"
         ]
       }
     }
   },
   "skills": {
-    "badge": "YETENEKLER & UZMANLIKLAR",
+    "badge": "Yetenekler & uzmanlıklar",
     "title": "Neler Yapabilirim?",
     "subtitle": "Yapay zeka, derin öğrenme ve modern yazılım mühendisliğini birleştirerek güvenilir sistemler, modeller ve dijital iş akışları geliştiriyorum.",
     "bento": {
       "card1": {
         "number": "01",
-        "category": "YAPAY ZEKA &\nDERİN ÖĞRENME",
+        "category": "Yapay zeka & derin öğrenme",
         "title": "AI, Bilgisayarlı Görü & Derin Öğrenme",
         "description": "Kameradan anlık görüntü analizi, derin öğrenme modelleri (CNN/MLP), multimodal LLM entegrasyonları (LLaVA) ve pgvector ile RAG mimarileri geliştirme.",
         "tags": [
@@ -382,27 +444,31 @@
           "Ollama / LLaVA",
           "pgvector"
         ],
-        "image": "/images/gif/coding.gif"
+        "image": "/images/gif/rag-flow-dark.gif",
+        "lightImage": "/images/gif/rag-flow-light.gif",
+        "poster": "/images/gif/rag-flow-dark.png",
+        "lightPoster": "/images/gif/rag-flow-light.png"
       },
       "card2": {
         "number": "02",
-        "category": "BACKEND, SİSTEMLER &\nPROGRAMLAMA",
+        "category": "Backend, sistemler & programlama",
         "title": "Backend, Sistemler & Programlama Dilleri",
-        "description": "FastAPI ile yüksek hızlı mikroservisler, nesne yönelimli mimariler (Java, C#, C++), SQL veritabanları ve Docker ile yapay zekayı ürünleştiren güvenilir sistem çözümleri.",
+        "description": "FastAPI ile yüksek hızlı mikroservisler, nesne yönelimli mimariler (Java, C#), SQL veritabanları ve Docker ile yapay zekayı ürünleştiren güvenilir sistem çözümleri.",
         "tags": [
           "FastAPI",
           "Java",
           "C#",
-          "C / C++",
           "SQL",
           "PostgreSQL",
           "Docker",
           "Git & GitHub",
           "Feature Engineering",
-          "Data Analysis",
-          "Kotlin"
+          "Data Analysis"
         ],
-        "image": "/images/gif/assistant.gif"
+        "image": "/images/gif/backend-flow-dark.gif",
+        "lightImage": "/images/gif/backend-flow-light.gif",
+        "poster": "/images/gif/backend-flow-dark.png",
+        "lightPoster": "/images/gif/backend-flow-light.png"
       }
     },
     "techColumns": [
@@ -456,16 +522,8 @@
           "icon": "/images/skills/csharp.svg"
         },
         {
-          "name": "C / C++",
-          "icon": "/images/skills/cplusplus.svg"
-        },
-        {
           "name": "SQL",
           "icon": "/images/skills/sql.svg"
-        },
-        {
-          "name": "Kotlin",
-          "icon": "/images/skills/kotlin.svg"
         }
       ],
       [
@@ -498,12 +556,15 @@
       "graduation": "Bilgisayar Müh.",
       "codeLines": "Satır Kod",
       "learningHrs": "Saat Pratik"
+    },
+    "tabs": {
+      "ai": "AI & Görü",
+      "backend": "Backend & Sistem"
     }
   },
   "experience": {
     "badge": "Geçmiş",
     "title": "Eğitim, Sertifikalar ve Aktiviteler",
-    "subtitle": "Mühendislik vizyonumu şekillendiren yolculuk.",
     "categories": {
       "education": "Eğitim",
       "certifications": "Sertifikalar",
@@ -513,8 +574,9 @@
       "degree": {
         "title": "Bilgisayar Mühendisliği Lisans",
         "organization": "İnönü Üniversitesi",
-        "period": "2022 - 2026",
-        "description": "Yapay Zeka ve Makine Öğrenmesi odaklı lisans müfredatı ve akademik çalışmalar."
+        "period": "2022 - 2027",
+        "description": "Yapay Zeka ve Makine Öğrenmesi odaklı lisans müfredatı ve akademik çalışmalar.",
+        "gpa": "2.87 / 4.0"
       },
       "mlCamp": {
         "title": "Machine Learning Camp",
@@ -662,7 +724,7 @@
         ]
       },
       "6months": {
-        "period": "2026 - Mezuniyet",
+        "period": "2027 - Mezuniyet",
         "title": "Kariyer Başlangıcı",
         "goals": [
           "Bilgisayar Mühendisliği diplomamı almak",
@@ -728,19 +790,19 @@
       "items": {
         "0": {
           "title": "Bilgisayar Mühendisliği Lisans",
-          "description": "İnönü Üniversitesi • 2022 - 2026 • GPA: 2.84/4.0"
+          "description": "İnönü Üniversitesi · 2022 - 2027 · Yapay Zeka ve Makine Öğrenmesi odaklı lisans müfredatı ve akademik çalışmalar."
         },
         "1": {
           "title": "Machine Learning Camp",
-          "description": "Miuul • 2024 • Kapsamlı makine öğrenmesi bootcamp programı"
+          "description": "Miuul · 2024 · Kapsamlı makine öğrenmesi bootcamp programı"
         },
         "2": {
           "title": "Feature Engineering",
-          "description": "Miuul • 2024 • Özellik mühendisliği ve veri ön işleme teknikleri"
+          "description": "Miuul · 2024 · Özellik mühendisliği ve veri ön işleme teknikleri"
         },
         "3": {
           "title": "Python Programming for Data Science",
-          "description": "Miuul • 2024 • Veri bilimi için Python programlama"
+          "description": "Miuul · 2024 · Veri bilimi için Python programlama"
         }
       }
     },
@@ -749,20 +811,36 @@
       "subtitle": "Aldığım eğitim ve topluluk deneyimlerim",
       "items": {
         "0": {
-          "title": "DevOps Developer - HSD İNÖNÜ",
-          "description": "Eki 2025 - Devam • CI/CD, Docker, GitHub Actions, sunucu yönetimi"
+          "title": "DevOps Developer",
+          "description": "HSD İNÖNÜ · Eki 2025 - Devam Ediyor · Topluluk projelerinde CI/CD pipeline'ları kurma, Docker container yönetimi, GitHub Actions ile otomasyon ve sunucu yönetimi. DevOps kültürü ve best practice'leri uygulama."
         },
         "1": {
-          "title": "Organizasyon Başkanı - Siber Güvenlik Topluluğu",
-          "description": "Kas 2024 - Eyl 2025 • 11 ay liderlik, etkinlik organizasyonu, takım yönetimi"
+          "title": "Organizasyon Başkanı",
+          "description": "İnönü Üniversitesi Siber Güvenlik Topluluğu · Kas 2024 - Eyl 2025 · 11 aylık görev süresinde topluluk etkinlikleri planlama, eğitim programları organize etme, takım yönetimi ve siber güvenlik farkındalığı oluşturma. Liderlik ve organizasyon becerileri geliştirme."
         },
         "2": {
-          "title": "Machine Learning",
-          "description": "Miuul • 2024 • Makine öğrenmesi algoritmaları ve uygulamaları"
+          "title": "Machine Learning Camp",
+          "description": "Miuul · 2024 · Kapsamlı makine öğrenmesi bootcamp programı"
         },
         "3": {
+          "title": "Feature Engineering",
+          "description": "Miuul · 2024 · Özellik mühendisliği ve veri ön işleme teknikleri"
+        },
+        "4": {
+          "title": "Machine Learning",
+          "description": "Miuul · 2024 · Makine öğrenmesi algoritmaları ve uygulamaları"
+        },
+        "5": {
+          "title": "Python Programming for Data Science",
+          "description": "Miuul · 2024 · Veri bilimi için Python programlama"
+        },
+        "6": {
+          "title": "C# Programlama Dili",
+          "description": "Udemy · 2024 · Her seviyeye hitap eden kapsamlı C# eğitimi"
+        },
+        "7": {
           "title": "Cloud Night",
-          "description": "HSD İnönü - Huawei • 2025 • Bulut teknolojileri eğitimi"
+          "description": "HSD İnönü - Huawei · 2025 · Bulut teknolojileri ve Huawei Cloud eğitimi"
         }
       }
     },
@@ -771,20 +849,12 @@
       "subtitle": "Teknik becerilerim",
       "items": {
         "0": {
-          "title": "AI ve Makine Öğrenmesi",
-          "description": "TensorFlow, PyTorch, Scikit-learn, Keras, OpenCV, NumPy"
+          "title": "AI, Bilgisayarlı Görü & Derin Öğrenme",
+          "description": "Kameradan anlık görüntü analizi, derin öğrenme modelleri (CNN/MLP), multimodal LLM entegrasyonları (LLaVA) ve pgvector ile RAG mimarileri geliştirme. Python, TensorFlow / Keras, PyTorch, Scikit-learn, NumPy / Pandas, OpenCV, Computer Vision, NLP, Deep Learning, Ollama / LLaVA, pgvector"
         },
         "1": {
-          "title": "Programlama Dilleri",
-          "description": "Python, JavaScript, TypeScript, C#, C++, Java, Kotlin, SQL"
-        },
-        "2": {
-          "title": "Frameworkler ve Araçlar",
-          "description": "React, Next.js, FastAPI, Docker, Git, Pandas"
-        },
-        "3": {
-          "title": "Veri Bilimi",
-          "description": "Veri analizi, özellik mühendisliği, model değerlendirme, PostgreSQL"
+          "title": "Backend, Sistemler & Programlama Dilleri",
+          "description": "FastAPI ile yüksek hızlı mikroservisler, nesne yönelimli mimariler (Java, C#), SQL veritabanları ve Docker ile yapay zekayı ürünleştiren güvenilir sistem çözümleri. FastAPI, Java, C#, SQL, PostgreSQL, Docker, Git & GitHub, Feature Engineering, Data Analysis"
         }
       }
     },
@@ -793,41 +863,44 @@
       "subtitle": "Öne çıkan AI, Backend ve Mobil projelerim",
       "items": {
         "0": {
-          "title": "AliağaAI — Akıllı Şehir Rehberi",
-          "description": "Next.js, FastAPI ve PostgreSQL + pgvector (RAG) ile hibrit akıllı şehir asistanı."
+          "title": "AliağaAI — Akıllı Şehir Rehberi & RAG Asistanı",
+          "description": "Aliağa’daki dağınık yerel bilgileri, kaynak gösteren tek bir şehir asistanında bir araya getiriyor."
         },
         "1": {
-          "title": "AI Rüya Yorumlayıcı",
-          "description": "React Native (Expo), FastAPI ve Groq LLM ile sesli/metin tabanlı mobil uygulama."
+          "title": "Rüya Yorumlayıcı (AI Dream Interpreter)",
+          "description": "Rüyaları kaydedip yapay zeka destekli yorumlarla sembolleri ve tekrar eden temaları keşfetmeyi sağlıyor."
         },
         "2": {
-          "title": "Kayıp Eşya QR Sistemi (KayıpQR)",
-          "description": "Next.js, TypeScript, Prisma ve PostgreSQL ile gizlilik odaklı QR buluntu platformu."
+          "title": "KayıpQR — Gizlilik Odaklı Akıllı QR Etiket Platformu",
+          "description": "Kaybolan eşyalar için QR etiketleri üzerinden iletişim kurmayı sağlıyor; telefon numaran gizli kalıyor."
         },
         "3": {
-          "title": "WeDo — Ortak Görev & Alışveriş",
-          "description": "Jetpack Compose (Kotlin), FastAPI ve WebSocket ile gerçek zamanlı Android uygulaması."
+          "title": "WeDo — Ortak Fikir, Liste & Karar Uygulaması",
+          "description": "Farklı uygulamalarda bulunan fikirleri ortak bir alanda toplayıp birlikte plan yapmayı kolaylaştırıyor."
         },
         "4": {
-          "title": "Anlık Anlatım — Görsel Anlama AI",
-          "description": "Python, OpenCV ve yerel Ollama LLaVA modeli ile gerçek zamanlı kamera analizi."
+          "title": "AskDocs — Kaynak Atıflı Belge Asistanı",
+          "description": "Belgelerinde sorularına yanıt bulmanı ve yanıtın dayandığı kaynak sayfayı incelemeni sağlıyor."
+        },
+        "5": {
+          "title": "Noktiq — AI Kodlama Ajanları için Görsel Geri Bildirim",
+          "description": "Arayüzde değiştirmek istediğin öğeyi seçip notunu kaynak bağlamıyla kodlama ajanına aktarmanı sağlıyor."
         }
       }
     }
   },
   "footer": {
-    "tagline": "Eğitim Aşamasında AI Mühendisi. Özgeçmişe satır eklemek yerine gerçek problemleri çözen sistemler inşa ediyorum.",
+    "tagline": "AI sistemleri, backend servisleri ve mobil uygulamalar geliştiriyorum.",
     "quickLinks": "Hızlı Bağlantılar",
     "getInTouch": "İletişime Geç",
     "getInTouchDesc": "Junior AI mühendisi rolleri ve çözülecek ilginç problemler için açığım.",
     "sendMessage": "Mesaj Gönder",
-    "builtWith": "ile inşa edildi",
-    "copyright": "Bu portföy yaşayan bir sistem—sürekli gelişiyor."
+    "builtWith": "ile inşa edildi"
   },
   "aiAssistant": {
-    "badge": "Çevrimiçi Asistan",
+    "badge": "AI asistan",
     "title": "AI Asistanıma Sor",
-    "subtitle": "Projelerim, deneyimim ve mühendislik yaklaşımım hakkında eğitilmiş akıllı asistan. Aklınıza takılan her şeyi doğrudan sorabilirsiniz.",
+    "subtitle": "Projelerim, deneyimim ve mühendislik yaklaşımım hakkında bilgi tabanımı kullanarak yanıt veren asistan. Aklınıza takılanları sorabilirsiniz.",
     "chatHeader": {
       "title": "AI Asistan",
       "poweredBy": "Bilgi tabanım tarafından destekleniyor"
@@ -841,25 +914,30 @@
       "q4": "Mühendislik sürecini anlatır mısın?"
     },
     "inDevelopment": "Geliştirme Aşamasında",
-    "inDevelopmentDesc": "Projelerim, yazı örneklerim ve mühendislik felsefem üzerinde eğitiliyor",
+    "inDevelopmentDesc": "Bilgi tabanı; projelerim, yazı örneklerim ve mühendislik yaklaşımımla hazırlanıyor",
     "inputPlaceholder": "Bana bir şey sor...",
     "sendButton": "Gönder",
     "features": {
       "realtime": {
-        "title": "Gerçek Zamanlı Yanıtlar",
-        "desc": "Projelerim ve deneyimim hakkında anında cevaplar"
+        "title": "Portfolyo hakkında yanıtlar",
+        "desc": "Projelerim ve deneyimim için kısa, bağlantılı yanıtlar"
       },
       "context": {
         "title": "Bağlam Farkında",
         "desc": "Takip sorularını anlıyor ve sohbet akışını sürdürüyor"
       },
       "learning": {
-        "title": "Sürekli Öğreniyor",
-        "desc": "Yeni projeler tamamladıkça ve deneyim kazandıkça güncelleniyor"
+        "title": "Yeni projelerle güncelleniyor",
+        "desc": "Yeni proje ve deneyim bilgilerini bilgi tabanına ben ekliyorum."
       }
     },
     "notifyQuestion": "AI asistan canlı yayına geçtiğinde haberdar olmak ister misiniz?",
-    "notifyButton": "Beni Bilgilendir"
+    "notifyButton": "Beni Bilgilendir",
+    "serviceStatus": {
+      "checking": "Servis kontrol ediliyor",
+      "available": "Servise erişiliyor",
+      "unavailable": "Servise ulaşılamıyor"
+    }
   },
   "contact": {
     "title": "İletişime Geç",

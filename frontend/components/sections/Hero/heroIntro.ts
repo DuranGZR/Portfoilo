@@ -46,17 +46,16 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
   const divider = hero?.querySelector('.hero-divider');
   const impact = hero?.querySelector<HTMLElement>('.hero-impact');
   const ring = impact?.querySelector('.hero-impact-ring');
-  const titleLight = hero?.querySelector('.hero-title-light');
   const name = hero?.querySelector('.hero-name');
   const opening = hero?.querySelector('.hero-visor-opening');
   const openingEyes = opening?.querySelector('.hero-visor-eye-pair');
-  const blink = openingEyes?.querySelector('svg');
+  const blink = openingEyes?.querySelector('[data-opening-eyes]');
   const stage = pod.querySelector<HTMLElement>('.hero-mascot-stage');
   const arm = stage?.querySelector('.hero-writing-arm');
   const shaft = arm?.querySelector('.hero-arm-shaft');
   const hand = arm?.querySelector('.hero-arm-hand');
   const eyes = stage?.querySelector('[data-mascot-eyes]');
-  if (!hero || !divider || !impact || !ring || !titleLight || !name || !opening || !openingEyes || !blink || !stage || !arm || !shaft || !hand || !eyes || !isAtHeroStart() || typeof pod.animate !== 'function') {
+  if (!hero || !divider || !impact || !ring || !name || !opening || !openingEyes || !blink || !stage || !arm || !shaft || !hand || !eyes || !isAtHeroStart() || typeof pod.animate !== 'function') {
     onFinish();
     return;
   }
@@ -215,12 +214,6 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
       { opacity: .7, transform: 'scale(.46)', offset: .24 },
       { opacity: 0, transform: 'scale(1.85)' },
     ], { delay: landing, duration: 540, easing: 'ease-out' }),
-    titleLight.animate([
-      { opacity: 0, maskPosition: '-100% 0' },
-      { opacity: .77, offset: .21 },
-      { opacity: .77, offset: .76 },
-      { opacity: 0, maskPosition: '200% 0' },
-    ], { delay: landing + 55, duration: 620, easing: 'ease-in-out' }),
     stage.animate([
       ...(showOpening ? [
         { transform: `scale(${closeupScale})`, transformOrigin: eyeOrigin, offset: 0 },

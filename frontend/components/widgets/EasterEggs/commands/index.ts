@@ -77,7 +77,7 @@ ${files.map(f => `  \x1b[32m${f.startsWith('.') ? '\x1b[2m' : ''}${f}\x1b[0m`).j
 \x1b[36m          .ckKNWMMMMMMMMMMWNKkc.              \x1b[0m   \x1b[1;33mOS:\x1b[0m Brain 4.0 (Neural Edition)\r
 \x1b[36m        .oKWMMMMMMMMMMMMMMMMMMWKo.            \x1b[0m   \x1b[1;33mHost:\x1b[0m İzmir, Turkey\r
 \x1b[36m       :0WMMMMMMMMMMMMMMMMMMMMMMW0:           \x1b[0m   \x1b[1;33mKernel:\x1b[0m Computer Engineering 4th Year\r
-\x1b[36m      ;KMMMMMMMMMMMMMMMMMMMMMMMMMMK;          \x1b[0m   \x1b[1;33mUptime:\x1b[0m İnönü University (2022-2026)\r
+\x1b[36m      ;KMMMMMMMMMMMMMMMMMMMMMMMMMMK;          \x1b[0m   \x1b[1;33mUptime:\x1b[0m İnönü University (2022-2027)\r
 \x1b[36m     .OMMMMMMMMMMMMMMMMMMMMMMMMMMMMO.         \x1b[0m   \x1b[1;33mPackages:\x1b[0m AI/ML, Web, Mobile\r
 \x1b[36m     lWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMl         \x1b[0m   \x1b[1;33mShell:\x1b[0m duran-terminal v2.0\r
 \x1b[36m     dMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMd         \x1b[0m   \x1b[1;33mResolution:\x1b[0m Full-Stack Vision\r
@@ -85,7 +85,7 @@ ${files.map(f => `  \x1b[32m${f.startsWith('.') ? '\x1b[2m' : ''}${f}\x1b[0m`).j
 \x1b[36m     lWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMl         \x1b[0m   \x1b[1;33mWM:\x1b[0m VS Code + Cursor\r
 \x1b[36m     .OMMMMMMMMMMMMMMMMMMMMMMMMMMMMO.         \x1b[0m   \x1b[1;33mTheme:\x1b[0m Dark Mode Always\r
 \x1b[36m      ;KMMMMMMMMMMMMMMMMMMMMMMMMMMK;          \x1b[0m   \x1b[1;33mTerminal:\x1b[0m xterm.js\r
-\x1b[36m       :0WMMMMMMMMMMMMMMMMMMMMMMW0:           \x1b[0m   \x1b[1;33mGPA:\x1b[0m 2.84/4.0\r
+\x1b[36m       :0WMMMMMMMMMMMMMMMMMMMMMMW0:           \x1b[0m   \x1b[1;33mGPA:\x1b[0m 2.87/4.0\r
 \x1b[36m        .oKWMMMMMMMMMMMMMMMMMMWKo.            \x1b[0m   \x1b[1;33mFocus:\x1b[0m AI/ML Engineering\r
 \x1b[36m          .ckKNWMMMMMMMMMMWNKkc.              \x1b[0m   \r
 \x1b[36m             .;lxkOOOOOOkxl;.                 \x1b[0m   \x1b[40m  \x1b[41m  \x1b[42m  \x1b[43m  \x1b[44m  \x1b[45m  \x1b[46m  \x1b[47m  \x1b[0m\r
@@ -114,8 +114,8 @@ ${files.map(f => `  \x1b[32m${f.startsWith('.') ? '\x1b[2m' : ''}${f}\x1b[0m`).j
 \r
   \x1b[1;33m👤 Name:\x1b[0m        Duran Gezer\r
   \x1b[1;33m🎓 Education:\x1b[0m   B.S. Computer Engineering (İnönü University)\r
-  \x1b[1;33m📅 Year:\x1b[0m        4th Year (2022 - 2026)\r
-  \x1b[1;33m📊 GPA:\x1b[0m         2.84/4.0\r
+  \x1b[1;33m📅 Year:\x1b[0m        4th Year (2022 - 2027)\r
+  \x1b[1;33m📊 GPA:\x1b[0m         2.87/4.0\r
   \x1b[1;33m📍 Location:\x1b[0m    İzmir, Turkey\r
   \x1b[1;33m🌐 Languages:\x1b[0m   Turkish (Native), English\r
 \r
@@ -177,7 +177,7 @@ A) 42    B) 69    C) 100+    D) We don't talk about bugs\r
 \x1b[1mUniversity:\x1b[0m   İnönü University\r
 \x1b[1mDegree:\x1b[0m       Computer Engineering (4th Year)\r
 \x1b[1mLocation:\x1b[0m     İzmir, Turkey\r
-\x1b[1mGPA:\x1b[0m          2.84/4.0\r
+\x1b[1mGPA:\x1b[0m          2.87/4.0\r
 \x1b[1mStatus:\x1b[0m       Building cool stuff 🚀\r
 \x1b[1mInterests:\x1b[0m    AI/ML, Full-Stack, DevOps\r
 \r

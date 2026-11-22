@@ -14,6 +14,7 @@ import KonamiListener from '@/components/widgets/EasterEggs/KonamiListener';
 import PageTransition from '@/components/transitions/PageTransition';
 import WebVitalsInit from '@/components/layout/WebVitalsInit';
 import ConditionalLayout from '@/components/layout/ConditionalLayout';
+import { ChatProvider } from '@/components/ai/ChatProvider';
 import '../globals.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://durangezer.dev';
@@ -21,8 +22,6 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://durangezer.dev';
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
     interactiveWidget: 'overlays-content',
 };
 
@@ -105,7 +104,7 @@ export default async function LocaleLayout({
     }
 
     const messages = await getMessages({ locale });
-    const heroTheme = (await cookies()).get('hero-theme')?.value === 'dark' ? 'dark' : 'light';
+    const heroTheme = (await cookies()).get('hero-theme')?.value === 'light' ? 'light' : 'dark';
 
     // JSON-LD structured data
     const jsonLd = {
@@ -132,6 +131,7 @@ export default async function LocaleLayout({
             </head>
             <body className="bg-primary text-text-primary antialiased font-body" suppressHydrationWarning>
                 <NextIntlClientProvider messages={messages} locale={locale}>
+                  <ChatProvider>
                     <ConditionalLayout>
                         <NoiseTexture />
                         <Navigation heroTheme={heroTheme} />
@@ -146,6 +146,7 @@ export default async function LocaleLayout({
                         <KonamiListener />
                     </ConditionalLayout>
                     <WebVitalsInit />
+                  </ChatProvider>
                 </NextIntlClientProvider>
             </body>
         </html>

@@ -60,17 +60,14 @@ export default function Thinking() {
 
   return (
     <section id="thinking" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto">
-      {/* Koyu degrade arka plan (Monokrom, Hakkımda & Deneyim ile birebir aynı) */}
-      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
-
       <div className="relative z-10 max-w-[1100px] w-full mx-auto md:my-auto">
         {/* Section Header (Hakkımda & Deneyim ile aynı tipografi) */}
         <SectionReveal delay={0}>
           <div className="mb-6 sm:mb-16">
-            <div className="font-mono text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-1.5 sm:mb-2">
+            <div className="font-mono text-xs sm:text-xs font-medium tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case mb-1.5 sm:mb-2">
               {t('badge')}
             </div>
-            <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.1] mb-2 sm:mb-3">
+            <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.1] mb-2 sm:mb-3">
               {t('title')}
             </h2>
             <p className="text-xs sm:text-[15px] leading-relaxed sm:leading-[1.8] text-white/60 portfolio-light:text-ink-muted max-w-[680px]">
@@ -114,7 +111,7 @@ export default function Thinking() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-base font-display font-bold text-[#f3f5f9] portfolio-light:text-ink mb-2 leading-snug">
+                    <h3 className="text-base font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink mb-2 leading-snug">
                       {t(`principles.${principle.key}.title`)}
                     </h3>
 
@@ -184,7 +181,7 @@ export default function Thinking() {
                   </div>
 
                   {/* İlke Başlığı */}
-                  <h3 className="text-lg sm:text-xl font-display font-bold text-[#f3f5f9] portfolio-light:text-ink mb-2.5 group-hover:text-white portfolio-light:group-hover:text-ink transition-colors">
+                  <h3 className="text-lg sm:text-xl font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink mb-2.5 group-hover:text-white portfolio-light:group-hover:text-ink transition-colors">
                     {t(`principles.${principle.key}.title`)}
                   </h3>
 

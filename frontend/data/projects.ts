@@ -42,7 +42,7 @@ export const projects: Project[] = [
     oneLiner: 'Aliağa ilçesine özel doğrulanmış verilerle çalışan, çok aşamalı hibrit RAG ve React Native mobil arayüzünü birleştiren akıllı şehir asistanı.',
     problem: 'Genel arama motorlarının ilçe bazlı yerel veriye (nöbetçi eczane, İZBAN saatleri, kesintiler, belediye duyuruları) ulaşmadaki dağınıklığını ve reklam odaklı yapısını çözmek.',
     constraints: [
-      'Sıfır halüsinasyon ve doğrulanmış kaynak zorunluluğu',
+      'Yerel kaynaklara dayanan ve kaynak atfı sunan yanıtlar',
       'Hızlı hibrit vektör arama (<500ms)',
       '9 izole asenkron veri botu ile güncel veri',
       'Mobil öncelikli arayüz (React Native)'
@@ -50,11 +50,11 @@ export const projects: Project[] = [
     approach: 'pgvector HNSW + PostgreSQL Türkçe Full-Text Search ve Reciprocal Rank Fusion (RRF) ile hibrit arama motoru. Groq Llama 3.3 ile doğrulanmış bağlam üzerinden kaynak atıflı ([S1], [S2]) yanıt üretimi.',
     modelChoice: {
       name: 'Groq Llama 3.3 + pgvector HNSW',
-      rationale: 'Hızlı çıkarım süresi, Türkçe anlama yeteneği ve hibrit vektör erişimi sayesinde uydurma bilgi üretmeden net kaynak referanslı cevaplar.'
+      rationale: 'Hızlı çıkarım süresi, Türkçe anlama yeteneği ve hibrit vektör erişimi sayesinde erişilen yerel kaynaklara referans veren cevaplar.'
     },
     evaluation: {
       metrics: [
-        { name: 'Halüsinasyon Oranı', value: '%0' },
+        { name: 'Kaynak Atıfları', value: '[S1], [S2]' },
         { name: 'Veri Botları', value: '9 İzole Bot' },
         { name: 'Sorgu Yanıtı', value: '<600ms' }
       ],

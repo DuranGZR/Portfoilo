@@ -1,26 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState } from 'react';
 import { Code2, FlaskConical, Rocket } from 'lucide-react';
 import { useTranslations, useMessages, useLocale } from 'next-intl';
 import SectionReveal from '@/components/animations/SectionReveal';
 
-// Exact transform coordinates matching Richard Miculob's portfolio card stack
 const CARD_POSITIONS = [
-  { tx: 6, ty: -4, rot: -7, sc: 1, op: 1, z: 30 },
-  { tx: 2, ty: 11, rot: 10, sc: 0.955, op: 0.7, z: 20 },
-  { tx: 30, ty: 22, rot: -13, sc: 0.91, op: 0.55, z: 10 },
-  { tx: 134, ty: -67, rot: 43, sc: 0.85, op: 0, z: 5 },
-];
-
-const FALLBACK_TRAITS = [
-  "Problem Solver",
-  "Detail-Oriented",
-  "Reliable",
-  "Continuous Learner",
-  "User-Focused",
-  "Analytical Thinker",
-  "Open to Feedback"
+  { tx: 0, ty: 0, rot: -2, sc: 1, op: 1, z: 30 },
+  { tx: 5, ty: 7, rot: 3, sc: 0.97, op: 0.7, z: 20 },
+  { tx: 10, ty: 14, rot: -4, sc: 0.94, op: 0.5, z: 10 },
+  { tx: 15, ty: 21, rot: 0, sc: 0.9, op: 0, z: 5 },
 ];
 
 export default function About() {
@@ -31,46 +20,24 @@ export default function About() {
     locale === 'en' ? '/cv/Duran_Gezer_CV_EN.pdf' : '/cv/Duran_Gezer_CV_TR.pdf';
 
   // Localized traits array from i18n messages
-  const traits: string[] = messages?.about?.traits?.items || FALLBACK_TRAITS;
+  const traits: string[] = messages?.about?.traits?.items || [];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  const nextCard = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % traits.length);
-  }, [traits.length]);
-
-  // Auto-rotate every 3 seconds
-  useEffect(() => {
-    timerRef.current = setInterval(nextCard, 3000);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [nextCard]);
-
-  // Click to cycle immediately and reset auto-timer
   const handleStackClick = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = setInterval(nextCard, 3000);
-    }
-    nextCard();
+    setCurrentIndex((index) => (index + 1) % traits.length);
   };
 
   return (
     <section id="about" className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-6 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto">
-      {/* Eski orijinal temiz arka plan (Koyu degrade) */}
-      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0d0d0d] to-[#0a0a0a]" />
-
       <div className="relative z-10 max-w-[1100px] w-full mx-auto md:my-auto">
         {/* Section Label + Title (Dile göre dinamik: TR'de HAKKIMDA, EN'de ABOUT ME) */}
         <SectionReveal delay={0}>
           <div className="mb-8">
-            <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2">
+            <div className="font-mono text-xs font-medium tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case mb-2">
               {t('badge')}
             </div>
-            <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
+            <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
               {t('headline')}
             </h2>
           </div>
@@ -100,20 +67,17 @@ export default function About() {
             </div>
           </div>
 
-          {/* Profile Info (İsim, Mavi Rozet, Sayaçlar ve Biyografi) */}
+          {/* Profile Info (İsim, Sayaçlar ve Biyografi) */}
           <div className="flex-1 flex flex-col gap-2">
-            {/* İsim + Mavi Onay Rozeti (Verified Badge) */}
+            {/* İsim */}
             <div className="inline-flex items-center gap-2 text-xl font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight font-display">
               <span>{t('name')}</span>
-              <svg className="w-5 h-5 text-[#3b82f6] shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-              </svg>
             </div>
 
             {/* Quick Stats: PROJECTS | CERTIFICATES | GRADUATED */}
             <div className="flex flex-row items-center gap-8 mt-1">
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
+                <span className="font-mono text-xs font-medium text-white/40 portfolio-light:text-ink-muted tracking-normal normal-case">
                   {t('stats.projectsLabel')}
                 </span>
                 <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
@@ -121,7 +85,7 @@ export default function About() {
                 </span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
+                <span className="font-mono text-xs font-medium text-white/40 portfolio-light:text-ink-muted tracking-normal normal-case">
                   {t('stats.certsLabel')}
                 </span>
                 <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
@@ -129,7 +93,7 @@ export default function About() {
                 </span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="font-mono text-[11px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.15em] uppercase">
+                <span className="font-mono text-xs font-medium text-white/40 portfolio-light:text-ink-muted tracking-normal normal-case">
                   {t('stats.gradLabel')}
                 </span>
                 <span className="text-base font-bold text-[#f3f5f9] portfolio-light:text-ink leading-tight">
@@ -186,7 +150,7 @@ export default function About() {
           <div className="mt-8 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Sol Taraf: CURRENTLY Strip */}
           <div className="flex flex-col gap-3">
-            <div className="font-mono text-[11px] font-medium tracking-[0.12em] text-white/40 portfolio-light:text-ink-muted uppercase">
+            <div className="font-mono text-xs font-medium tracking-normal text-white/40 portfolio-light:text-ink-muted normal-case">
               {t('currently.title')}
             </div>
             <div className="flex flex-wrap items-center gap-6 sm:gap-7">
@@ -237,13 +201,16 @@ export default function About() {
             </div>
           </div>
 
-          {/* Sağ Taraf: Richard Miculob Birebir 3D Card Stack (Dile göre ÖZELLİK / TRAIT) */}
+          {/* Project decisions; visitors control when the card changes. */}
           <div className="flex justify-end p-3 ml-auto">
-            <div
+            <button
+              type="button"
+              disabled={traits.length < 2}
               onClick={handleStackClick}
-              className="relative w-[220px] h-[150px] cursor-pointer select-none"
+              className="relative w-[240px] h-[170px] text-left cursor-pointer select-none rounded-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-[#819fa7]"
               style={{ perspective: '800px' }}
-              title="Kartı değiştirmek için tıkla"
+              aria-label={`${traits[currentIndex]}. ${t('traits.next')}`}
+              title={t('traits.next')}
             >
               {traits.map((trait, index) => {
                 const pos = (index - currentIndex + traits.length) % traits.length;
@@ -257,7 +224,7 @@ export default function About() {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   willChange: 'transform, opacity',
-                  transition: 'transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, box-shadow 0.4s ease',
+                  transition: 'transform 0.25s ease, opacity 0.25s ease',
                   userSelect: 'none',
                 };
 
@@ -319,21 +286,17 @@ export default function About() {
                 }
 
                 return (
-                  <div
-                    key={trait}
-                    style={styleObj}
-                    className="hover:scale-[1.02] active:scale-[0.98]"
-                  >
-                    <div className="font-mono text-[10px] font-semibold text-white/40 portfolio-light:text-ink-muted tracking-[0.2em] uppercase">
-                      {t('traits.label')}
-                    </div>
-                    <div className="text-lg font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight">
+                  <span key={trait} style={styleObj} aria-hidden={pos !== 0} className="motion-reduce:!transition-none">
+                    <span className="font-mono text-xs font-medium text-white/40 portfolio-light:text-ink-muted">
+                      {t('traits.label')} · {index + 1}/{traits.length}
+                    </span>
+                    <span className="text-base font-semibold leading-relaxed text-[#f3f5f9] portfolio-light:text-ink">
                       {trait}
-                    </div>
-                  </div>
+                    </span>
+                  </span>
                 );
               })}
-            </div>
+            </button>
           </div>
         </div>
         </SectionReveal>

@@ -396,7 +396,7 @@ export default function VisorPodMascot({
           className="absolute -inset-4 rounded-full pointer-events-none"
           style={{
             background:
-              'radial-gradient(circle, rgba(162, 210, 226, 0.4) 0%, rgba(129, 159, 167, 0.16) 45%, rgba(129, 159, 167, 0) 75%)',
+              'radial-gradient(circle, rgba(129, 159, 167, 0.08) 0%, transparent 65%)',
             filter: 'blur(6px)',
           }}
         />

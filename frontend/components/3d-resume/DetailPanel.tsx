@@ -1,18 +1,17 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import HolographicEffect from './HolographicEffect';
+import { useLocale, useTranslations } from 'next-intl';
 import { AboutPanel, EducationPanel, ExperiencePanel, SkillsPanel, ProjectsPanel } from './panels';
 
-const islandConfig: Record<string, { color: string }> = {
-    about: { color: '#819fa7' },
-    education: { color: '#6b8a92' },
-    experience: { color: '#5b7a82' },
-    skills: { color: '#7aa3ab' },
-    projects: { color: '#6d8f98' },
+const PANELS = {
+    about: AboutPanel,
+    education: EducationPanel,
+    experience: ExperiencePanel,
+    skills: SkillsPanel,
+    projects: ProjectsPanel,
 };
 
 interface DetailPanelProps {
@@ -22,118 +21,66 @@ interface DetailPanelProps {
 
 export default function DetailPanel({ islandId, onClose }: DetailPanelProps) {
     const t = useTranslations('resume3d');
-    const config = islandId ? islandConfig[islandId] : null;
+    const locale = useLocale();
+    const reduceMotion = useReducedMotion();
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const Panel = islandId && Object.hasOwn(PANELS, islandId)
+        ? PANELS[islandId as keyof typeof PANELS]
+        : null;
 
     useEffect(() => {
-        if (!islandId) return;
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
+        if (!Panel) return;
+        const previousFocus = document.activeElement;
+        const dialog = dialogRef.current;
+        dialog?.querySelector<HTMLButtonElement>('button')?.focus({ preventScroll: true });
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                onClose();
+            }
+            if (event.key !== 'Tab' || !dialog) return;
+            const controls = Array.from(dialog.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+            const first = controls[0];
+            const last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last?.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first?.focus();
+            }
         };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [islandId, onClose]);
-
-    const renderPanelContent = () => {
-        if (!islandId || !config) return null;
-
-        switch (islandId) {
-            case 'about':
-                return <AboutPanel color={config.color} />;
-            case 'education':
-                return <EducationPanel color={config.color} />;
-            case 'experience':
-                return <ExperiencePanel color={config.color} />;
-            case 'skills':
-                return <SkillsPanel color={config.color} />;
-            case 'projects':
-                return <ProjectsPanel color={config.color} />;
-            default:
-                return null;
-        }
-    };
+        document.addEventListener('keydown', handleKeyDown);
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            if (previousFocus instanceof HTMLElement && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+        };
+    }, [Panel, onClose]);
 
     return (
         <AnimatePresence>
-            {config && islandId && (
-                <div
-                    key={islandId}
-                    className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
-                    onClick={onClose}
-                    role="dialog"
-                    aria-modal="true"
-                >
-                    {/* GPU-only opacity backdrop (no backdrop-blur over live WebGL canvas) */}
+            {Panel && islandId && (
+                <div key={islandId} className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" onClick={onClose}>
+                    <motion.div aria-hidden="true" className="absolute inset-0 bg-black/75" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18 }} />
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.18, ease: 'easeOut' }}
-                        className="absolute inset-0 bg-black/78"
-                        style={{ willChange: 'opacity' }}
-                    />
-
-                    {/* GPU-composited modal card (transform + opacity only, zero layout thrashing) */}
-                    <motion.div
-                        className="relative z-10 w-full max-w-2xl"
-                        onClick={(e) => e.stopPropagation()}
-                        initial={{ opacity: 0, scale: 0.95, y: 12 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.96, y: 8 }}
-                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ willChange: 'transform, opacity' }}
+                        ref={dialogRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="resume-panel-title"
+                        className="relative w-full max-w-3xl max-h-[86dvh] flex flex-col rounded-xl bg-[#101214] border border-white/10 text-[#f3f5f9] [overflow-wrap:anywhere] [&_a:focus-visible]:outline [&_a:focus-visible]:outline-2 [&_a:focus-visible]:outline-offset-4 [&_button:focus-visible]:outline [&_button:focus-visible]:outline-2 [&_button:focus-visible]:outline-offset-4"
+                        onClick={event => event.stopPropagation()}
+                        initial={{ opacity: 0, y: reduceMotion ? 0 : 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: reduceMotion ? 0 : 8 }}
+                        transition={{ duration: 0.2, ease: 'easeOut' }}
                     >
-                        <HolographicEffect isActive={!!islandId} color={config.color}>
-                            <div
-                                className="overflow-hidden rounded-2xl"
-                                style={{
-                                    background: 'linear-gradient(180deg, #0e1013 0%, #090a0c 100%)',
-                                    border: `1px solid ${config.color}38`,
-                                    boxShadow: '0 25px 55px rgba(0, 0, 0, 0.85)',
-                                }}
-                            >
-                                {/* Top accent line */}
-                                <div
-                                    className="h-[2px]"
-                                    style={{
-                                        background: `linear-gradient(90deg, transparent, ${config.color}, transparent)`,
-                                    }}
-                                />
-
-                                {/* Header with close button */}
-                                <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-white/[0.06]">
-                                    <div className="flex items-center gap-3">
-                                        <div
-                                            className="w-1 h-5 rounded-full"
-                                            style={{ background: config.color }}
-                                        />
-                                        <h2 className="text-base sm:text-lg font-semibold text-white">
-                                            {t(`${islandId}.title`)}
-                                        </h2>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        onClick={onClose}
-                                        aria-label="Close"
-                                        className="p-2 rounded-lg bg-white/5 hover:bg-white/12 border border-white/10 text-white/60 hover:text-white transition-colors"
-                                    >
-                                        <X className="w-4 h-4" />
-                                    </button>
-                                </div>
-
-                                {/* Dynamic Panel Content */}
-                                <div className="p-5 max-h-[72vh] overflow-y-auto overscroll-contain">
-                                    {renderPanelContent()}
-                                </div>
-
-                                {/* Bottom accent */}
-                                <div
-                                    className="h-px"
-                                    style={{
-                                        background: `linear-gradient(90deg, transparent, ${config.color}30, transparent)`,
-                                    }}
-                                />
-                            </div>
-                        </HolographicEffect>
+                        <header className="flex items-center justify-between gap-4 pl-6 pr-3 py-3 border-b border-white/10 shrink-0">
+                            <h2 id="resume-panel-title" className="text-xl font-display font-medium">{t(`${islandId}.title`)}</h2>
+                            <button type="button" onClick={onClose} aria-label={locale === 'tr' ? 'Pencereyi kapat' : 'Close panel'} className="size-11 flex items-center justify-center rounded-md text-white/60 hover:text-white hover:bg-white/5 transition-colors">
+                                <X className="size-5" aria-hidden="true" />
+                            </button>
+                        </header>
+                        <div className="min-h-0 overflow-y-auto overscroll-contain p-6 sm:p-8"><Panel /></div>
                     </motion.div>
                 </div>
             )}

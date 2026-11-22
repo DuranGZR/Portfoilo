@@ -31,9 +31,7 @@ const TECH_COLUMNS: TechItem[][] = [
   [
     { name: 'Java', icon: '/images/skills/java.svg' },
     { name: 'C#', icon: '/images/skills/csharp.svg' },
-    { name: 'C / C++', icon: '/images/skills/cplusplus.svg' },
     { name: 'SQL', icon: '/images/skills/sql.svg' },
-    { name: 'Kotlin', icon: '/images/skills/kotlin.svg' },
   ],
   // Column 4: Backend & Modern Engineering Tools
   [
@@ -58,7 +56,10 @@ export default function Skills() {
     number: '01',
     category: 'YAPAY ZEKA &\nDERİN ÖĞRENME',
     title: 'Yapay Zeka, Bilgisayarlı Görü & Derin Öğrenme',
-    image: '/images/gif/coding.gif',
+    image: '/images/gif/rag-flow-dark.gif',
+    lightImage: '/images/gif/rag-flow-light.gif',
+    poster: '/images/gif/rag-flow-dark.png',
+    lightPoster: '/images/gif/rag-flow-light.png',
     description:
       'Kameradan anlık görüntü analizi, derin öğrenme modelleri (YOLO, CNN), lokal LLM entegrasyonları (LLaVA) ve pgvector ile RAG mimarileri geliştirme.',
     tags: [
@@ -80,45 +81,48 @@ export default function Skills() {
     number: '02',
     category: 'BACKEND, SİSTEMLER &\nPROGRAMLAMA',
     title: 'Backend, Sistemler & Programlama Dilleri',
-    image: '/images/gif/assistant.gif',
+    image: '/images/gif/backend-flow-dark.gif',
+    lightImage: '/images/gif/backend-flow-light.gif',
+    poster: '/images/gif/backend-flow-dark.png',
+    lightPoster: '/images/gif/backend-flow-light.png',
     description:
-      'FastAPI ile yüksek hızlı mikroservisler, nesne yönelimli mimariler (Java, C#, C++), SQL veritabanları ve Docker ile yapay zekayı ürünleştiren güvenilir sistem çözümleri.',
+      'FastAPI ile yüksek hızlı mikroservisler, nesne yönelimli mimariler (Java, C#), SQL veritabanları ve Docker ile yapay zekayı ürünleştiren güvenilir sistem çözümleri.',
     tags: [
       'FastAPI',
       'Java',
       'C#',
-      'C / C++',
       'SQL',
       'PostgreSQL',
       'Docker',
       'Git & GitHub',
       'Feature Engineering',
       'Data Analysis',
-      'Kotlin',
     ],
   };
 
   const renderBentoCard = (card: typeof card1) => (
-    <div className="bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line rounded-[20px] p-5 sm:p-7 flex flex-col justify-between h-full transition-all duration-400 hover:-translate-y-1 hover:border-white/20 portfolio-light:hover:border-paper-line-strong hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,0.8)] portfolio-light:hover:shadow-paper relative group">
+    <div className="bg-[#141414] portfolio-light:bg-paper-raised border border-white/10 portfolio-light:border-paper-line rounded-[20px] p-5 sm:p-7 flex flex-col justify-between h-full transition-colors duration-200 hover:border-white/20 portfolio-light:hover:border-paper-line-strong relative group">
       <div>
         {/* Header: Number (Left) & Category (Right-aligned 2-3 lines) */}
         <div className="flex justify-between items-start mb-4 sm:mb-5">
           <span className="font-sans font-extralight text-3xl sm:text-5xl text-[#f3f5f9] portfolio-light:text-ink tracking-tighter leading-none select-none">
             {card.number}
           </span>
-          <span className="font-mono text-[10px] tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase text-right leading-tight max-w-[130px] whitespace-pre-line">
+          <span className="font-mono text-xs tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case text-right leading-tight max-w-[130px] whitespace-pre-line">
             {card.category}
           </span>
         </div>
 
-        {/* Center Visual (GIF / Custom Image) */}
-        <div className="skill-card-visual h-16 sm:h-20 mb-4 sm:mb-5 flex items-center justify-center opacity-85 group-hover:opacity-100 transition-opacity">
-          <img
-            src={card.image || card.gif || '/images/gif/coding.gif'}
-            alt={card.title || 'Skills visual'}
-            className="h-14 sm:h-16 object-contain select-none pointer-events-none"
-            draggable={false}
-          />
+        {/* Theme-specific GIFs have static alternatives for reduced motion. */}
+        <div className="skill-card-visual h-16 sm:h-20 mb-4 sm:mb-5 flex items-center justify-center" aria-hidden="true">
+          <picture className="portfolio-light:hidden">
+            <source media="(prefers-reduced-motion: reduce)" srcSet={card.poster || card.image} />
+            <img src={card.image} alt="" width={360} height={160} className="h-16 sm:h-20 w-auto object-contain" draggable={false} />
+          </picture>
+          <picture className="hidden portfolio-light:block">
+            <source media="(prefers-reduced-motion: reduce)" srcSet={card.lightPoster || card.lightImage || card.image} />
+            <img src={card.lightImage || card.image} alt="" width={360} height={160} className="h-16 sm:h-20 w-auto object-contain" draggable={false} />
+          </picture>
         </div>
 
         {card.title && (
@@ -138,7 +142,7 @@ export default function Skills() {
         {(card.tags || []).map((tag: string, idx: number) => (
           <span
             key={idx}
-            className="font-mono text-[9.5px] sm:text-[10px] portfolio-light:text-[11px] sm:portfolio-light:text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/[0.03] portfolio-light:bg-paper-tint border border-white/10 portfolio-light:border-paper-line text-white/70 portfolio-light:text-ink-accent hover:text-white portfolio-light:hover:text-ink hover:border-white/30 portfolio-light:hover:border-paper-line-strong transition-colors cursor-default"
+            className="font-mono text-xs px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-white/[0.03] portfolio-light:bg-paper-tint border border-white/10 portfolio-light:border-paper-line text-white/70 portfolio-light:text-ink-accent hover:text-white portfolio-light:hover:text-ink hover:border-white/30 portfolio-light:hover:border-paper-line-strong transition-colors cursor-default"
           >
             {tag}
           </span>
@@ -153,7 +157,6 @@ export default function Skills() {
       className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto overflow-hidden"
     >
       {/* Background dark gradient */}
-      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1200px] w-full mx-auto md:my-auto">
         {/* Exact Richard Miculob Layout: Grid with Left (Headline + 4 Columns Tech Stack) and Right (2 Side-by-Side Bento Cards) */}
@@ -162,10 +165,10 @@ export default function Skills() {
           {/* Left Column (what-i-can-do-left) */}
           <SectionReveal delay={0} direction="left">
             <div className="flex flex-col">
-              <div className="font-mono text-xs font-semibold tracking-[0.25em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2 sm:mb-3">
+              <div className="font-mono text-xs font-medium tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case mb-2 sm:mb-3">
                 {t('badge')}
               </div>
-              <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08] mb-3 sm:mb-4">
+              <h2 className="text-2xl sm:text-5xl md:text-[54px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08] mb-3 sm:mb-4">
                 {t('title')}
               </h2>
               <p className="text-sm sm:text-[15px] leading-[1.7] text-white/60 portfolio-light:text-ink-muted max-w-[480px] mb-5 sm:mb-8">
@@ -233,7 +236,7 @@ export default function Skills() {
                         : 'text-white/50 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink'
                     }`}
                   >
-                    01 AI & Görü
+                    01 {t('tabs.ai')}
                   </button>
                   <button
                     onClick={() => setActiveBento(1)}
@@ -243,7 +246,7 @@ export default function Skills() {
                         : 'text-white/50 portfolio-light:text-ink-muted hover:text-white portfolio-light:hover:text-ink'
                     }`}
                   >
-                    02 Backend & Sistem
+                    02 {t('tabs.backend')}
                   </button>
                 </div>
               </div>

@@ -4,15 +4,15 @@
         "title": "Computer Engineer & AI Systems Developer",
         "location": "İzmir, Türkiye",
         "university": "İnönü Üniversitesi - Bilgisayar Mühendisliği",
-        "year": "4. sınıf (2022-2026, Mezuniyet: 2026)",
-        "gpa": "2.84/4.0",
+        "year": "4. sınıf (2022-2027, planlanan mezuniyet: 2027)",
+        "gpa": "2.87/4.0",
         "bio": "İnönü Üniversitesi Bilgisayar Mühendisliği 4. sınıf öğrencisiyim. AI sistemleri, hibrit RAG mimarileri (pgvector, Türkçe FTS, RRF), mobil ve backend mimarileri (FastAPI, React Native, Next.js) ile DevOps (Docker, CI/CD) alanlarına odaklanıyorum. 2022'den bu yana 20'den fazla proje geliştirdim. Teoriyi pratiğe dökerek gerçek dünya problemlerini çözen, production-ready sistemler inşa ediyorum.",
         "goal": "AI sistemleri, hibrit RAG mimarileri ve production-ready backend/mobil yazılım alanlarında uzmanlaşarak gerçek dünya problemlerine ölçeklenebilir ve yüksek performanslı çözümler üretmek.",
         "status": "İş fırsatlarına açık (Junior AI / Backend / DevOps rolleri)"
     },
     "highlights": [
         "20+ Tamamlanan Proje (AI, Backend, Mobil, DevOps)",
-        "Hibrit RAG Mimarisi (pgvector HNSW + PostgreSQL Türkçe FTS + RRF ile sıfır halüsinasyon)",
+        "Hibrit RAG Mimarisi (pgvector HNSW + PostgreSQL Türkçe FTS + RRF ile kaynak tabanlı yanıtlar)",
         "Yerel Multimodal AI & Edge Çıkarımı (LLaVA 7B, Ollama, WebSocket)",
         "Çoklu Model LLM Orkestrasyonu & Failover (Google Gemini 1.5 + Groq Llama 3)",
         "Topluluk Liderliği (HSD İnönü DevOps Developer & Siber Güvenlik Topluluğu Organizasyon Başkanı)"
@@ -37,9 +37,7 @@
             "JavaScript",
             "SQL (PostgreSQL, SQLite)",
             "Java",
-            "Kotlin",
-            "C#",
-            "C++"
+            "C#"
         ],
         "backend_and_frameworks": [
             "FastAPI",
@@ -70,7 +68,7 @@
             "featured": true,
             "category": "AI Systems • Hybrid RAG • Mobile",
             "year": "2025",
-            "description": "Aliağa ilçesine özel doğrulanmış verilerle çalışan; React Native mobil arayüzü ve çok aşamalı hibrit RAG (FastAPI + pgvector HNSW + PostgreSQL Türkçe Full-Text Search + Reciprocal Rank Fusion / RRF) mimarisini birleştiren halüsinasyonsuz akıllı şehir rehberi ve asistanı. 9 izole asenkron veri botu (APScheduler) ile canlı belediye duyuruları, İZBAN seferleri, nöbetçi eczaneler ve planlı kesintiler taranır. Groq Llama 3.3 modeli yalnızca doğrulanmış bağlam üzerinden yanıt üretir; yanıtlarda [S1], [S2] tıklanabilir kaynak atıfları sunar. SlowAPI rate limiting ve X-API-Key güvenliğine sahiptir.",
+            "description": "Aliağa ilçesine özel doğrulanmış verilerle çalışan; React Native mobil arayüzü ve çok aşamalı hibrit RAG (FastAPI + pgvector HNSW + PostgreSQL Türkçe Full-Text Search + Reciprocal Rank Fusion / RRF) mimarisini birleştiren kaynak atıflı akıllı şehir rehberi ve asistanı. 9 izole asenkron veri botu (APScheduler) ile canlı belediye duyuruları, İZBAN seferleri, nöbetçi eczaneler ve planlı kesintiler taranır. Groq Llama 3.3 modeli erişilen yerel kaynakları yanıt bağlamı olarak kullanır; yanıtlarda [S1], [S2] tıklanabilir kaynak atıfları sunar. SlowAPI rate limiting ve X-API-Key güvenliğine sahiptir.",
             "tech": [
                 "Python 3.11+",
                 "FastAPI",
@@ -83,7 +81,8 @@
                 "Docker Compose",
                 "SlowAPI"
             ],
-            "github": "https://github.com/DuranGZR/AliagaAI"
+            "github": "https://github.com/DuranGZR/AliagaAI",
+            "page": "/tr/projects/aliaga-ai"
         },
         {
             "name": "Rüya Yorumlayıcı (AI Dream Interpreter)",
@@ -103,7 +102,8 @@
                 "Firebase Auth",
                 "Docker Compose"
             ],
-            "github": "https://github.com/DuranGZR/Ai-Dream-Interpreter"
+            "github": "https://github.com/DuranGZR/Ai-Dream-Interpreter",
+            "page": "/tr/projects/ai-dream-interpreter"
         },
         {
             "name": "KayıpQR — Gizlilik Odaklı Akıllı QR Etiket Platformu",
@@ -123,7 +123,8 @@
                 "Resend Outbox",
                 "Docker"
             ],
-            "github": "https://github.com/DuranGZR/KayipQR"
+            "github": "https://github.com/DuranGZR/KayipQR",
+            "page": "/tr/projects/kayip-qr"
         },
         {
             "name": "WeDo — Ortak Fikir, Liste & Karar Uygulaması",
@@ -143,24 +144,50 @@
                 "Docker Compose",
                 "Nginx"
             ],
-            "github": "https://github.com/DuranGZR/WeDo"
+            "github": "https://github.com/DuranGZR/WeDo",
+            "page": "/tr/projects/wedo"
         },
         {
-            "name": "Anlık Anlatım — Gerçek Zamanlı Görsel Anlama AI",
+            "name": "AskDocs — Kaynak Atıflı Belge Asistanı",
             "featured": true,
-            "category": "Computer Vision • Local Multimodal AI",
-            "year": "2024",
-            "description": "Webcam görüntülerini %100 yerel çalışan multimodal LLaVA 7B (Mistral q4_0) derin öğrenme modeliyle analiz edip düşük gecikmeyle anlık Türkçe doğal dil açıklamaları üreten sistem. Çift yönlü düşük gecikmeli WebSocket akışı ve OpenCV kamera entegrasyonuyla harici bulut/API maliyeti olmadan sıfır veri sızıntısıyla çalışır.",
+            "category": "AI Systems • Document RAG • Backend",
+            "year": "2026",
+            "description": "Belgelerde bilgi ararken yanıtın hangi kaynağa dayandığını doğrulamayı kolaylaştırmak için geliştirildi. Kullanıcılar PDF ve metin dosyalarını ayrı çalışma alanlarına yükleyebilir, aramayı belirli dosyalarla sınırlandırabilir ve doğal dilde sorular sorabilir.\n\nBelge işleme ile sohbet akışı birbirinden ayrılır: ağır indeksleme işleri arka planda yürürken yanıtlar kaynak işaretleriyle akış halinde sunulur. Kaynak inceleme paneli, yanıtı ilgili sayfa ve metin pasajıyla karşılaştırmayı sağlar.",
             "tech": [
-                "Python 3.11+",
+                "Python",
+                "Rust / PyO3",
                 "FastAPI",
-                "Ollama",
-                "LLaVA 7B (Mistral q4_0)",
-                "WebSockets",
-                "OpenCV",
-                "React"
+                "Celery",
+                "Redis",
+                "Qdrant",
+                "PyMuPDF",
+                "HuggingFace TEI",
+                "BAAI/bge-m3",
+                "Gemini",
+                "Langfuse"
             ],
-            "github": "https://github.com/DuranGZR/Real-Time-Visual-Understanding"
+            "github": "https://github.com/DuranGZR/AskDocs",
+            "page": "/tr/projects/askdocs"
+        },
+        {
+            "name": "Noktiq — AI Kodlama Ajanları için Görsel Geri Bildirim",
+            "featured": true,
+            "category": "Developer Tools • AI Workflow • Frontend",
+            "year": "2026",
+            "description": "Bir arayüz değişikliğini kodlama ajanına tarif ederken hangi öğeden söz edildiğini açıklama ihtiyacından doğdu. Noktiq, ekrandaki hedefi seçip değişiklik notunu doğrudan o öğeye bağlamayı sağlar.\n\nAraç, bulunabildiğinde kaynak dosyası ve konumunu; seçici, görünür metin ve öğe bağlamıyla birlikte kopyalanabilir bir istekte toplar. İstek Codex, Claude Code veya başka bir kodlama ajanına yapıştırılır. Noktiq kodu kendisi düzenlemez ve AI API anahtarı gerektirmez.",
+            "tech": [
+                "TypeScript",
+                "React",
+                "Vue",
+                "Vite",
+                "Next.js",
+                "Nuxt",
+                "Webpack",
+                "Turbopack",
+                "Browser APIs"
+            ],
+            "github": "https://github.com/DuranGZR/Noktiq",
+            "page": "/tr/projects/noktiq"
         },
         {
             "name": "Telegram Doğum Günü Botu",
@@ -182,7 +209,7 @@
             "featured": false,
             "category": "Deep Learning • CNN",
             "year": "2024",
-            "description": "CNN (Evrişimli Sinir Ağları) ve OpenCV ile MNIST veri seti üzerinde eğitilmiş derin öğrenme modeli. Gerçek zamanlı çizim GUI arayüzü ile el yazısı rakamları %98+ doğrulukla tanır.",
+            "description": "CNN (Evrişimli Sinir Ağları) ve OpenCV ile MNIST veri seti üzerinde eğitilmiş derin öğrenme modeli. Gerçek zamanlı çizim GUI arayüzü ile el yazısı rakamlarını tanır.",
             "tech": [
                 "Python",
                 "TensorFlow",
@@ -198,7 +225,7 @@
             "featured": false,
             "category": "Reinforcement Learning",
             "year": "2024",
-            "description": "Pekiştirmeli öğrenme (Q-Learning) algoritmasıyla kendi kendine oynayarak optimal hamleler öğrenen Tic-Tac-Toe yapay zekası. Epsilon-greedy keşif stratejisiyle %95+ kazanma oranı elde eder.",
+            "description": "Pekiştirmeli öğrenme (Q-Learning) algoritmasıyla kendi kendine oynayarak hamleler öğrenen Tic-Tac-Toe yapay zekası. Epsilon-greedy keşif stratejisi kullanır.",
             "tech": [
                 "Python",
                 "NumPy",
@@ -212,7 +239,7 @@
             "featured": false,
             "category": "Machine Learning • Classification",
             "year": "2024",
-            "description": "Makine öğrenmesi ve kapsamlı özellik mühendisliği (feature engineering) ile diyabet riskini erken tespit eden sınıflandırma modeli. Random Forest ve XGBoost algoritmalarıyla ROC-AUC 0.85 performansı sağlar.",
+            "description": "Makine öğrenmesi ve kapsamlı özellik mühendisliği (feature engineering) ile diyabet riskini erken tespit eden sınıflandırma modeli. Sınıflandırma algoritmaları ve veri ön işleme adımları içerir.",
             "tech": [
                 "Python",
                 "Scikit-learn",
@@ -267,8 +294,8 @@
     "education": {
         "degree": "Bilgisayar Mühendisliği Lisans",
         "university": "İnönü Üniversitesi",
-        "period": "2022 - 2026",
-        "gpa": "2.84/4.0"
+        "period": "2022 - 2027",
+        "gpa": "2.87/4.0"
     },
     "certifications": [
         {
@@ -314,7 +341,13 @@
             "organization": "HSD İNÖNÜ",
             "period": "Ekim 2025 - Devam Ediyor",
             "description": "Topluluk projelerinde CI/CD pipeline'ları kurma, Docker container yönetimi, GitHub Actions ile otomasyon ve sunucu yönetimi. DevOps kültürü ve best practice'leri uygulama.",
-            "skills_gained": ["CI/CD", "Docker", "GitHub Actions", "Linux Server Management", "DevOps"]
+            "skills_gained": [
+                "CI/CD",
+                "Docker",
+                "GitHub Actions",
+                "Linux Server Management",
+                "DevOps"
+            ]
         },
         {
             "title": "Organizasyon Başkanı",
@@ -322,7 +355,13 @@
             "period": "Kasım 2024 - Eylül 2025",
             "duration": "11 ay",
             "description": "Topluluk etkinlikleri planlama, eğitim programları organize etme, takım yönetimi ve siber güvenlik farkındalığı oluşturma.",
-            "skills_gained": ["Liderlik", "Takım Yönetimi", "Etkinlik Organizasyonu", "İletişim", "Siber Güvenlik Farkındalığı"]
+            "skills_gained": [
+                "Liderlik",
+                "Takım Yönetimi",
+                "Etkinlik Organizasyonu",
+                "İletişim",
+                "Siber Güvenlik Farkındalığı"
+            ]
         }
     ],
     "courses": [
@@ -350,12 +389,37 @@
     },
     "roadmap": {
         "now": "Son Sınıf - Yapay zeka ve makine öğrenmesi projelerini güçlendirme, hibrit RAG ve production-ready AI sistemleri geliştirme",
-        "graduation": "2026 - Bilgisayar Mühendisliği diploması, AI Systems / Backend / DevOps alanında rol",
-        "1year": "Gerçek dünya LLM ve RAG sistemlerinde derinleşme, ölçeklenebilir mikroservisler ve yüksek erişilebilirlik",
-        "2years": "Mid-level AI/ML Engineer, kendi AI ürünlerini ve mimarilerini hayata geçirme"
+        "graduation": "2027 - Planlanan Bilgisayar Mühendisliği mezuniyeti"
     },
     "contact": {
         "github": "https://github.com/DuranGZR",
-        "location": "İzmir, Türkiye"
-    }
+        "location": "İzmir, Türkiye",
+        "email": "contact@durangezer.com",
+        "linkedin": "https://linkedin.com/in/durangezer",
+        "cv_tr": "/cv/Duran_Gezer_CV_TR.pdf",
+        "cv_en": "/cv/Duran_Gezer_CV_EN.pdf"
+    },
+    "last_updated": "2026-11-22",
+    "achievements": [
+        {
+            "title": "TUA Astro Hackathon Malatya",
+            "result": "5. sıra",
+            "role": "Takım lideri",
+            "date": "Mart 2026",
+            "description": "Uzay telemetri verilerindeki radyasyon kaynaklı bozulmalar için veri kurtarma sistemi geliştiren ekibe liderlik etti. Anomali tespiti, veri temizleme ve sinyal iyileştirme çalışmalarında teknik planlama, görev dağılımı ve final sunumunu koordine etti.",
+            "source": "Sitede yayımlanan TR/EN CV"
+        }
+    ],
+    "languages": [
+        {
+            "language": "Türkçe",
+            "level": "Ana dil"
+        },
+        {
+            "language": "İngilizce",
+            "level": "B1",
+            "source": "Sitede yayımlanan TR/EN CV"
+        }
+    ],
+    "certification_note": "Bu dosyada yalnızca listelenmiş sertifikalar doğrulanmıştır. Listelenen kayıt sayısını toplam sahip olunan sertifika sayısı olarak yorumlama; ek sertifika adları veya kurumları tahmin etme."
 }

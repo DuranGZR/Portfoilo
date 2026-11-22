@@ -6,6 +6,12 @@
 # (User requested to exclude these)
 memory-bank/
 Agent.md
+AGENTS.md
+/BLUEPRINT.md
+/DEPLOY.md
+/START_HERE.md
+/backend/hash.txt
+/data-templates/
 
 # ----- OS Generated Files -----
 .DS_Store
@@ -110,3 +116,7 @@ temp/
 # ----- Misc -----
 *.pem
 .npmrc
+/output/
+.playwright-cli/
+playwright-report/
+test-results/

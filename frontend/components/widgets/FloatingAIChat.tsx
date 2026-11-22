@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect, useCallback, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import {
   motion,
@@ -16,7 +16,8 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { useLocale } from 'next-intl';
-import { sendChatMessage } from '@/lib/api';
+import { useChat } from '@/components/ai/ChatProvider';
+import ChatFeedback from '@/components/ai/ChatFeedback';
 import ChatMessageContent from '@/components/ui/ChatMessageContent';
 import HeroWritingArm from '@/components/sections/Hero/HeroWritingArm';
 import { HERO_INTRO_READY, isAtHeroStart, playHeroIntro } from '@/components/sections/Hero/heroIntro';
@@ -26,14 +27,6 @@ import {
   playWakeChime,
   playSendBlip,
 } from '@/components/widgets/Mascot/botVoice';
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-  isStreaming?: boolean;
-}
 
 type SectionKey =
   | 'hero'
@@ -70,7 +63,7 @@ const SECTION_LINES: Record<'tr' | 'en', Record<SectionKey, string>> = {
   tr: {
     hero: "Hoş geldin! Ben Duran'ın asistanıyım 👋",
     about: "Duran'ı yakından tanımak istersen buradayım 😊",
-    projects: 'Projelerimi incelemeyi unutma! 🚀',
+    projects: 'Duran’ın projelerine buradan göz atabilirsin.',
     skills: 'Mutfaktaki teknolojilere göz atmayı unutma 🛠️',
     experience: 'Eğitim ve sertifikalara da bir bak derim 🎓',
     thinking: 'Problemlere nasıl yaklaştığı tam burada 🧠',
@@ -79,7 +72,7 @@ const SECTION_LINES: Record<'tr' | 'en', Record<SectionKey, string>> = {
   en: {
     hero: "Welcome! I'm Duran's assistant 👋",
     about: "I'm right here if you want to know Duran better 😊",
-    projects: "Don't forget to check out my projects! 🚀",
+    projects: "Take a look at Duran’s projects here.",
     skills: 'Take a peek at the tech stack here 🛠️',
     experience: 'Check out the uni courses & certs too 🎓',
     thinking: 'How he approaches problems is right here 🧠',
@@ -90,47 +83,43 @@ const SECTION_LINES: Record<'tr' | 'en', Record<SectionKey, string>> = {
 const UI_COPY = {
   tr: {
     welcomeSpeech:
-      "Selam! 👋 Ben Duran'ın AI asistanıyım. Geliştirdiği projeler, kullandığı teknolojiler veya deneyimi hakkında merak ettiğin her şeyi bana sorabilirsin!",
-    statusIdle: 'Seni dinliyor',
-    statusReading: 'Yazdıklarını okuyor...',
+      "Selam! Duran’ın projeleri, eğitimi, kullandığı teknolojiler veya CV’si hakkında sorabilirsin.",
+    statusIdle: 'Yazışmaya hazır',
+    statusReading: 'Yazıyorsunuz…',
     statusThinking: 'Düşünüyor...',
-    statusSpeaking: 'Konuşuyor...',
+    statusSpeaking: 'Konuşuyor…',
     statusHappy: 'Selam! 👋',
-    statusError: 'Bağlantı sorunu',
-    inputPlaceholder: 'Bana bir şey sor...',
+    statusError: 'Yanıt alınamadı',
+    inputPlaceholder: 'Duran hakkında bir soru…',
     send: 'Gönder',
-    fallbackOfflineReply:
-      'Şu anda arka plan AI servisine ulaşamıyorum, ama hemen özetleyeyim: Duran Gezer; AI Systems, Backend ve DevOps alanlarına odaklanan (RAG mimarileri, Python, FastAPI, Docker, Next.js) bir Bilgisayar Mühendisliği öğrencisidir.',
     clearChat: 'Sohbeti sıfırla',
-    muteToggle: 'Konuşma sesini aç/kapat',
+    muteToggle: 'Maskot sesini aç/kapat',
     closeChat: 'Sohbeti kapat',
     closeGreeting: 'Mesajı kapat',
     openChat: 'AI Asistan ile konuş',
   },
   en: {
     welcomeSpeech:
-      "Hey there! 👋 I'm Duran's AI assistant. Ask me anything about his AI/ML projects, tech stack, or engineering journey!",
-    statusIdle: 'Listening',
-    statusReading: 'Reading what you type...',
+      "Hi! Ask about Duran’s projects, education, technologies or CV.",
+    statusIdle: 'Ready to chat',
+    statusReading: 'You’re typing…',
     statusThinking: 'Thinking...',
-    statusSpeaking: 'Speaking...',
+    statusSpeaking: 'Speaking…',
     statusHappy: 'Hello! 👋',
-    statusError: 'Connection issue',
-    inputPlaceholder: 'Ask me anything...',
+    statusError: 'No response',
+    inputPlaceholder: 'Ask about Duran…',
     send: 'Send',
-    fallbackOfflineReply:
-      "I couldn't reach the live AI backend right now, but here's a quick summary: Duran Gezer is a Computer Engineering student focusing on AI Systems, Backend, and DevOps (RAG architectures, Python, FastAPI, Docker, Next.js).",
     clearChat: 'Reset chat',
-    muteToggle: 'Toggle mascot voice',
+    muteToggle: 'Toggle mascot sounds',
     closeChat: 'Close chat',
     closeGreeting: 'Dismiss message',
     openChat: 'Talk to AI Assistant',
   },
 } as const;
 
-const VOWEL_REGEX = /[aeıioöuüAEIİOÖUÜ]/;
 const POD_WIDTH = 74;
 const POD_HEIGHT = 67;
+const subscribeToNothing = () => () => {};
 
 function computeCornerCoords(
   corner: CornerKey,
@@ -174,17 +163,22 @@ export default function FloatingAIChat() {
   const [isMuted, setIsMuted] = useState(false);
 
   // Conversation & live lip-sync states
-  const [messages, setMessages] = useState<Message[]>([]);
+  const {messages, isLoading, isResetting, error, send, clear} = useChat();
+  const stickToBottom = useRef(true);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechEnergy, setSpeechEnergy] = useState(0);
   const [speechTick, setSpeechTick] = useState(0);
+  const [speech, setSpeech] = useState<{id: string; cursor: number} | null>(null);
+  const seenReplyRef = useRef<string | null>(null);
+  const speechTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const latestReply = messages.filter(message => message.role === 'assistant').at(-1);
+  const speechTargetId = latestReply?.id || 'welcome';
+  const speechTargetText = latestReply?.content || copy.welcomeSpeech;
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [typingProgress, setTypingProgress] = useState(0.5);
   const [transientMood, setTransientMood] = useState<'greeting' | 'happy' | 'error' | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(subscribeToNothing, () => true, () => false);
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -193,12 +187,9 @@ export default function FloatingAIChat() {
   const stageLiftRef = useRef<HTMLDivElement>(null);
   const isInputFocusedRef = useRef(false);
   const lockedScrollYRef = useRef<number | null>(null);
-  const hasSpokenIntroRef = useRef(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const streamTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const activeStreamFullTextRef = useRef<{ id: string; text: string } | null>(null);
   const transientMoodTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flightLandTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const leanResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -209,18 +200,21 @@ export default function FloatingAIChat() {
 
   // Persist voice mute preference
   useEffect(() => {
-    const saved = localStorage.getItem('dg_mascot_muted');
-    if (saved === '1') {
-      setIsMuted(true);
-      isMutedRef.current = true;
-    }
+    const frame = requestAnimationFrame(() => {
+      try {
+        const muted = localStorage.getItem('dg_mascot_muted') === '1';
+        setIsMuted(muted);
+        isMutedRef.current = muted;
+      } catch { /* Keep the default voice when storage is unavailable. */ }
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   const toggleMute = () => {
     setIsMuted((prev) => {
       const next = !prev;
       isMutedRef.current = next;
-      localStorage.setItem('dg_mascot_muted', next ? '1' : '0');
+      try { localStorage.setItem('dg_mascot_muted', next ? '1' : '0'); } catch { /* Preference applies to this visit. */ }
       if (!next) {
         playWakeChime();
       }
@@ -236,10 +230,6 @@ export default function FloatingAIChat() {
     transientMoodTimeoutRef.current = setTimeout(() => {
       setTransientMood(null);
     }, durationMs);
-  }, []);
-
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   // Track exact inner viewport dimensions without thrashing during mobile keyboard open
@@ -433,7 +423,6 @@ export default function FloatingAIChat() {
   useEffect(() => {
     return () => {
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-      if (streamTimerRef.current) clearTimeout(streamTimerRef.current);
       if (transientMoodTimeoutRef.current) clearTimeout(transientMoodTimeoutRef.current);
       if (flightLandTimeoutRef.current) clearTimeout(flightLandTimeoutRef.current);
       if (leanResetTimeoutRef.current) clearTimeout(leanResetTimeoutRef.current);
@@ -441,137 +430,6 @@ export default function FloatingAIChat() {
     };
   }, []);
 
-  // Natural human-cadence speech streamer with punctuation breathing, syllable lip-sync & voice blips!
-  const streamAssistantReply = useCallback(
-    (fullText: string) => {
-      if (streamTimerRef.current) {
-        clearTimeout(streamTimerRef.current);
-      }
-
-      const msgId = `ai-${Date.now()}`;
-      const isQuestionSentence = fullText.includes('?');
-      activeStreamFullTextRef.current = { id: msgId, text: fullText };
-      setIsSpeaking(true);
-      setSpeechEnergy(0.6);
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: msgId,
-          role: 'assistant',
-          content: '',
-          timestamp: new Date(),
-          isStreaming: true,
-        },
-      ]);
-
-      const baseStep = Math.max(1, Math.min(3, Math.ceil(fullText.length / 130)));
-      let cursor = 0;
-
-      const stepSpeech = () => {
-        cursor = Math.min(cursor + baseStep, fullText.length);
-        const currentSlice = fullText.slice(0, cursor);
-        const lastChar = currentSlice[currentSlice.length - 1] || '';
-        const finished = cursor >= fullText.length;
-
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === msgId
-              ? { ...m, content: currentSlice, isStreaming: !finished }
-              : m
-          )
-        );
-
-        if (finished) {
-          streamTimerRef.current = null;
-          activeStreamFullTextRef.current = null;
-          setIsSpeaking(false);
-          setSpeechEnergy(0);
-          flashMood('happy', 900);
-          return;
-        }
-
-        // Compute syllable energy & natural breathing pause on punctuation
-        let nextDelay = 24;
-        if (lastChar === '.' || lastChar === '!' || lastChar === '?' || lastChar === '\n') {
-          nextDelay = 210;
-          setSpeechEnergy(0.08);
-        } else if (lastChar === ',' || lastChar === ';' || lastChar === ':') {
-          nextDelay = 125;
-          setSpeechEnergy(0.12);
-        } else if (lastChar === ' ') {
-          nextDelay = 28;
-          setSpeechEnergy(0.28);
-        } else {
-          const isVowel = VOWEL_REGEX.test(lastChar);
-          const energy = isVowel
-            ? 0.78 + ((lastChar.charCodeAt(0) % 22) / 100)
-            : 0.46 + ((lastChar.charCodeAt(0) % 24) / 100);
-          setSpeechEnergy(Math.min(1, energy));
-          setSpeechTick((t) => t + 1);
-
-          if (!isMutedRef.current && isVowel) {
-            playSyllableBlip(lastChar.charCodeAt(0), isQuestionSentence);
-          }
-        }
-
-        streamTimerRef.current = setTimeout(stepSpeech, nextDelay);
-      };
-
-      streamTimerRef.current = setTimeout(stepSpeech, 60);
-    },
-    [flashMood]
-  );
-
-  // Instant-complete current streaming speech if user clicks the streaming bubble
-  const completeActiveStreamImmediately = useCallback(() => {
-    const active = activeStreamFullTextRef.current;
-    if (!active) return;
-    if (streamTimerRef.current) {
-      clearTimeout(streamTimerRef.current);
-      streamTimerRef.current = null;
-    }
-    setMessages((prev) =>
-      prev.map((m) =>
-        m.id === active.id
-          ? { ...m, content: active.text, isStreaming: false }
-          : m
-      )
-    );
-    activeStreamFullTextRef.current = null;
-    setIsSpeaking(false);
-    setSpeechEnergy(0);
-  }, []);
-
-  const activeMood: MascotMood = (() => {
-    if (transientMood === 'error') return 'error';
-    if (isLoading) return 'thinking';
-    if (isSpeaking) return 'speaking';
-    if (isUserTyping && input.trim().length > 0) return 'user-typing';
-    if (transientMood) return transientMood;
-    if (!isOpen && isPodOrBubbleHovered) return 'happy';
-    return 'idle';
-  })();
-
-  const statusText = (() => {
-    switch (activeMood) {
-      case 'error':
-        return copy.statusError;
-      case 'thinking':
-        return copy.statusThinking;
-      case 'speaking':
-        return copy.statusSpeaking;
-      case 'user-typing':
-        return copy.statusReading;
-      case 'happy':
-      case 'greeting':
-        return copy.statusHappy;
-      default:
-        return copy.statusIdle;
-    }
-  })();
-
-  // Direct 60fps GPU keyboard lift so ONLY the assistant glides up while background page stays still
   const syncVisualViewport = useCallback(() => {
     if (typeof window === 'undefined') return;
 
@@ -650,8 +508,6 @@ export default function FloatingAIChat() {
       isInputFocusedRef.current = false;
       lockedScrollYRef.current = null;
       document.documentElement.style.scrollBehavior = '';
-      setIsInputFocused(false);
-      setIsKeyboardVisible(false);
       return;
     }
 
@@ -746,103 +602,74 @@ export default function FloatingAIChat() {
 
   // Keep conversation scrolled smoothly to latest bubble
   useEffect(() => {
-    if (isOpen && messagesContainerRef.current) {
+    if (isOpen && messagesContainerRef.current && stickToBottom.current) {
       messagesContainerRef.current.scrollTo({
         top: messagesContainerRef.current.scrollHeight,
-        behavior: 'smooth',
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
       });
     }
-  }, [messages, isLoading, isOpen, isKeyboardVisible]);
+  }, [messages, speech, isLoading, isOpen, isKeyboardVisible, prefersReducedMotion]);
 
-  // Focus input on desktop & speak live welcome greeting on first open!
   useEffect(() => {
     if (!isOpen) return;
-
-    const isMobileTouch =
-      typeof window !== 'undefined' &&
-      (window.innerWidth < 640 || window.matchMedia('(pointer: coarse)').matches);
-
-    const focusTimer = !isMobileTouch
-      ? setTimeout(() => {
-          inputRef.current?.focus({ preventScroll: true });
-        }, 200)
-      : null;
-
-    if (!hasSpokenIntroRef.current) {
-      hasSpokenIntroRef.current = true;
-      const introTimer = setTimeout(() => {
-        streamAssistantReply(copy.welcomeSpeech);
-      }, 180);
-      return () => {
-        if (focusTimer) clearTimeout(focusTimer);
-        clearTimeout(introTimer);
-      };
-    }
-
-    return () => {
-      if (focusTimer) clearTimeout(focusTimer);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        setIsInputFocused(false);
+        setIsKeyboardVisible(false);
+        requestAnimationFrame(() => document.querySelector<HTMLButtonElement>('[data-portfolio-chat] button[aria-label="' + copy.openChat + '"]')?.focus());
+      }
     };
-  }, [isOpen, copy.welcomeSpeech, streamAssistantReply]);
+    document.addEventListener('keydown', onKey);
+    const timer = window.innerWidth >= 640 ? setTimeout(() => inputRef.current?.focus({preventScroll:true}), 200) : null;
+    return () => {document.removeEventListener('keydown', onKey); if (timer) clearTimeout(timer);};
+  }, [isOpen, copy.openChat]);
 
-  const sendPrompt = useCallback(
-    async (rawText: string) => {
-      const trimmed = rawText.trim();
-      if (!trimmed || isLoading) return;
-
-      if (isSpeaking) {
-        completeActiveStreamImmediately();
-      }
-
-      if (!isMutedRef.current) {
-        playSendBlip();
-      }
-
-      if (typingTimeoutRef.current) {
-        clearTimeout(typingTimeoutRef.current);
-      }
-      setIsUserTyping(false);
-
-      const userMessage: Message = {
-        id: `user-${Date.now()}`,
-        role: 'user',
-        content: trimmed,
-        timestamp: new Date(),
+  // Animate only the mascot's presentation; shared history retains the complete answer.
+  useEffect(() => {
+    const fresh = seenReplyRef.current !== speechTargetId;
+    if (isOpen || latestReply) seenReplyRef.current = speechTargetId;
+    const frame = requestAnimationFrame(() => {
+      setSpeech(null); setIsSpeaking(false); setSpeechEnergy(0);
+      if (!fresh || !isOpen || prefersReducedMotion || isLoading) return;
+      const step = Math.max(1, Math.min(3, Math.ceil(speechTargetText.length / 130)));
+      let cursor = 0;
+      const reveal = () => {
+        const chunk = speechTargetText.slice(cursor, cursor + step);
+        cursor = Math.min(cursor + step, speechTargetText.length);
+        const last = chunk.at(-1) || '';
+        const finished = cursor === speechTargetText.length;
+        const vowel = chunk.match(/[aeıioöuüAEIİOÖUÜ]/)?.[0];
+        setSpeech({id: speechTargetId, cursor});
+        setIsSpeaking(!finished);
+        setSpeechEnergy(finished ? 0 : vowel ? 0.8 : 0.3);
+        setSpeechTick(value => value + 1);
+        if (vowel && !isMutedRef.current) playSyllableBlip(vowel.charCodeAt(0), speechTargetText.includes('?'));
+        if (finished) {speechTimerRef.current = null; return;}
+        const delay = /[.!?\n]/.test(last) ? 210 : /[,;:]/.test(last) ? 125 : last === ' ' ? 28 : 24;
+        speechTimerRef.current = setTimeout(reveal, delay);
       };
+      reveal();
+    });
+    return () => {cancelAnimationFrame(frame); if (speechTimerRef.current) clearTimeout(speechTimerRef.current);};
+  }, [speechTargetId, speechTargetText, isOpen, prefersReducedMotion, isLoading, latestReply]);
 
-      setMessages((prev) => [...prev, userMessage]);
-      setInput('');
-      setIsLoading(true);
+  const finishSpeech = () => {
+    if (speechTimerRef.current) clearTimeout(speechTimerRef.current);
+    speechTimerRef.current = null;
+    setSpeech(null); setIsSpeaking(false); setSpeechEnergy(0);
+  };
 
-      try {
-        const response = await sendChatMessage({
-          message: trimmed,
-          session_id: sessionId || undefined,
-        });
-
-        if (response.session_id) {
-          setSessionId(response.session_id);
-        }
-
-        setIsLoading(false);
-        streamAssistantReply(response.response);
-      } catch {
-        setIsLoading(false);
-        flashMood('error', 1500);
-        setTimeout(() => {
-          streamAssistantReply(copy.fallbackOfflineReply);
-        }, 380);
-      }
-    },
-    [
-      isLoading,
-      isSpeaking,
-      completeActiveStreamImmediately,
-      sessionId,
-      streamAssistantReply,
-      flashMood,
-      copy.fallbackOfflineReply,
-    ]
-  );
+  const sendPrompt = useCallback((rawText: string) => {
+    if (!rawText.trim() || isLoading || isResetting) return;
+    if (speechTimerRef.current) clearTimeout(speechTimerRef.current);
+    setSpeech(null); setIsSpeaking(false); setSpeechEnergy(0);
+    stickToBottom.current = true;
+    if (!isMutedRef.current) playSendBlip();
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    setIsUserTyping(false); setInput('');
+    void send(rawText);
+  }, [isLoading, isResetting, send]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -877,11 +704,11 @@ export default function FloatingAIChat() {
   };
 
   const handleCloseChat = () => {
+    finishSpeech();
     inputRef.current?.blur();
-    if (isSpeaking) {
-      completeActiveStreamImmediately();
-    }
     setIsOpen(false);
+    setIsInputFocused(false);
+    setIsKeyboardVisible(false);
   };
 
   const handleDismissBubble = (e: React.MouseEvent) => {
@@ -890,21 +717,11 @@ export default function FloatingAIChat() {
   };
 
   const handleResetChat = () => {
-    if (streamTimerRef.current) {
-      clearTimeout(streamTimerRef.current);
-      streamTimerRef.current = null;
-    }
-    activeStreamFullTextRef.current = null;
-    setIsSpeaking(false);
-    setSpeechEnergy(0);
-    setIsLoading(false);
-    setSessionId(null);
-    setInput('');
-    setMessages([]);
-    setTimeout(() => {
-      streamAssistantReply(copy.welcomeSpeech);
-    }, 120);
+    finishSpeech(); setInput(''); void clear();
   };
+
+  const activeMood: MascotMood = error ? 'error' : isLoading ? 'thinking' : isSpeaking ? 'speaking' : isUserTyping ? 'user-typing' : transientMood || 'idle';
+  const statusText = error ? copy.statusError : isLoading ? copy.statusThinking : isSpeaking ? copy.statusSpeaking : isUserTyping ? copy.statusReading : copy.statusIdle;
 
   const isRightSide = activeCorner.endsWith('right');
   const podFacing: 'left' | 'right' = isRightSide ? 'left' : 'right';
@@ -988,16 +805,6 @@ export default function FloatingAIChat() {
           onMouseLeave={() => setIsPodOrBubbleHovered(false)}
           className="absolute top-0 left-0 z-10 pointer-events-auto"
         >
-          {!isWritingIntro && <div
-            aria-hidden="true"
-            className="absolute -inset-6 rounded-full pointer-events-none -z-10"
-            style={{
-              background:
-                'radial-gradient(circle, rgba(142, 184, 198, 0.24) 0%, rgba(129, 159, 167, 0.08) 50%, transparent 76%)',
-              filter: 'blur(9px)',
-            }}
-          />}
-
           <AnimatePresence mode="wait">
             {isBubbleVisible && (
               <motion.div
@@ -1029,7 +836,7 @@ export default function FloatingAIChat() {
                 }}
                 style={{
                   boxShadow:
-                    'var(--hero-chat-shadow, 0 10px 28px rgba(0, 0, 0, 0.72), 0 0 20px rgba(129, 159, 167, 0.14), inset 0 1px 0 rgba(220, 242, 250, 0.22))',
+                    'var(--hero-chat-shadow, 0 4px 12px rgba(0, 0, 0, 0.25))',
                 }}
                 className={`chat-greeting chat-accent-surface group/bubble absolute top-1/2 -translate-y-1/2 ${
                   isRightSide ? 'right-full mr-3' : 'left-full ml-3'
@@ -1102,19 +909,6 @@ export default function FloatingAIChat() {
                 isRightSide ? 'items-end' : 'items-start'
               } ${isKeyboardVisible ? 'gap-2' : 'gap-2.5'} pointer-events-none`}
             >
-              {/* Soft Open-Air Atmospheric Stage Glow */}
-              <div
-                aria-hidden="true"
-                className={`chat-stage-glow absolute -bottom-4 ${
-                  isRightSide ? 'right-0' : 'left-0'
-                } w-64 h-64 rounded-full pointer-events-none -z-10`}
-                style={{
-                  background:
-                    'radial-gradient(circle, rgba(142, 188, 204, 0.22) 0%, rgba(129, 159, 167, 0.06) 52%, transparent 75%)',
-                  filter: 'blur(16px)',
-                }}
-              />
-
             {/* A. Floating Mini Status & Controls Pill */}
             <div
               className="chat-status chat-accent-surface pointer-events-auto inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#172028]/88 backdrop-blur-xl border border-[#9ec3d0]/32 shadow-[0_8px_24px_rgba(0,0,0,0.6)]"
@@ -1126,7 +920,7 @@ export default function FloatingAIChat() {
                     : activeMood === 'speaking' ||
                         activeMood === 'thinking' ||
                         activeMood === 'user-typing'
-                      ? 'bg-[#d6f3fc] portfolio-light:bg-ink-accent animate-ping'
+                      ? 'bg-[#d6f3fc] portfolio-light:bg-ink-accent'
                       : 'bg-[#9ec3d0] portfolio-light:bg-ink-accent'
                 }`}
               />
@@ -1157,6 +951,7 @@ export default function FloatingAIChat() {
               <button
                 type="button"
                 onClick={handleResetChat}
+                disabled={isResetting}
                 title={copy.clearChat}
                 aria-label={copy.clearChat}
                 className="p-1 rounded-full text-[#9ebbc7]/70 hover:text-[#f3f8fb] transition-colors"
@@ -1178,6 +973,9 @@ export default function FloatingAIChat() {
             {/* B. Open-Air Floating Speech Bubbles Stream (Top-Faded, Zero Scrollbar!) */}
             <div
               ref={messagesContainerRef}
+              role="region"
+              aria-label={locale === 'tr' ? 'Sohbet mesajları' : 'Conversation messages'}
+              onScroll={(event) => {const el=event.currentTarget; stickToBottom.current = el.scrollHeight-el.scrollTop-el.clientHeight < 64;}}
               style={{
                 maxHeight: isMobileViewport ? '200px' : '265px',
                 maskImage: messagesFade,
@@ -1185,6 +983,7 @@ export default function FloatingAIChat() {
               }}
               className="pointer-events-auto w-full min-h-0 overflow-y-auto overscroll-contain mascot-no-scrollbar flex flex-col gap-2.5 pt-2 pb-1.5 px-1"
             >
+              {messages.length === 0 && <div className="chat-assistant-copy px-3"><ChatMessageContent content={speech?.id === 'welcome' ? copy.welcomeSpeech.slice(0, speech.cursor) : copy.welcomeSpeech} isStreaming={isSpeaking && speech?.id === 'welcome'} /></div>}
               {messages.map((message, idx) => {
                 const isUser = message.role === 'user';
                 const isLatestAssistant = !isUser && idx === lastAssistantIdx;
@@ -1192,9 +991,9 @@ export default function FloatingAIChat() {
                 return (
                   <motion.div
                     key={message.id}
-                    initial={{ opacity: 0, y: 12, scale: 0.95 }}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 12, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: prefersReducedMotion ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
                     className={`flex w-full shrink-0 ${
                       isUser
                         ? isRightSide
@@ -1206,9 +1005,8 @@ export default function FloatingAIChat() {
                     }`}
                   >
                     <div
-                      onClick={
-                        message.isStreaming ? completeActiveStreamImmediately : undefined
-                      }
+                      onClick={isSpeaking && speech?.id === message.id ? finishSpeech : undefined}
+                      data-speaking={isSpeaking && speech?.id === message.id ? 'true' : undefined}
                       style={
                         isUser
                           ? {
@@ -1222,11 +1020,7 @@ export default function FloatingAIChat() {
                       className={`relative max-w-[88%] px-4 py-2.5 rounded-2xl text-[12.5px] sm:text-[13px] leading-[1.48] ${
                         isUser
                           ? 'chat-user-bubble bg-gradient-to-br from-[#9abcc8]/95 to-[#6b848d]/95 text-[#090c10] font-medium backdrop-blur-xl'
-                          : `chat-accent-surface bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 text-[#f2f7fa] border ${
-                              message.isStreaming
-                                ? 'border-[#bae2f0]/60 cursor-pointer'
-                                : 'border-[#9ec3d0]/40'
-                            } backdrop-blur-2xl`
+                          : 'chat-accent-surface bg-gradient-to-br from-[#232e38]/95 to-[#151c23]/97 text-[#f2f7fa] border border-[#9ec3d0]/40 backdrop-blur-2xl'
                       }`}
                     >
                       {/* Speech Pointer Tail Connecting Latest Bubble Directly To Mascot Below! */}
@@ -1235,18 +1029,14 @@ export default function FloatingAIChat() {
                           aria-hidden="true"
                           className={`absolute -bottom-[5px] ${
                             isRightSide ? 'right-8' : 'left-8'
-                          } chat-tail w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r ${
-                            message.isStreaming
-                              ? 'border-[#bae2f0]/60'
-                              : 'border-[#9ec3d0]/40'
-                          }`}
+                          } chat-tail w-2.5 h-2.5 rotate-45 bg-[#161d24] border-b border-r border-[#9ec3d0]/40`}
                         />
                       )}
 
                       <ChatMessageContent
                         className={isUser ? undefined : 'chat-assistant-copy'}
-                        content={message.content}
-                        isStreaming={message.isStreaming}
+                        content={speech?.id === message.id ? message.content.slice(0, speech.cursor) : message.content}
+                        isStreaming={isSpeaking && speech?.id === message.id}
                         isUser={isUser}
                       />
                     </div>
@@ -1293,6 +1083,11 @@ export default function FloatingAIChat() {
               )}
             </div>
 
+            <div className="pointer-events-auto px-3">
+              <p id="floating-chat-help" className="text-xs chat-assistant-copy">{input.length}/2000</p>
+              {isSpeaking && <button type="button" onClick={finishSpeech} className="text-xs chat-assistant-copy underline underline-offset-2">{locale === 'tr' ? 'Tamamını göster' : 'Show full answer'}</button>}
+              <ChatFeedback compact />
+            </div>
             {/* C. Bottom Companion Stage: Full-Size Open-Air Visor Pod + Single-Piece Floating Input Capsule */}
             <div
               className={`pointer-events-auto w-full flex shrink-0 items-center gap-2.5 ${
@@ -1314,6 +1109,8 @@ export default function FloatingAIChat() {
                 <input
                   ref={inputRef}
                   type="text"
+                  maxLength={2000}
+                  aria-describedby="floating-chat-help"
                   enterKeyHint="send"
                   value={input}
                   onChange={handleInputChange}
@@ -1348,14 +1145,14 @@ export default function FloatingAIChat() {
                   }}
                   placeholder={copy.inputPlaceholder}
                   aria-label={copy.inputPlaceholder}
-                  disabled={isLoading}
+                  disabled={isLoading || isResetting}
                   className="flex-1 min-w-0 bg-transparent border-none text-base sm:text-[13px] text-[#f5f9fc] placeholder-[#9ab3be]/55 disabled:opacity-50 py-1"
                 />
                 <button
                   type="submit"
                   onMouseDown={(e) => e.preventDefault()}
                   onPointerDown={(e) => e.preventDefault()}
-                  disabled={!input.trim() || isLoading}
+                  disabled={!input.trim() || isLoading || isResetting}
                   aria-label={copy.send}
                   className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#a8cad6] to-[#6a838c] text-[#090c10] flex items-center justify-center hover:opacity-95 active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed transition-all shrink-0 shadow-xs"
                 >

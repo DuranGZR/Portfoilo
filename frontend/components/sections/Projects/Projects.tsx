@@ -28,11 +28,8 @@ const PROJECT_LIST: ProjectItem[] = [
   },
   { key: 'kayipQR', slug: 'kayip-qr', defaultImage: '/projects/kayipqr.png' },
   { key: 'weDo', slug: 'wedo', defaultImage: '/projects/wedo-card.png' },
-  {
-    key: 'visualAI',
-    slug: 'real-time-visual-understanding',
-    defaultImage: '/projects/visual-ai.png',
-  },
+  { key: 'askDocs', slug: 'askdocs', defaultImage: '/projects/askdocs.png' },
+  { key: 'noktiq', slug: 'noktiq', defaultImage: '/projects/noktiq.png' },
 ];
 
 const TOTAL = PROJECT_LIST.length;
@@ -45,7 +42,7 @@ function subscribeToReducedMotion(onChange: () => void) {
 }
 
 /**
- * Signed shortest circular distance in [-2, -1, 0, 1, 2] for 5 items.
+ * Signed shortest circular distance from the active project.
  */
 function getCircularOffset(index: number, activeIndex: number): number {
   let diff = index - activeIndex;
@@ -69,9 +66,6 @@ export default function Projects() {
   const [currentIndex, setCurrentIndex] = useState(0); // Start on AliağaAI
   const [viewportW, setViewportW] = useState(1200);
   const [dragOffset, setDragOffset] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const wheelLockRef = useRef(false);
   const pointerStateRef = useRef<{
     active: boolean;
@@ -113,23 +107,9 @@ export default function Projects() {
     setCurrentIndex(((idx % TOTAL) + TOTAL) % TOTAL);
   }, []);
 
-  // Auto-rotate every 5.5s when not hovered / touched
-  useEffect(() => {
-    if (isPaused || prefersReducedMotion) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      return;
-    }
-
-    timerRef.current = setInterval(goNext, 5500);
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isPaused, goNext, currentIndex, prefersReducedMotion]);
-
   // Bidirectional Pointer / Touch Swipe Handler (Smooth mobile left & right swipe)
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    setIsPaused(true);
     pointerStateRef.current = {
       active: true,
       pointerId: e.pointerId,
@@ -190,9 +170,6 @@ export default function Projects() {
     st.active = false;
     st.axisLocked = null;
 
-    if (e.pointerType !== 'mouse') {
-      setIsPaused(false);
-    }
   };
 
   // Horizontal trackpad two-finger swipe support
@@ -225,8 +202,8 @@ export default function Projects() {
 
   const isMobile = viewportW < 640;
   const isTablet = viewportW >= 640 && viewportW < 1024;
-  const step1X = isMobile ? 140 : isTablet ? 215 : 265;
-  const step2X = isMobile ? 225 : isTablet ? 345 : 430;
+  const step1X = isMobile ? 185 : isTablet ? 270 : 340;
+  const step2X = isMobile ? 290 : isTablet ? 420 : 510;
 
   const activeProjectMeta = PROJECT_LIST[currentIndex];
   const items = messages?.projects?.items || {};
@@ -237,18 +214,15 @@ export default function Projects() {
       id="projects"
       className="relative md:min-h-screen flex flex-col justify-center py-20 sm:py-24 md:py-28 lg:py-32 px-4 md:px-8 bg-[#0d0d0d] portfolio-light:bg-paper content-visibility-auto overflow-hidden"
     >
-      {/* Background dark gradient */}
-      <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
-
       <div className="relative z-10 max-w-[1140px] w-full mx-auto md:my-auto flex flex-col justify-center">
         {/* Header Layout */}
         <SectionReveal delay={0}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8 md:mb-10">
             <div>
-              <div className="font-mono text-xs font-semibold tracking-[0.2em] text-[#819fa7] portfolio-light:text-ink-accent uppercase mb-2">
+              <div className="font-mono text-xs font-medium tracking-normal text-[#819fa7] portfolio-light:text-ink-accent normal-case mb-2">
                 {t('badge')}
               </div>
-              <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-extrabold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
+              <h2 className="text-3xl sm:text-5xl md:text-[54px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight leading-[1.08]">
                 {t('title')}
               </h2>
               <p className="text-sm sm:text-base text-white/50 portfolio-light:text-ink-muted max-w-xl mt-3 leading-relaxed">
@@ -260,7 +234,7 @@ export default function Projects() {
               href="https://github.com/DuranGZR?tab=repositories"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 self-start sm:self-auto px-5 py-2.5 rounded-xl bg-white portfolio-light:paper-action text-black portfolio-light:text-paper-raised font-semibold text-xs tracking-wider uppercase hover:bg-white/90 portfolio-light:hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300 shadow-lg portfolio-light:shadow-paper hover:shadow-white/10 portfolio-light:hover:shadow-paper shrink-0"
+              className="inline-flex items-center gap-2 self-start sm:self-auto px-5 py-2.5 rounded-xl bg-white portfolio-light:paper-action text-black portfolio-light:text-paper-raised font-medium text-xs tracking-normal normal-case hover:bg-white/90 portfolio-light:hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300 shadow-lg portfolio-light:shadow-paper hover:shadow-white/10 portfolio-light:hover:shadow-paper shrink-0"
             >
               {t('viewMore')}
               <ExternalLink className="w-3.5 h-3.5" />
@@ -273,8 +247,6 @@ export default function Projects() {
           <div
             tabIndex={0}
             onKeyDown={handleKeyDown}
-            onMouseEnter={() => setIsPaused(true)}
-            onMouseLeave={() => setIsPaused(false)}
             className="relative w-full my-2 sm:my-6 flex flex-col items-center select-none"
           >
             {/* Interactive Swipe & Coverflow Stage */}
@@ -285,7 +257,7 @@ export default function Projects() {
               onPointerCancel={finishPointerGesture}
               onWheel={handleWheel}
               style={{ perspective: 1200, touchAction: 'pan-y' }}
-              className="relative w-full max-w-[1040px] h-[215px] sm:h-[295px] md:h-[355px] flex items-center justify-center cursor-grab active:cursor-grabbing"
+              className="relative w-full max-w-[1140px] h-[255px] sm:h-[340px] md:h-[430px] lg:h-[460px] flex items-center justify-center cursor-grab active:cursor-grabbing"
             >
               {PROJECT_LIST.map((proj, idx) => {
                 const projData = items[proj.key] || {};
@@ -306,9 +278,9 @@ export default function Projects() {
                           : -step2X;
 
                 const targetScale =
-                  rel === 0 ? 1 : absRel === 1 ? 0.76 : 0.56;
+                  rel === 0 ? 1 : absRel === 1 ? 0.66 : 0.46;
                 const targetOpacity =
-                  rel === 0 ? 1 : absRel === 1 ? 0.82 : isMobile ? 0 : 0.28;
+                  absRel > 2 ? 0 : rel === 0 ? 1 : absRel === 1 ? 0.65 : isMobile ? 0 : 0.18;
                 const targetRotateY = prefersReducedMotion
                   ? 0
                   : rel === 0
@@ -358,12 +330,12 @@ export default function Projects() {
                       zIndex,
                       transformStyle: 'preserve-3d',
                       willChange: 'transform, opacity',
-                      pointerEvents: isMobile && absRel > 1 ? 'none' : 'auto',
+                      pointerEvents: absRel > 2 || (isMobile && absRel > 1) ? 'none' : 'auto',
                     }}
-                    className={`project-cover-frame group/card absolute w-[276px] sm:w-[410px] md:w-[490px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer ${
+                    className={`project-cover-frame group/card absolute w-[min(84vw,360px)] sm:w-[500px] md:w-[620px] lg:w-[680px] aspect-[16/10] rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer ${
                       isCenter
-                        ? 'border border-white/25 shadow-[0_28px_65px_-15px_rgba(0,0,0,0.92),0_0_40px_rgba(129,159,167,0.2)] portfolio-light:shadow-paper-elevated'
-                        : 'border border-white/10 shadow-[0_16px_32px_-10px_rgba(0,0,0,0.65)] portfolio-light:shadow-paper'
+                        ? 'border border-white/25 portfolio-light:shadow-paper'
+                        : 'border border-white/10'
                     }`}
                   >
                     <img
@@ -416,6 +388,7 @@ export default function Projects() {
                     type="button"
                     onClick={() => goToIndex(idx)}
                     aria-label={`${locale === 'tr' ? 'Proje' : 'Project'} ${idx + 1}`}
+                    aria-current={isActive ? 'true' : undefined}
                     className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
                       isActive
                         ? 'w-7 bg-[#819fa7] portfolio-light:bg-ink-accent'
@@ -439,17 +412,17 @@ export default function Projects() {
                 className="space-y-3"
               >
                 {activeData.category && (
-                  <div className="inline-block font-mono text-[11px] font-semibold tracking-[0.16em] uppercase text-[#819fa7]/90 portfolio-light:text-ink-accent">
+                  <div className="inline-block font-mono text-xs font-medium tracking-normal normal-case text-[#819fa7]/90 portfolio-light:text-ink-accent">
                     {activeData.category}
                   </div>
                 )}
 
-                <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-bold text-[#f3f5f9] portfolio-light:text-ink tracking-tight">
+                <h3 className="text-2xl sm:text-3xl md:text-[34px] font-display font-semibold text-[#f3f5f9] portfolio-light:text-ink tracking-tight">
                   {activeData.title || 'Project'}
                 </h3>
 
                 <p className="text-sm sm:text-[15px] leading-relaxed text-white/60 portfolio-light:text-ink-muted max-w-[660px] mx-auto">
-                  {activeData.tagline || ''}
+                  {activeData.gallerySummary || activeData.tagline || ''}
                 </p>
 
                 <div className="pt-2">

@@ -1,7 +1,8 @@
 """
 Portfolio Backend - FastAPI Application
 """
-from contextlib import asynccontextmanager
+import asyncio
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +13,15 @@ from app.config import settings
 from app.api.v1.router import api_router
 from app.core.security import limiter
 from app.db.database import create_tables
+from app.services.ai_service import close_client
+from app.services.chat_sessions import cleanup_conversations
+
+
+async def rate_limit_exceeded(request, error):
+    response = _rate_limit_exceeded_handler(request, error)
+    response.headers['Retry-After'] = '60'
+    response.headers['Cache-Control'] = 'no-store'
+    return response
 
 
 @asynccontextmanager
@@ -21,8 +31,14 @@ async def lifespan(app: FastAPI):
     await create_tables()
     print(f"🚀 {settings.app_name} started")
     print(f"📚 API docs: http://{settings.host}:{settings.port}/docs")
-    yield
-    # Shutdown
+    cleanup = asyncio.create_task(cleanup_conversations())
+    try:
+        yield
+    finally:
+        cleanup.cancel()
+        with suppress(asyncio.CancelledError):
+            await cleanup
+        await close_client()
     print(f"👋 {settings.app_name} shutting down")
 
 
@@ -41,7 +57,7 @@ def create_app() -> FastAPI:
     
     # Rate Limiter
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded)
     
     # CORS Middleware
     app.add_middleware(
@@ -50,6 +66,7 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=['Retry-After'],
     )
     
     # Include API router

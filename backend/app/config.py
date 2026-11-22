@@ -55,6 +55,12 @@ class Settings(BaseSettings):
     groq_api_key: str = ""
     groq_model: str = "qwen/qwen3.8-27b"
     groq_fallback_models: str = "openai/gpt-oss-120b,openai/gpt-oss-20b"
+    chat_timeout_seconds: float = 20
+    chat_max_concurrency: int = 4
+    chat_requests_per_minute: int = 60
+    chat_requests_per_day: int = 1000
+    chat_session_ttl_seconds: int = 1800
+    chat_max_sessions: int = 500
 
     @property
     def groq_models_list(self) -> List[str]:

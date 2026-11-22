@@ -519,7 +519,8 @@ export default function AdminPage() {
                             <Field label="Kategori (örn: AI / RAG / Full-Stack)" value={item.category || ""} path={`${basePath}.${itemKey}.category`} />
                             <Field label="Dönem (örn: 2024)" value={item.period || ""} path={`${basePath}.${itemKey}.period`} />
                         </div>
-                        <Field label="Kısa Özet (Carousel Altında Görünen Metin)" value={item.tagline || ""} path={`${basePath}.${itemKey}.tagline`} multiline />
+                        <Field label="Galeri Özeti (Kısa Problem–Çözüm)" value={item.gallerySummary || ""} path={`${basePath}.${itemKey}.gallerySummary`} multiline />
+                        <Field label="Proje Tanıtımı (Detay Sayfası)" value={item.tagline || ""} path={`${basePath}.${itemKey}.tagline`} multiline />
                         <Field label="Detaylı Genel Bakış (Proje Sayfasında Görünen Metin)" value={item.overview || ""} path={`${basePath}.${itemKey}.overview`} multiline />
                         
                         <ImageUploadField label="Proje Görseli (Dosya Seçip Yükleyebilirsiniz)" value={item.image || ""} path={`${basePath}.${itemKey}.image`} />
@@ -765,9 +766,9 @@ export default function AdminPage() {
                                 <Field label="Projeler Etiketi" value={sectionData.stats?.projectsLabel || ""} path="about.stats.projectsLabel" />
                                 <Field label="Projeler Değeri (örn: 20+)" value={sectionData.stats?.projectsValue || ""} path="about.stats.projectsValue" />
                                 <Field label="Sertifikalar Etiketi" value={sectionData.stats?.certsLabel || ""} path="about.stats.certsLabel" />
-                                <Field label="Sertifikalar Değeri (örn: 9)" value={sectionData.stats?.certsValue || ""} path="about.stats.certsValue" />
+                                <Field label="Listelenen Sertifika Sayısı (örn: 6)" value={sectionData.stats?.certsValue || ""} path="about.stats.certsValue" />
                                 <Field label="Mezuniyet / Bölüm Etiketi" value={sectionData.stats?.gradLabel || ""} path="about.stats.gradLabel" />
-                                <Field label="Mezuniyet Değeri (örn: 2026)" value={sectionData.stats?.gradValue || ""} path="about.stats.gradValue" />
+                                <Field label="Mezuniyet Değeri (örn: 2027)" value={sectionData.stats?.gradValue || ""} path="about.stats.gradValue" />
                             </div>
                         </div>
 
@@ -802,11 +803,12 @@ export default function AdminPage() {
                         {/* 5. 3D Dönen Özellik Kartları (Traits) */}
                         <div className="space-y-3 pt-3 border-t border-white/5">
                             <h3 className="text-sm font-semibold text-[#819fa7] flex items-center gap-2">
-                                🎴 3D Dönen Özellik Kartları (Traits Stack)
+                                🎴 Proje Kararı Kartları
                             </h3>
                             <Field label="Kart Üst Etiketi (örn: ÖZELLİK / TRAIT)" value={sectionData.traits?.label || ""} path="about.traits.label" />
+                            <Field label="Sonraki Kart Erişilebilir Adı" value={sectionData.traits?.next || ""} path="about.traits.next" />
                             <ListEditor
-                                label="Özellik Kartı Maddeleri (Sırayla tıklandıkça döner)"
+                                label="Proje Kararları (Tıklandıkça değişir)"
                                 items={sectionData.traits?.items || []}
                                 path="about.traits.items"
                             />
@@ -829,7 +831,7 @@ export default function AdminPage() {
                         </div>
 
                         <div className="space-y-3 pt-3 border-t border-white/5">
-                            <h3 className="text-sm font-semibold text-[#819fa7]">📦 5 Öne Çıkan Proje (Kartlar ve Detay Sayfaları)</h3>
+                            <h3 className="text-sm font-semibold text-[#819fa7]">📦 Öne Çıkan Projeler (Kartlar ve Detay Sayfaları)</h3>
                             <p className="text-xs text-white/40">
                                 Her bir projenin başlığını, açıklamasını, etiketlerini ve görselini buradan düzenleyebilir; doğrudan bilgisayarından yeni fotoğraf yükleyebilirsin.
                             </p>
@@ -867,9 +869,16 @@ export default function AdminPage() {
                             </div>
                             <ImageUploadField
                                 label="Kart 01 Görseli / GIF (Dosya Seçin veya Yol Girin)"
-                                value={sectionData.bento?.card1?.image || sectionData.bento?.card1?.gif || "/images/gif/coding.gif"}
+                                value={sectionData.bento?.card1?.image || sectionData.bento?.card1?.gif || "/images/gif/rag-flow-dark.gif"}
                                 path="skills.bento.card1.image"
                             />
+                            {[
+                                ['lightImage', 'Açık Tema GIF'],
+                                ['poster', 'Koyu Tema Sabit Görsel (Azaltılmış Hareket)'],
+                                ['lightPoster', 'Açık Tema Sabit Görsel (Azaltılmış Hareket)'],
+                            ].map(([field, label]) => (
+                                <ImageUploadField key={field} label={label} value={sectionData.bento?.card1?.[field] || ""} path={`skills.bento.card1.${field}`} />
+                            ))}
                             <Field label="Açıklama Paragrafı" value={sectionData.bento?.card1?.description || ""} path="skills.bento.card1.description" multiline />
                             <ListEditor
                                 label="Yetenek Etiketleri (Python, TensorFlow, PyTorch...)"
@@ -890,9 +899,16 @@ export default function AdminPage() {
                             </div>
                             <ImageUploadField
                                 label="Kart 02 Görseli / GIF (Dosya Seçin veya Yol Girin)"
-                                value={sectionData.bento?.card2?.image || sectionData.bento?.card2?.gif || "/images/gif/assistant.gif"}
+                                value={sectionData.bento?.card2?.image || sectionData.bento?.card2?.gif || "/images/gif/backend-flow-dark.gif"}
                                 path="skills.bento.card2.image"
                             />
+                            {[
+                                ['lightImage', 'Açık Tema GIF'],
+                                ['poster', 'Koyu Tema Sabit Görsel (Azaltılmış Hareket)'],
+                                ['lightPoster', 'Açık Tema Sabit Görsel (Azaltılmış Hareket)'],
+                            ].map(([field, label]) => (
+                                <ImageUploadField key={field} label={label} value={sectionData.bento?.card2?.[field] || ""} path={`skills.bento.card2.${field}`} />
+                            ))}
                             <Field label="Açıklama Paragrafı" value={sectionData.bento?.card2?.description || ""} path="skills.bento.card2.description" multiline />
                             <ListEditor
                                 label="Yetenek Etiketleri (FastAPI, Java, C#, Docker...)"
@@ -917,7 +933,6 @@ export default function AdminPage() {
                             <h3 className="text-sm font-semibold text-[#819fa7]">📌 Genel Bölüm Başlıkları & Sekmeler</h3>
                             <Field label="Rozet (Badge)" value={sectionData.badge || ""} path="experience.badge" />
                             <Field label="Başlık" value={sectionData.title || ""} path="experience.title" />
-                            <Field label="Alt Başlık" value={sectionData.subtitle || ""} path="experience.subtitle" multiline />
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
                                 <Field label="1. Sekme (Eğitim)" value={sectionData.categories?.education || ""} path="experience.categories.education" />
@@ -1036,7 +1051,7 @@ export default function AdminPage() {
                                     <Field label="Açıklama" value={sectionData.features?.context?.desc || ""} path="aiAssistant.features.context.desc" multiline />
                                 </div>
                                 <div className="p-3.5 bg-white/[0.02] border border-white/10 rounded-xl space-y-2">
-                                    <span className="font-mono text-xs font-semibold text-[#819fa7]">03 // Sürekli Öğreniyor</span>
+                                    <span className="font-mono text-xs font-semibold text-[#819fa7]">03 // Yeni projelerle güncelleniyor</span>
                                     <Field label="Başlık" value={sectionData.features?.learning?.title || ""} path="aiAssistant.features.learning.title" />
                                     <Field label="Açıklama" value={sectionData.features?.learning?.desc || ""} path="aiAssistant.features.learning.desc" multiline />
                                 </div>
@@ -1059,7 +1074,6 @@ export default function AdminPage() {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                 <Field label="Mesaj Gönder Butonu" value={sectionData.sendMessage || ""} path="footer.sendMessage" />
                                 <Field label="İnşa Edildi Metni (Built With)" value={sectionData.builtWith || ""} path="footer.builtWith" />
-                                <Field label="Telif Hakkı / Dipnot" value={sectionData.copyright || ""} path="footer.copyright" />
                             </div>
                         </div>
                     </div>

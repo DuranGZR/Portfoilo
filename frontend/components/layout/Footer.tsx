@@ -37,9 +37,6 @@ export default function Footer() {
   return (
     <>
       <footer className="relative bg-[#0d0d0d] portfolio-light:bg-paper border-t border-white/10 portfolio-light:border-paper-line">
-        {/* Degrade arka plan (Diğer tüm bölümler ile birebir aynı) */}
-        <div className="portfolio-section-backdrop absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] pointer-events-none" />
-
         <div className="relative z-10 max-w-[1100px] mx-auto px-4 md:px-6">
           
           {/* ===== MOBILE LAYOUT ===== */}
@@ -152,7 +149,7 @@ export default function Footer() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 }}
                 >
-                  <h4 className="text-xs font-mono font-semibold text-[#819fa7] portfolio-light:text-ink-accent uppercase tracking-[0.2em] mb-5">
+                  <h4 className="text-xs font-mono font-medium text-[#819fa7] portfolio-light:text-ink-accent tracking-normal mb-5">
                     {t('quickLinks')}
                   </h4>
                   <ul className="space-y-3">
@@ -180,7 +177,7 @@ export default function Footer() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.2 }}
                 >
-                  <h4 className="text-xs font-mono font-semibold text-[#819fa7] portfolio-light:text-ink-accent uppercase tracking-[0.2em] mb-5">
+                  <h4 className="text-xs font-mono font-medium text-[#819fa7] portfolio-light:text-ink-accent tracking-normal mb-5">
                     {t('getInTouch')}
                   </h4>
                   <p className="text-sm text-white/60 portfolio-light:text-ink-muted mb-5 leading-relaxed">
@@ -206,9 +203,6 @@ export default function Footer() {
                 © {currentYear} Duran Gezer. {t('builtWith')}
                 <Heart className="w-3 h-3 text-[#819fa7]/50 portfolio-light:text-ink-accent inline mx-1" />
                 Next.js
-              </p>
-              <p className="text-xs text-white/40 portfolio-light:text-ink-muted">
-                {t('copyright')}
               </p>
             </div>
           </div>

@@ -28,7 +28,7 @@ function parseInline(
   // 2. Inline code: `code`
   // 3. Bold: **text**
   // 4. Italic: *text* (excluding **)
-  const tokenRegex = /(\[[^\]]+\]\(https?:\/\/[^\s)]+\)|`[^`]+`|\*\*[^*]+\*\*|(?<!\*)\*[^*\n]+?\*(?!\*))/g;
+  const tokenRegex = /(\[[^\]]+\]\((?:https?:\/\/|mailto:|\/(?!\/))[^\s)\\]+\)|`[^`]+`|\*\*[^*]+\*\*|(?<!\*)\*[^*\n]+?\*(?!\*))/g;
 
   const parts = text.split(tokenRegex);
   const elements: React.ReactNode[] = [];
@@ -87,7 +87,7 @@ function parseInline(
     }
     // Markdown link [label](url)
     else if (part.startsWith('[') && part.includes('](')) {
-      const linkMatch = part.match(/^\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/);
+      const linkMatch = part.match(/^\[(.*?)\]\(((?:https?:\/\/|mailto:|\/(?!\/))[^\s)\\]+)\)$/);
       if (linkMatch) {
         const [, label, url] = linkMatch;
         elements.push(
