@@ -1,4 +1,5 @@
 import { playSyllableBlip, unlockMascotAudio } from '@/components/widgets/Mascot/botVoice';
+import { getLayoutRect, getPageScale } from '@/lib/page-scale';
 
 export const HERO_INTRO_READY = 'portfolio-hero-ready';
 export const HERO_LANDING = 'portfolio-hero-landing';
@@ -20,7 +21,7 @@ function getTypingLine(hero: HTMLElement, selector: string, byGroup = false) {
   range.selectNodeContents(ink);
   if (range.getClientRects().length !== 1) return;
 
-  const rect = ink.getBoundingClientRect();
+  const rect = getLayoutRect(ink);
   if (!rect.width) return;
 
   const reveal: Keyframe[] = [{ clipPath: 'inset(0 100% 0 0)', offset: 0, easing: 'step-end' }];
@@ -30,7 +31,7 @@ function getTypingLine(hero: HTMLElement, selector: string, byGroup = false) {
   for (const unit of units) {
     end += unit.length;
     range.setEnd(text, end);
-    const progress = (range.getBoundingClientRect().right - rect.left) / rect.width;
+    const progress = (getLayoutRect(range).right - rect.left) / rect.width;
     const vowel = unit.match(/[aeıioöuü]/iu)?.[0];
     if (vowel) syllables.push({ offset: Math.min(1, progress), code: vowel.charCodeAt(0) });
     if (progress <= (reveal.at(-1)?.offset ?? 0) || progress >= 1) continue;
@@ -68,13 +69,14 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
     onFinish();
     return;
   }
-  const dock = pod.getBoundingClientRect();
-  const viewportWidth = document.documentElement.clientWidth;
+  const scale = getPageScale();
+  const dock = getLayoutRect(pod);
+  const viewportWidth = document.documentElement.clientWidth / scale;
   const centerY = (rect: DOMRect) => rect.top + rect.height / 2;
-  const ledge = divider.getBoundingClientRect();
+  const ledge = getLayoutRect(divider);
   const landingX = ledge.left + ledge.width / 2 + 16;
   const landingY = centerY(ledge) - 54;
-  const heroRect = hero.getBoundingClientRect();
+  const heroRect = getLayoutRect(hero);
   impact.style.left = `${landingX - heroRect.left}px`;
   impact.style.top = `${centerY(ledge) - heroRect.top}px`;
   const firstTip = 77;
@@ -108,8 +110,8 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
     return { translate: `${x - dockCenter}px ${top - dock.top}px`, offset: time / duration, easing };
   }
 
-  const closeupRect = openingEyes.getBoundingClientRect();
-  const eyeRect = eyes.getBoundingClientRect();
+  const closeupRect = getLayoutRect(openingEyes);
+  const eyeRect = getLayoutRect(eyes);
   const eyeX = eyeRect.left + eyeRect.width / 2 - dock.left;
   const eyeY = centerY(eyeRect) - dock.top;
   const eyeOrigin = `${eyeX}px ${eyeY}px`;
@@ -295,11 +297,11 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
   };
   const initialScroll = window.scrollY;
   const syncScroll = () => {
-    stage.style.setProperty('--hero-intro-scroll', `${initialScroll - window.scrollY}px`);
+    stage.style.setProperty('--hero-intro-scroll', `${(initialScroll - window.scrollY) / scale}px`);
   };
   const landingTimer = window.setTimeout(() => {
     hero.dispatchEvent(new CustomEvent<HeroLanding>(HERO_LANDING, {
-      detail: { x: landingX, y: centerY(ledge) + initialScroll - window.scrollY, signal: events.signal },
+      detail: { x: landingX * scale, y: centerY(ledge) * scale + initialScroll - window.scrollY, signal: events.signal },
     }));
   }, landing);
   const writtenTimer = window.setTimeout(onWritten, written);
@@ -323,7 +325,7 @@ export function playHeroIntro(pod: HTMLDivElement, onWritten: () => void, onFini
     if (event.target instanceof HTMLElement && event.target.matches(':focus-visible')) finish();
   }, options);
   window.addEventListener('resize', () => {
-    if (document.documentElement.clientWidth !== viewportWidth) finish();
+    if (document.documentElement.clientWidth / scale !== viewportWidth) finish();
   }, options);
   window.addEventListener('scroll', syncScroll, { ...options, passive: true });
 

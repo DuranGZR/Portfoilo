@@ -24,7 +24,7 @@ export default function Hero() {
     window.dispatchEvent(new Event(HERO_INTRO_READY));
   }, []);
   return (
-    <section id="hero" className="relative min-h-[100svh] md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
+    <section id="hero" className="relative min-h-svh md:min-h-screen flex items-center justify-center overflow-hidden bg-[#0d0d0d]">
       <AsciiCloth />
       <div className="hero-visor-opening" aria-hidden="true">
         <div className="hero-visor-eye-pair">

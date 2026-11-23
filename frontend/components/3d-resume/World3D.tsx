@@ -4,11 +4,14 @@ import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { Suspense, useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import { useLocale } from 'next-intl';
+import { usePathname } from 'next/navigation';
+import { getPageScale } from '@/lib/page-scale';
 import Island from './Island';
 import Environment3D from './Environment3D';
 import CameraController from './CameraController';
 import DetailPanel from './DetailPanel';
 import IntroSequence from './IntroSequence';
+import SceneRenderLoop from './SceneRenderLoop';
 
 interface IslandItem {
     title: string;
@@ -79,6 +82,7 @@ export default function World3D({
     onIntroComplete,
 }: World3DProps) {
     const rawLocale = useLocale();
+    const pathname = usePathname();
     const locale = rawLocale === 'en' ? 'en' : 'tr';
     const copy = ISLAND_LABELS[locale];
 
@@ -145,6 +149,9 @@ export default function World3D({
     }, [onIntroComplete]);
 
     const applyTooltipTransform = useCallback((x: number, y: number) => {
+        const scale = getPageScale();
+        x /= scale;
+        y /= scale;
         pointerCoordsRef.current = { x, y };
         if (tooltipRef.current) {
             tooltipRef.current.style.transform = `translate3d(${x + 16}px, ${y + 16}px, 0)`;
@@ -194,6 +201,9 @@ export default function World3D({
     return (
         <>
             <Canvas
+                frameloop="never"
+                className="resume-world"
+                eventPrefix="client"
                 camera={{ position: [0, 80, 200], fov: 55 }}
                 gl={{
                     antialias: true,
@@ -210,6 +220,7 @@ export default function World3D({
                 }}
             >
                 <Suspense fallback={null}>
+                    <SceneRenderLoop paused={!!selectedIsland || !pathname.endsWith('/3d-resume')} />
                     {/* Clean two-light setup for fast PBR shading */}
                     <ambientLight intensity={0.34} color="#dfe8ed" />
                     <directionalLight position={[10, 20, 10]} intensity={0.62} color="#f5f8fa" />

@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Suspense, useState, useEffect, useCallback } from 'react';
+import { Suspense, useState, useEffect, useCallback, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Loader2, Monitor, SkipForward } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +12,15 @@ const World3D = dynamic(() => import('@/components/3d-resume/World3D'), {
     ssr: false,
     loading: () => <LoadingScreen />,
 });
+
+const desktopQuery = '(min-width: 768px)';
+const subscribeDesktop = (onChange: () => void) => {
+    const media = window.matchMedia(desktopQuery);
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+};
+const isDesktop = () => window.matchMedia(desktopQuery).matches;
+const serverDesktop = () => false;
 
 function LoadingScreen() {
     const locale = useLocale();
@@ -56,6 +65,7 @@ function MobileWarning() {
 }
 
 export default function Resume3DPage() {
+    const desktop = useSyncExternalStore(subscribeDesktop, isDesktop, serverDesktop);
     const t = useTranslations('resume3d');
     const locale = useLocale();
     const [selectedIsland, setSelectedIsland] = useState<string | null>(null);
@@ -189,7 +199,7 @@ export default function Resume3DPage() {
             </AnimatePresence>
 
             {/* 3D World */}
-            <Suspense fallback={<LoadingScreen />}>
+            {desktop && <Suspense fallback={<LoadingScreen />}>
                 <World3D
                     selectedIsland={selectedIsland}
                     onIslandSelect={setSelectedIsland}
@@ -197,7 +207,7 @@ export default function Resume3DPage() {
                     skipIntro={skipIntro}
                     onIntroComplete={handleIntroComplete}
                 />
-            </Suspense>
+            </Suspense>}
         </div>
     );
 }

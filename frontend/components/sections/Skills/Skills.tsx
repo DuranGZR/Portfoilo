@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslations, useMessages } from 'next-intl';
 import SectionReveal from '@/components/animations/SectionReveal';
+import SkillVisual from './SkillVisual';
 
 interface TechItem {
   name: string;
@@ -115,14 +116,7 @@ export default function Skills() {
 
         {/* Theme-specific GIFs have static alternatives for reduced motion. */}
         <div className="skill-card-visual h-16 sm:h-20 mb-4 sm:mb-5 flex items-center justify-center" aria-hidden="true">
-          <picture className="portfolio-light:hidden">
-            <source media="(prefers-reduced-motion: reduce)" srcSet={card.poster || card.image} />
-            <img src={card.image} alt="" width={360} height={160} className="h-16 sm:h-20 w-auto object-contain" draggable={false} />
-          </picture>
-          <picture className="hidden portfolio-light:block">
-            <source media="(prefers-reduced-motion: reduce)" srcSet={card.lightPoster || card.lightImage || card.image} />
-            <img src={card.lightImage || card.image} alt="" width={360} height={160} className="h-16 sm:h-20 w-auto object-contain" draggable={false} />
-          </picture>
+          <SkillVisual image={card.image} lightImage={card.lightImage} poster={card.poster} lightPoster={card.lightPoster} />
         </div>
 
         {card.title && (

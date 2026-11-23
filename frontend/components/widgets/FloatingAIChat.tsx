@@ -16,6 +16,7 @@ import {
   VolumeX,
 } from 'lucide-react';
 import { useLocale } from 'next-intl';
+import { getPageScale } from '@/lib/page-scale';
 import { useChat } from '@/components/ai/ChatProvider';
 import ChatFeedback from '@/components/ai/ChatFeedback';
 import ChatMessageContent from '@/components/ui/ChatMessageContent';
@@ -126,7 +127,7 @@ function computeCornerCoords(
   vw: number,
   vh: number
 ): { x: number; y: number } {
-  const isMobile = vw < 640;
+  const isMobile = window.innerWidth < 640;
   const marginX = isMobile ? 14 : 24;
   const marginBottom =
     corner === 'bottom-left'
@@ -239,11 +240,12 @@ export default function FloatingAIChat() {
         return;
       }
       const vv = window.visualViewport;
+      const scale = getPageScale();
       const w =
         fixedFrameRef.current?.clientWidth ||
-        document.documentElement.clientWidth ||
-        window.innerWidth;
-      const h = Math.round(vv ? vv.offsetTop + vv.height : window.innerHeight);
+        document.documentElement.clientWidth / scale ||
+        window.innerWidth / scale;
+      const h = Math.round((vv ? vv.offsetTop + vv.height : window.innerHeight) / scale);
       setViewport((prev) =>
         prev.w === w && Math.abs(prev.h - h) < 2 ? prev : { w, h }
       );
@@ -447,6 +449,7 @@ export default function FloatingAIChat() {
     const frameEl = fixedFrameRef.current;
     const stageEl = stageLiftRef.current;
     const vv = window.visualViewport;
+    const scale = getPageScale();
 
     const frameW = frameEl?.clientWidth || document.documentElement.clientWidth || window.innerWidth;
     const frameH =
@@ -455,7 +458,7 @@ export default function FloatingAIChat() {
       window.innerHeight;
 
     const isMobileTouch =
-      frameW < 640 || window.matchMedia('(pointer: coarse)').matches;
+      frameW * scale < 640 || window.matchMedia('(pointer: coarse)').matches;
 
     if (!isMobileTouch) {
       if (stageEl) {
@@ -485,13 +488,13 @@ export default function FloatingAIChat() {
 
     if (stageEl) {
       stageEl.style.transform =
-        liftPx > 0 ? `translate3d(0, -${liftPx}px, 0)` : 'translate3d(0, 0, 0)';
+        liftPx > 0 ? `translate3d(0, -${liftPx / scale}px, 0)` : 'translate3d(0, 0, 0)';
     }
 
     if (messagesContainerRef.current) {
       const maxH = Math.max(
         84,
-        Math.min(230, Math.round(visibleH - (keyboardActive ? 124 : 210)))
+        Math.min(230, Math.round(visibleH / scale - (keyboardActive ? 124 : 210)))
       );
       messagesContainerRef.current.style.maxHeight = `${maxH}px`;
       if (keyboardActive) {
@@ -732,7 +735,7 @@ export default function FloatingAIChat() {
       ? computeCornerCoords(activeCorner, viewport.w, viewport.h)
       : null;
 
-  const isMobileViewport = viewport.w > 0 && viewport.w < 640;
+  const isMobileViewport = viewport.w > 0 && window.innerWidth < 640;
   const messagesFade = messages.length > 2
     ? 'var(--hero-chat-message-mask, linear-gradient(to bottom, transparent 0%, black 16%, black 100%))'
     : undefined;

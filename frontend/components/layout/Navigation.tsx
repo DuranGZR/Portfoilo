@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import { useState, useEffect, useRef, type MouseEvent } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { flushSync } from 'react-dom';
 import { Menu, Moon, Sun, X } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -16,12 +16,6 @@ const navLinks = [
   { key: 'thinking', href: '#thinking' }
 ];
 
-type InkFrames = { width: number; height: number; paths: string[] };
-
-// The traced frames include padding so the origin can follow the theme button.
-const INK_PADDING = 0.16;
-const INK_ORIGIN = { x: 0.84, y: 0.045 };
-
 export default function Navigation({ heroTheme }: { heroTheme: 'light' | 'dark' }) {
   const t = useTranslations('navigation');
   const locale = useLocale();
@@ -34,16 +28,7 @@ export default function Navigation({ heroTheme }: { heroTheme: 'light' | 'dark' 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
   const themeTransitioning = useRef(false);
-  const inkFrames = useRef<InkFrames | null>(null);
-
-  useEffect(() => {
-    if (!isPortfolio || !document.startViewTransition) return;
-    void import('@/data/theme-ink-paths.json').then(({ default: frames }) => {
-      inkFrames.current = frames;
-    }).catch(() => {});
-  }, [isPortfolio]);
-
-  const toggleTheme = (event: MouseEvent<HTMLButtonElement>) => {
+  const toggleTheme = () => {
     if (themeTransitioning.current) return;
 
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -54,56 +39,16 @@ export default function Navigation({ heroTheme }: { heroTheme: 'light' | 'dark' 
       setTheme(nextTheme);
     };
 
-    const ink = inkFrames.current;
-    if (!ink || !document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       applyTheme();
       return;
     }
 
-    const button = event.currentTarget.getBoundingClientRect();
-    const viewportWidth = root.clientWidth;
-    const viewportHeight = root.clientHeight;
-    const frameWidth = viewportWidth * (1 + 2 * INK_PADDING);
-    const frameHeight = viewportHeight * (1 + 2 * INK_PADDING);
-    const offsetX = Math.max(
-      viewportWidth - frameWidth,
-      Math.min(0, button.left + button.width / 2 - viewportWidth * (INK_ORIGIN.x + INK_PADDING)),
-    );
-    const offsetY = Math.max(
-      viewportHeight - frameHeight,
-      Math.min(0, button.top + button.height / 2 - viewportHeight * (INK_ORIGIN.y + INK_PADDING)),
-    );
-
-    const scaleX = frameWidth / ink.width;
-    const scaleY = frameHeight / ink.height;
-    const frames = [
-      { clipPath: 'inset(100%)', easing: 'step-end' },
-      ...ink.paths.map((path) => ({
-        clipPath: path ? `path(evenodd, "${path.replace(/(\d+),(\d+)/g, (_, x, y) => {
-          const px = Math.round((offsetX + Number(x) * scaleX) * 10) / 10;
-          const py = Math.round((offsetY + Number(y) * scaleY) * 10) / 10;
-          return `${px},${py}`;
-        })}")` : 'inset(100%)',
-        easing: 'step-end',
-      })),
-      { clipPath: 'inset(0)' },
-    ];
-
-    root.classList.add('theme-ink-transition');
     themeTransitioning.current = true;
-
+    root.setAttribute('data-theme-transitioning', '');
     const transition = document.startViewTransition(() => flushSync(applyTheme));
-    let inkAnimation: Animation | undefined;
-    void transition.ready.then(() => {
-      inkAnimation = root.animate(frames, {
-        duration: 2100,
-        fill: 'both',
-        pseudoElement: '::view-transition-new(root)',
-      });
-    }).catch(() => transition.skipTransition());
     const cleanup = () => {
-      inkAnimation?.cancel();
-      root.classList.remove('theme-ink-transition');
+      root.removeAttribute('data-theme-transitioning');
       themeTransitioning.current = false;
     };
     void transition.finished.then(cleanup, cleanup);

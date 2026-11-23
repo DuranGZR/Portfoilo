@@ -141,11 +141,22 @@ export default function VisorPodMascot({
     }
 
     let rafId: number | null = null;
+    let lastUpdate = 0;
+    let tracking = true;
+
+    const handleMouseLeave = () => {
+      if (!tracking) return;
+      tracking = false;
+      rawLookX.set(0);
+      rawLookY.set(0);
+      setProximityNear(false);
+    };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (rafId !== null) return;
+      if (rafId !== null || performance.now() - lastUpdate < 1000 / 30 || document.hidden) return;
       rafId = requestAnimationFrame(() => {
         rafId = null;
+        lastUpdate = performance.now();
         const el = containerRef.current;
         if (!el) return;
 
@@ -155,24 +166,19 @@ export default function VisorPodMascot({
 
         const dx = e.clientX - centerX;
         const dy = e.clientY - centerY;
-        const distance = Math.hypot(dx, dy);
-
+        const distanceSquared = dx * dx + dy * dy;
         const maxRadius = 420;
-        const factor = Math.min(distance / maxRadius, 1);
-        const angle = Math.atan2(dy, dx);
+        if (distanceSquared > maxRadius * maxRadius) {
+          handleMouseLeave();
+          return;
+        }
+        tracking = true;
+        rawLookX.set(dx / maxRadius);
+        rawLookY.set(dy / maxRadius);
 
-        rawLookX.set(Math.cos(angle) * factor);
-        rawLookY.set(Math.sin(angle) * factor);
-
-        const isNear = distance < 165;
+        const isNear = distanceSquared < 165 * 165;
         setProximityNear((prev) => (prev !== isNear ? isNear : prev));
       });
-    };
-
-    const handleMouseLeave = () => {
-      rawLookX.set(0);
-      rawLookY.set(0);
-      setProximityNear(false);
     };
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
@@ -341,7 +347,7 @@ export default function VisorPodMascot({
       <div
         className="w-full h-full relative flex items-center justify-center"
         style={
-          prefersReducedMotion || isIntroducing
+          prefersReducedMotion || isIntroducing || !(isHovered || proximityNear || isFlying || mood === 'speaking' || mood === 'thinking' || mood === 'user-typing')
             ? undefined
             : { animation: 'float 3.6s ease-in-out infinite' }
         }
@@ -397,7 +403,6 @@ export default function VisorPodMascot({
           style={{
             background:
               'radial-gradient(circle, rgba(129, 159, 167, 0.08) 0%, transparent 65%)',
-            filter: 'blur(6px)',
           }}
         />
 
@@ -421,7 +426,7 @@ export default function VisorPodMascot({
             viewBox="0 0 128 114"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="visor-pod-art w-full h-full overflow-visible drop-shadow-[0_10px_20px_rgba(0,0,0,0.75)]"
+            className="visor-pod-art w-full h-full overflow-visible drop-shadow-[0_5px_8px_rgba(0,0,0,0.45)]"
           >
             <defs>
               <radialGradient
@@ -746,7 +751,6 @@ export default function VisorPodMascot({
             opacity: isFlying ? 0.25 : 0.75,
             background:
               'var(--mascot-floor-shadow, radial-gradient(ellipse at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.45) 55%, transparent 80%))',
-            filter: 'blur(2px)',
           }}
         />
       )}
