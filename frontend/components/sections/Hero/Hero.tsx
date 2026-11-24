@@ -105,7 +105,7 @@ export default function Hero() {
               <Github className="w-4 h-4" aria-hidden="true" />
             </a>
             <a
-              href="https://linkedin.com/in/durangezer"
+              href="https://linkedin.com/in/durangzr"
               aria-label={t('socialLinks.linkedin')}
               target="_blank"
               rel="noopener noreferrer"
