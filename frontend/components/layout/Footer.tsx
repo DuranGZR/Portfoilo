@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 const socialLinks = [
   { icon: Github, href: 'https://github.com/DuranGZR', label: 'GitHub' },
-  { icon: Linkedin, href: 'https://linkedin.com/in/durangezer', label: 'LinkedIn' },
+  { icon: Linkedin, href: 'https://linkedin.com/in/durangzr', label: 'LinkedIn' },
   { icon: Mail, href: 'mailto:contact@durangezer.com', label: 'Email' }
 ];
 
